@@ -1,13 +1,10 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { fileService } from '@/services/file';
-import { ClientService } from '@/services/file/_deprecated';
 import { messageService } from '@/services/message';
 import { imageGenerationService } from '@/services/textToImage';
 import { uploadService } from '@/services/upload';
 import { chatSelectors } from '@/store/chat/selectors';
-import { useFileStore } from '@/store/file';
 import { ChatMessage } from '@/types/message';
 import { DallEImageItem } from '@/types/tool/dalle';
 
@@ -42,28 +39,18 @@ describe('chatToolSlice - dalle', () => {
       vi.spyOn(uploadService, 'getImageFileByUrlWithCORS').mockResolvedValue(
         new File(['1'], 'file.png', { type: 'image/png' }),
       );
+      // @ts-ignore
+      vi.spyOn(uploadService, 'uploadToClientS3').mockResolvedValue({} as any);
 
-      // Mock the new uploadWithProgress method from useFileStore
-      vi.spyOn(useFileStore, 'getState').mockReturnValue({
-        uploadWithProgress: vi.fn().mockResolvedValue({
-          id: mockId,
-          url: '',
-          dimensions: { width: 512, height: 512 },
-          filename: 'file.png',
-        }),
-      } as any);
-
-      // Mock store methods that are called in the implementation
       vi.spyOn(result.current, 'toggleDallEImageLoading');
-      vi.spyOn(result.current, 'updatePluginState').mockResolvedValue(undefined);
-      vi.spyOn(result.current, 'internal_updateMessageContent').mockResolvedValue(undefined);
 
       await act(async () => {
         await result.current.generateImageFromPrompts(prompts, messageId);
       });
       // For each prompt, loading is toggled on and then off
       expect(imageGenerationService.generateImage).toHaveBeenCalledTimes(prompts.length);
-      expect(useFileStore.getState().uploadWithProgress).toHaveBeenCalledTimes(prompts.length);
+      // @ts-ignore
+      expect(uploadService.uploadToClientS3).toHaveBeenCalledTimes(prompts.length);
       expect(result.current.toggleDallEImageLoading).toHaveBeenCalledTimes(prompts.length * 2);
     });
   });
@@ -79,7 +66,7 @@ describe('chatToolSlice - dalle', () => {
         draft[0].previewUrl = 'new-url';
         draft[0].imageId = 'new-id';
       };
-      vi.spyOn(result.current, 'internal_updateMessageContent').mockResolvedValue(undefined);
+      vi.spyOn(result.current, 'internal_updateMessageContent');
 
       // 模拟 getMessageById 返回消息内容
       vi.spyOn(chatSelectors, 'getMessageById').mockImplementationOnce(
@@ -110,9 +97,7 @@ describe('chatToolSlice - dalle', () => {
       const data = [{ prompt: 'prompt 1' }, { prompt: 'prompt 2' }] as DallEImageItem[];
 
       // Mock generateImageFromPrompts
-      const generateImageFromPromptsMock = vi
-        .spyOn(result.current, 'generateImageFromPrompts')
-        .mockResolvedValue(undefined);
+      const generateImageFromPromptsMock = vi.spyOn(result.current, 'generateImageFromPrompts');
 
       await act(async () => {
         await result.current.text2image(id, data);

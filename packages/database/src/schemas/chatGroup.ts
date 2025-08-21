@@ -1,7 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix  */
 import {
   boolean,
-  integer,
   jsonb,
   pgTable,
   primaryKey,
@@ -11,8 +10,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 
-import { idGenerator } from '@/database/utils/idGenerator';
-import type { ChatGroupConfig } from '@/database/types/chatGroup';
+import { idGenerator, randomSlug } from '@/database/utils/idGenerator';
 
 import { timestamps } from './_helpers';
 import { agents } from './agent';
@@ -29,13 +27,24 @@ export const chatGroups = pgTable(
       .primaryKey()
       .$defaultFn(() => idGenerator('chatGroups'))
       .notNull(),
+    slug: varchar('slug', { length: 100 })
+      .$defaultFn(() => randomSlug(4))
+      .unique(),
     title: text('title'),
     description: text('description'),
 
     /**
      * Group configuration
      */
-    config: jsonb('config').$type<ChatGroupConfig>(),
+    config: jsonb('config').$type<{
+      maxResponseInRow?: number;
+      orchestratorModel?: string;
+      orchestratorProvider?: string;
+      responseOrder?: 'sequential' | 'natural';
+      responseSpeed?: 'slow' | 'medium' | 'fast';
+      revealDM?: boolean;
+      systemPrompt?: string;
+    }>(),
 
     clientId: text('client_id'),
 
@@ -80,7 +89,7 @@ export const chatGroupsAgents = pgTable(
     /**
      * Display or speaking order of the agent in the group
      */
-    order: integer('order').default(0),
+    order: text('order').default('0'),
 
     /**
      * Role of the agent in the group (e.g., 'moderator', 'participant')
@@ -95,4 +104,4 @@ export const chatGroupsAgents = pgTable(
 );
 
 export type NewChatGroupAgent = typeof chatGroupsAgents.$inferInsert;
-export type ChatGroupAgentItem = typeof agents.$inferInsert
+export type ChatGroupAgentItem = typeof agents.$inferInsert;

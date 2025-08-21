@@ -1,7 +1,8 @@
+import { ChatGroupAgentItem } from '@/database/schemas/chatGroup';
+
 import { LobeAgentConfig } from '../agent';
 import { MetaData } from '../meta';
-
-export type SessionGroupId = 'default' | 'pinned' | string;
+import { SessionGroupId } from './sessionGroup';
 
 export enum LobeSessionType {
   Agent = 'agent',
@@ -9,7 +10,7 @@ export enum LobeSessionType {
 }
 
 /**
- * Lobe Agent
+ * Lobe Agent Session
  */
 export interface LobeAgentSession {
   config: LobeAgentConfig;
@@ -24,6 +25,21 @@ export interface LobeAgentSession {
   updatedAt: Date;
 }
 
+/**
+ * Group chat (not confuse with session group)
+ */
+export interface LobeGroupSession {
+  createdAt: Date;
+  group?: SessionGroupId;
+  id: string; // Start with 'cg_'
+  members?: ChatGroupAgentItem[];
+  meta: MetaData;
+  pinned?: boolean;
+  tags?: string[];
+  type: LobeSessionType.Group;
+  updatedAt: Date;
+}
+
 export interface LobeAgentSettings {
   /**
    * 语言模型角色设定
@@ -32,4 +48,7 @@ export interface LobeAgentSettings {
   meta: MetaData;
 }
 
-export type LobeSessions = LobeAgentSession[];
+// Union type for all session types
+export type LobeSession = LobeAgentSession | LobeGroupSession;
+
+export type LobeSessions = LobeSession[];

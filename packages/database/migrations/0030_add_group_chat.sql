@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS "chat_groups" (
 	"id" text PRIMARY KEY NOT NULL,
+	"slug" varchar(100),
 	"title" text,
 	"description" text,
 	"config" jsonb,
@@ -8,7 +9,8 @@ CREATE TABLE IF NOT EXISTS "chat_groups" (
 	"pinned" boolean DEFAULT false,
 	"accessed_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "chat_groups_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "chat_groups_agents" (
@@ -16,7 +18,7 @@ CREATE TABLE IF NOT EXISTS "chat_groups_agents" (
 	"agent_id" text NOT NULL,
 	"user_id" text NOT NULL,
 	"enabled" boolean DEFAULT true,
-	"order" integer DEFAULT 0,
+	"order" text DEFAULT '0',
 	"role" text DEFAULT 'participant',
 	"accessed_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,

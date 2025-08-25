@@ -328,11 +328,6 @@ export default {
       desc: 'Choose the model to use for group conversations',
       title: 'Orchestrator Model',
     },
-    systemPrompt: {
-      desc: 'Custom system prompt for the group conversation orchestrator. This overrides the default orchestrator behavior.',
-      placeholder: 'Enter custom orchestrator system prompt...',
-      title: 'Orchestrator System Prompt',
-    },
     responseOrder: {
       desc: 'Agents will respond in the order they are set in the group',
       options: {
@@ -357,6 +352,11 @@ export default {
       title: 'Reveal DM',
     },
     submit: 'Update Settings',
+    systemPrompt: {
+      desc: 'Custom system prompt for the group conversation orchestrator. This overrides the default orchestrator behavior.',
+      placeholder: 'Enter custom orchestrator system prompt...',
+      title: 'Orchestrator System Prompt',
+    },
     title: 'Chat Settings',
   },
   settingGroupMembers: {

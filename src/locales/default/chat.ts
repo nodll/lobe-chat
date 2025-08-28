@@ -74,6 +74,19 @@ export default {
     title: '群组',
   },
   groupDescription: '群组描述',
+  groupSidebar: {
+    members: {
+      addMember: '添加成员',
+      orchestrator: '主持人',
+      orchestratorThinking: '主持人正在思考中...',
+      removeMember: '移除成员',
+    },
+    tabs: {
+      members: '成员',
+      role: '角色',
+    },
+  },
+
   history: {
     title: '助手将只记住最后{{count}}条消息',
   },
@@ -103,10 +116,8 @@ export default {
   intentUnderstanding: {
     title: '正在理解并分析您的意图...',
   },
-
   // Group chat related translations
   inviteMembers: '邀请成员',
-
   knowledgeBase: {
     all: '所有内容',
     allFiles: '所有文件',

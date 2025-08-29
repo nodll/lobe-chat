@@ -28,7 +28,7 @@ const ChatGroupSettings = memo(() => {
     { label: t('settingGroupChat.responseSpeed.options.fast'), value: 'fast' },
   ];
 
-  const chatSettings: FormGroupItemType = {
+  const orchestratorSettings: FormGroupItemType = {
     children: [
       {
         children: <ModelSelect />,
@@ -48,6 +48,12 @@ const ChatGroupSettings = memo(() => {
         label: t('settingGroupChat.systemPrompt.title'),
         name: 'systemPrompt',
       },
+    ],
+    title: t('settingGroupChat.orchestratorTitle'),
+  };
+
+  const chatSettings: FormGroupItemType = {
+    children: [
       {
         children: (
           <Select
@@ -111,7 +117,7 @@ const ChatGroupSettings = memo(() => {
           provider: config?.orchestratorProvider,
         },
       }}
-      items={[chatSettings]}
+      items={[orchestratorSettings, chatSettings]}
       itemsType={'group'}
       onFinish={({ _modelConfig, ...rest }) => {
         updateConfig({

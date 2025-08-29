@@ -330,6 +330,7 @@ export default {
       desc: '选择用于群聊对话的模型',
       title: '主持人模型',
     },
+    orchestratorTitle: '主持人设置',
     responseOrder: {
       desc: '代理将按照在群聊中设置的顺序进行回复',
       options: {
@@ -359,7 +360,7 @@ export default {
       placeholder: '请输入自定义主持人系统提示词...',
       title: '主持人系统提示词',
     },
-    title: '聊天设置',
+    title: '聊天设置'
   },
   settingGroupMembers: {
     edit: '编辑成员',

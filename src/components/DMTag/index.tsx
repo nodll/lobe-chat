@@ -49,7 +49,7 @@ const DMTag = memo<DMTagProps>(({ senderId, targetId }) => {
   if (!targetInfo) return null;
 
   // Check if message involves user (either sent by user or sent to user)
-  const involvesUser = senderId === 'user' || targetId === 'user';
+  // const involvesUser = senderId === 'user' || targetId === 'user';
 
   // Handler for opening thread panel
   const handleOpenThread = () => {

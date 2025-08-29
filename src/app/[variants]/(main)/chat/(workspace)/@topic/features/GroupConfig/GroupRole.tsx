@@ -13,7 +13,7 @@ import { LobeSession } from '@/types/session';
 
 import { useStyles } from './style';
 
-interface GroupRoleContentProps {
+interface GroupRoleProps {
   currentSession?: LobeSession;
   editing: boolean;
   editorModalOpen: boolean;
@@ -21,7 +21,7 @@ interface GroupRoleContentProps {
   setEditorModalOpen: (open: boolean) => void;
 }
 
-const GroupRoleContent = memo<GroupRoleContentProps>(
+const GroupRole = memo<GroupRoleProps>(
   ({ currentSession, editorModalOpen, setEditorModalOpen, setEditing, editing }) => {
     const { styles } = useStyles();
     const { t } = useTranslation('chat');
@@ -94,4 +94,6 @@ const GroupRoleContent = memo<GroupRoleContentProps>(
   },
 );
 
-export default GroupRoleContent;
+GroupRole.displayName = 'GroupRole';
+
+export default GroupRole;

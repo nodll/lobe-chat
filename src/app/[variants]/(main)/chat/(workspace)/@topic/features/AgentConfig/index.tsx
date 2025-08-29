@@ -22,7 +22,7 @@ import { sessionMetaSelectors, sessionSelectors } from '@/store/session/selector
 
 import { useStyles } from './style';
 
-const SystemRole = memo(() => {
+const AgentConfig = memo(() => {
   const [editing, setEditing] = useState(false);
   const { styles, cx } = useStyles();
   const openChatSettings = useOpenChatSettings(ChatSettingsTabs.Prompt);
@@ -142,4 +142,6 @@ const SystemRole = memo(() => {
   );
 });
 
-export default SystemRole;
+AgentConfig.displayName = 'AgentConfig';
+
+export default AgentConfig;

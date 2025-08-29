@@ -1,6 +1,7 @@
 'use client';
 
 import React, { memo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { SkeletonList, VirtualizedList } from '@/features/Conversation';
 import { useChatStore } from '@/store/chat';
@@ -8,9 +9,8 @@ import { chatSelectors } from '@/store/chat/selectors';
 import { useChatGroupStore } from '@/store/chatGroup';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
-import { useTranslation } from 'react-i18next';
 
-import ThreadChatItem from './ThreadChatItem';
+import DMChatItem from './DMChatItem';
 
 const ThreadChatList = memo(() => {
   const { t } = useTranslation('chat');
@@ -26,7 +26,7 @@ const ThreadChatList = memo(() => {
   const data = useChatStore(chatSelectors.getThreadMessageIDs(activeThreadAgentId));
 
   const itemContent = useCallback(
-    (index: number, id: string) => <ThreadChatItem id={id} index={index} />,
+    (index: number, id: string) => <DMChatItem id={id} index={index} />,
     [],
   );
 

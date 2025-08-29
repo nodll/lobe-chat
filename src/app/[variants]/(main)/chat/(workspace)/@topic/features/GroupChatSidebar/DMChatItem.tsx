@@ -11,24 +11,23 @@ import { useChatListActionsBar } from '@/features/Conversation/hooks/useChatList
 import { useChatStore } from '@/store/chat';
 import { chatSelectors } from '@/store/chat/selectors';
 
-export interface ThreadChatItemProps {
+export interface DMChatItemProps {
   id: string;
   index: number;
 }
 
-const ThreadChatItem = memo<ThreadChatItemProps>(({ id, index }) => {
+/**
+ * Chat item for DM panel
+ */
+const DMChatItem = memo<DMChatItemProps>(({ id, index }) => {
   const { t } = useTranslation('common');
   const { message } = App.useApp();
-
-  // For thread view, we don't need history divider
-  const enableHistoryDivider = false;
 
   const item = useChatStore(chatSelectors.getMessageById(id), isEqual);
   const [deleteMessage, regenerateMessage, copyMessage, toggleMessageEditing] = useChatStore(
     (s) => [s.deleteMessage, s.regenerateMessage, s.copyMessage, s.toggleMessageEditing],
   );
 
-  // Get actions but exclude the "Create Subtopic" (branching) action
   const { regenerate, edit, copy, divider, del } = useChatListActionsBar();
 
   // Handle action clicks (same logic as original ActionsBar but without branching)
@@ -77,13 +76,13 @@ const ThreadChatItem = memo<ThreadChatItemProps>(({ id, index }) => {
   return (
     <ChatItem
       actionBar={actionBar}
-      enableHistoryDivider={enableHistoryDivider}
+      enableHistoryDivider={false}
       id={id}
-      inPortalThread={true} // Mark this as thread context
+      inPortalThread={true}
       index={index}
       showAvatar={false}
     />
   );
 });
 
-export default ThreadChatItem;
+export default DMChatItem;

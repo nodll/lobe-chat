@@ -24,7 +24,7 @@ import Header from '../Header';
 import TopicListContent from '../TopicListContent';
 import GroupRoleContent from './GroupRoleContent';
 
-const GroupChatThread = lazy(() => import('./thread'));
+const GroupChatDM = lazy(() => import('./dm'));
 
 const useStyles = createStyles(({ css, token }) => ({
   content: css`
@@ -148,12 +148,12 @@ const GroupChatSidebar = memo(() => {
     setSelectedAgentId(undefined);
   };
 
-  const showThread = activeThreadAgentId && activeThreadAgentId.length > 0;
+  const showDMPanel = activeThreadAgentId && activeThreadAgentId.length > 0;
 
   return (
     <Flexbox height={'100%'}>
       <AnimatePresence mode="wait">
-        {showThread ? (
+        {showDMPanel ? (
           <motion.div
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
@@ -162,7 +162,7 @@ const GroupChatSidebar = memo(() => {
             style={{ height: '100%', width: '100%' }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
-            <GroupChatThread />
+            <GroupChatDM />
           </motion.div>
         ) : (
           <motion.div

@@ -25,7 +25,7 @@ const useStyles = createStyles(({ css, token }) => ({
   `,
 }));
 
-const GroupChatThread = memo(() => {
+const GroupChatDM = memo(() => {
   const { styles } = useStyles();
   const activeThreadAgentId = useChatGroupStore((s) => s.activeThreadAgentId);
   const toggleThread = useChatGroupStore((s) => s.toggleThread);
@@ -71,4 +71,4 @@ const GroupChatThread = memo(() => {
   );
 });
 
-export default GroupChatThread;
+export default GroupChatDM;

@@ -49,14 +49,7 @@ const GroupRole = memo<GroupRoleProps>(
     };
 
     return (
-      <Flexbox
-        height={200}
-        onClick={handleOpen}
-        onDoubleClick={() => {
-          return;
-        }}
-        padding={16}
-      >
+      <Flexbox height={200} onClick={handleOpen} padding={16}>
         <EditableMessage
           classNames={{ markdown: styles.prompt }}
           editing={editing}

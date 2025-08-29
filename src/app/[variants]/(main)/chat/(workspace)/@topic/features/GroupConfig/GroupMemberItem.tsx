@@ -1,6 +1,6 @@
 'use client';
 
-import { Avatar, Icon, SortableList, Text } from '@lobehub/ui';
+import { ActionIcon, Avatar, SortableList, Text } from '@lobehub/ui';
 import { LoaderCircle, PinIcon } from 'lucide-react';
 import { ReactNode, memo } from 'react';
 import { Flexbox } from 'react-layout-kit';
@@ -13,9 +13,9 @@ interface GroupMemberItemProps {
   actions?: ReactNode;
   avatar?: string;
   background?: string;
+  generating?: boolean;
+  generatingTooltip?: string;
   id: string;
-  loading?: boolean;
-  loadingTooltip?: string;
   onClick?: () => void;
   pin?: boolean;
   showActionsOnHover?: boolean;
@@ -32,8 +32,8 @@ const GroupMemberItem = memo<GroupMemberItemProps>(
     actions,
     showActionsOnHover = true,
     pin,
-    loading,
-    loadingTooltip,
+    generating,
+    generatingTooltip,
   }) => {
     const { styles } = useStyles();
 
@@ -70,7 +70,9 @@ const GroupMemberItem = memo<GroupMemberItemProps>(
             {actions}
           </Flexbox>
         )}
-        {loading && <Icon icon={LoaderCircle} size={14} spin title={loadingTooltip} />}
+        {generating && (
+          <ActionIcon icon={LoaderCircle} size={'small'} spin title={generatingTooltip} />
+        )}
       </SortableList.Item>
     );
   },

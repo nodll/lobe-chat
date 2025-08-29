@@ -92,9 +92,9 @@ const GroupMember = memo<GroupMemberProps>(
           {/* Orchestrator */}
           <GroupMemberItem
             avatar={'🎙️'}
+            generating={isSupervisorLoading}
+            generatingTooltip={t('groupSidebar.members.orchestratorThinking')}
             id={'orchestrator'}
-            loading={isSupervisorLoading}
-            loadingTooltip={t('groupSidebar.members.orchestratorThinking')}
             pin
             showActionsOnHover={false}
             title={t('groupSidebar.members.orchestrator')}

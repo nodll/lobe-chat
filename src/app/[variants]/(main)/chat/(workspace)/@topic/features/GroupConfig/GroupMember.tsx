@@ -1,8 +1,8 @@
 'use client';
 
-import { ActionIcon, Avatar, SortableList, Text, Tooltip } from '@lobehub/ui';
+import { ActionIcon, Avatar, Icon, SortableList, Text } from '@lobehub/ui';
 import { createStyles } from 'antd-style';
-import { LoaderCircle, MessageSquare, UserMinus } from 'lucide-react';
+import { LoaderCircle, MessageSquare, PinIcon, UserMinus } from 'lucide-react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
@@ -22,14 +22,27 @@ const useStyles = createStyles(({ css, token }) => ({
   memberItem: css`
     cursor: pointer;
 
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+
     width: 100%;
     padding: 8px;
     border-radius: ${token.borderRadius}px;
 
     transition: all 0.2s ease;
 
+    .show-on-hover {
+      opacity: 0;
+    }
+
     &:hover {
       background: ${token.colorFillSecondary};
+
+      .show-on-hover {
+        opacity: 1;
+      }
     }
   `,
 }));
@@ -77,7 +90,6 @@ const GroupMember = memo<GroupMemberProps>(
     const [members, setMembers] = useState<any[]>(initialMembers);
 
     const [removingMemberIds, setRemovingMemberIds] = useState<string[]>([]);
-    const [hoveredMemberId, setHoveredMemberId] = useState<string | null>(null);
 
     useEffect(() => {
       setMembers(initialMembers);
@@ -108,46 +120,32 @@ const GroupMember = memo<GroupMemberProps>(
       <>
         <Flexbox padding={6}>
           {/* Orchestrator */}
-          <div className={styles.memberItem}>
-            <Flexbox align={'center'} gap={8} horizontal>
-              <div style={{ opacity: 0.3, pointerEvents: 'none' }}>
-                <SortableList.DragHandle />
-              </div>
+          <SortableList.Item className={styles.memberItem} id={'orchestrator'}>
+            <SortableList.DragHandle disabled icon={PinIcon} />
+            <Flexbox flex={1} gap={8} horizontal style={{ overflow: 'hidden' }}>
               <Avatar avatar={'🎙️'} size={24} />
-              <Flexbox flex={1}>
-                <div
-                  style={{
-                    fontSize: '14px',
-                    fontWeight: 500,
-                  }}
-                >
-                  {t('groupSidebar.members.orchestrator')}
-                </div>
-              </Flexbox>
-              {isSupervisorLoading && (
-                <Flexbox gap={4} horizontal>
-                  <Tooltip title={t('groupSidebar.members.orchestratorThinking')}>
-                    <ActionIcon icon={LoaderCircle} size={14} spin />
-                  </Tooltip>
-                </Flexbox>
-              )}
+              <Text ellipsis>{t('groupSidebar.members.orchestrator')}</Text>
             </Flexbox>
-          </div>
+            {isSupervisorLoading && (
+              <Icon
+                icon={LoaderCircle}
+                size={14}
+                spin
+                title={t('groupSidebar.members.orchestratorThinking')}
+              />
+            )}
+          </SortableList.Item>
 
           {/* Current User */}
-          <div className={styles.memberItem}>
-            <Flexbox align={'center'} gap={8} horizontal>
-              <div style={{ opacity: 0.3, pointerEvents: 'none' }}>
-                <SortableList.DragHandle />
-              </div>
+          <SortableList.Item className={styles.memberItem} id={'currentUser'}>
+            <SortableList.DragHandle disabled icon={PinIcon} />
+            <Flexbox flex={1} gap={8} horizontal style={{ overflow: 'hidden' }}>
               <Avatar avatar={currentUser.avatar} size={24} />
-              <Flexbox flex={1}>
-                <div>{currentUser.name}</div>
-              </Flexbox>
+              <Text ellipsis>{currentUser.name}</Text>
             </Flexbox>
-          </div>
+          </SortableList.Item>
 
-          {members && members.length > 0 ? (
+          {Boolean(members && members.length > 0) && (
             <SortableList
               items={members}
               onChange={async (items: any[]) => {
@@ -159,65 +157,59 @@ const GroupMember = memo<GroupMemberProps>(
                 });
               }}
               renderItem={(item: any) => (
-                <SortableList.Item className={styles.memberItem} id={item.id}>
+                <SortableList.Item
+                  className={styles.memberItem}
+                  id={item.id}
+                  justify={'space-between'}
+                >
                   <Flexbox
                     align={'center'}
-                    gap={8}
+                    gap={4}
                     horizontal
-                    justify={'space-between'}
-                    onMouseEnter={() => setHoveredMemberId(item.id)}
-                    onMouseLeave={() => setHoveredMemberId(null)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMemberClick(item.id);
+                    }}
+                    style={{ cursor: 'pointer', flex: '1 1 0', minWidth: 0 }}
                   >
-                    <Flexbox
-                      align={'center'}
-                      gap={8}
-                      horizontal
-                      onClick={() => handleMemberClick(item.id)}
-                      style={{ cursor: 'pointer', flex: '1 1 0', minWidth: 0 }}
-                    >
-                      <SortableList.DragHandle />
+                    <SortableList.DragHandle />
+                    <Flexbox flex={1} gap={8} horizontal style={{ overflow: 'hidden' }}>
                       <Avatar
                         avatar={item.avatar || DEFAULT_AVATAR}
                         background={item.backgroundColor!}
                         size={24}
                       />
-                      <div style={{ flex: '1 1 0', minWidth: 0, overflow: 'hidden' }}>
-                        <Text ellipsis style={{ display: 'block' }}>
-                          {item.title || t('defaultSession', { ns: 'common' })}
-                        </Text>
-                      </div>
+                      <Text ellipsis>{item.title || t('defaultSession', { ns: 'common' })}</Text>
                     </Flexbox>
-                    {hoveredMemberId === item.id && (
-                      <Flexbox gap={4} horizontal>
-                        <ActionIcon
-                          icon={MessageSquare}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleThread(item.id);
-                            togglePortal(true);
-                          }}
-                          size={'small'}
-                          title={t('dm.tooltip')}
-                        />
-                        <ActionIcon
-                          danger
-                          icon={UserMinus}
-                          loading={removingMemberIds.includes(item.id)}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveMember(item.id);
-                          }}
-                          size={'small'}
-                          title={t('groupSidebar.members.removeMember')}
-                        />
-                      </Flexbox>
-                    )}
+                  </Flexbox>
+                  <Flexbox className={'show-on-hover'} gap={4} horizontal>
+                    <ActionIcon
+                      icon={MessageSquare}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleThread(item.id);
+                        togglePortal(true);
+                      }}
+                      size={'small'}
+                      title={t('dm.tooltip')}
+                    />
+                    <ActionIcon
+                      danger
+                      icon={UserMinus}
+                      loading={removingMemberIds.includes(item.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveMember(item.id);
+                      }}
+                      size={'small'}
+                      title={t('groupSidebar.members.removeMember')}
+                    />
                   </Flexbox>
                 </SortableList.Item>
               )}
               style={{ margin: 0 }}
             />
-          ) : null}
+          )}
         </Flexbox>
 
         <MemberSelectionModal

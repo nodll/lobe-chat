@@ -97,7 +97,6 @@ const SystemRole = memo(() => {
         size={12}
         style={{
           opacity: expanded ? 1 : 0,
-          paddingBottom: 16,
           transition: 'all 0.3s ease',
         }}
       >

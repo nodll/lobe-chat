@@ -100,7 +100,6 @@ const GroupChatSidebar = memo(() => {
           maxHeight: expanded ? (activeTab === 'members' ? '40vh' : 200) : 0,
           minHeight: expanded ? 232 : 0,
           opacity: expanded ? 1 : 0,
-          paddingBottom: 16,
           transition: 'all 0.3s ease',
         }}
       >

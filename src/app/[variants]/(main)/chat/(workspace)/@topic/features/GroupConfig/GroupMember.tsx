@@ -19,21 +19,10 @@ import { LobeSession } from '@/types/session';
 import AgentSettings from '../../../features/AgentSettings';
 
 const useStyles = createStyles(({ css, token }) => ({
-  content: css`
-    overflow-y: auto;
-
-    height: fit-content;
-    min-height: 200px;
-    padding-block: ${token.paddingSM}px;
-    padding-block-end: ${token.padding}px;
-    padding-inline: 0;
-  `,
   memberItem: css`
     cursor: pointer;
 
-    width: calc(100% - 16px);
-    margin-block: 1px;
-    margin-inline: 8px;
+    width: 100%;
     padding: 8px;
     border-radius: ${token.borderRadius}px;
 
@@ -117,9 +106,9 @@ const GroupMember = memo<GroupMemberProps>(
 
     return (
       <>
-        <Flexbox className={styles.content} flex={0.6} gap={0}>
+        <Flexbox padding={6}>
           {/* Orchestrator */}
-          <div className={styles.memberItem} style={{ marginBottom: 8 }}>
+          <div className={styles.memberItem}>
             <Flexbox align={'center'} gap={8} horizontal>
               <div style={{ opacity: 0.3, pointerEvents: 'none' }}>
                 <SortableList.DragHandle />
@@ -146,7 +135,7 @@ const GroupMember = memo<GroupMemberProps>(
           </div>
 
           {/* Current User */}
-          <div className={styles.memberItem} style={{ marginBottom: 8 }}>
+          <div className={styles.memberItem}>
             <Flexbox align={'center'} gap={8} horizontal>
               <div style={{ opacity: 0.3, pointerEvents: 'none' }}>
                 <SortableList.DragHandle />
@@ -226,6 +215,7 @@ const GroupMember = memo<GroupMemberProps>(
                   </Flexbox>
                 </SortableList.Item>
               )}
+              style={{ margin: 0 }}
             />
           ) : null}
         </Flexbox>

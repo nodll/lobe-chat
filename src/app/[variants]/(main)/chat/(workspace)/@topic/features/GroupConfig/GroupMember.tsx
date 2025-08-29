@@ -34,6 +34,8 @@ const GroupMember = memo<GroupMemberProps>(
     const persistReorder = useChatGroupStore((s) => s.reorderGroupMembers);
     const toggleThread = useChatGroupStore((s) => s.toggleThread);
     const togglePortal = useChatStore((s) => s.togglePortal);
+    const cancelSupervisorDecision = useChatStore((s) => s.internal_cancelSupervisorDecision);
+    const triggerSupervisorDecision = useChatStore((s) => s.internal_triggerSupervisorDecision);
 
     const isSupervisorLoading = useChatStore(chatSelectors.isSupervisorLoading(sessionId || ''));
 
@@ -91,6 +93,16 @@ const GroupMember = memo<GroupMemberProps>(
       setSelectedAgentId(undefined);
     };
 
+    const handleStopSupervisor = () => {
+      if (!sessionId) return;
+      cancelSupervisorDecision(sessionId);
+    };
+
+    const handleTriggerSupervisor = () => {
+      if (!sessionId) return;
+      triggerSupervisorDecision(sessionId);
+    };
+
     return (
       <>
         <Flexbox gap={2} padding={6}>
@@ -100,8 +112,12 @@ const GroupMember = memo<GroupMemberProps>(
             generating={isSupervisorLoading}
             generatingTooltip={t('groupSidebar.members.orchestratorThinking')}
             id={'orchestrator'}
+            onStopGenerating={handleStopSupervisor}
+            onStopGeneratingTooltip={t('groupSidebar.members.stopOrchestrator')}
+            onTriggerSupervisor={handleTriggerSupervisor}
+            onTriggerSupervisorTooltip={t('groupSidebar.members.triggerOrchestrator')}
             pin
-            showActionsOnHover={false}
+            showActionsOnHover={true}
             title={t('groupSidebar.members.orchestrator')}
           />
 

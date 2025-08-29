@@ -1,7 +1,7 @@
 'use client';
 
 import { ActionIcon, Avatar, SortableList, Text } from '@lobehub/ui';
-import { LoaderCircle, PinIcon } from 'lucide-react';
+import { LoaderCircle, PinIcon, Play, StopCircle } from 'lucide-react';
 import { ReactNode, memo } from 'react';
 import { Flexbox } from 'react-layout-kit';
 
@@ -17,6 +17,10 @@ interface GroupMemberItemProps {
   generatingTooltip?: string;
   id: string;
   onClick?: () => void;
+  onStopGenerating?: () => void;
+  onStopGeneratingTooltip?: string;
+  onTriggerSupervisor?: () => void;
+  onTriggerSupervisorTooltip?: string;
   pin?: boolean;
   showActionsOnHover?: boolean;
   title: string;
@@ -34,6 +38,10 @@ const GroupMemberItem = memo<GroupMemberItemProps>(
     pin,
     generating,
     generatingTooltip,
+    onStopGenerating,
+    onStopGeneratingTooltip,
+    onTriggerSupervisor,
+    onTriggerSupervisorTooltip,
   }) => {
     const { styles } = useStyles();
 
@@ -76,8 +84,34 @@ const GroupMemberItem = memo<GroupMemberItemProps>(
             {actions}
           </Flexbox>
         )}
-        {generating && (
-          <ActionIcon icon={LoaderCircle} size={'small'} spin title={generatingTooltip} />
+        {generating ? (
+          <Flexbox gap={4} horizontal>
+            <ActionIcon icon={LoaderCircle} size={'small'} spin title={generatingTooltip} />
+            {onStopGenerating && (
+              <ActionIcon
+                icon={StopCircle}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onStopGenerating();
+                }}
+                size={'small'}
+                title={onStopGeneratingTooltip || 'Stop generating'}
+              />
+            )}
+          </Flexbox>
+        ) : (
+          onTriggerSupervisor && (
+            <ActionIcon
+              className="show-on-hover"
+              icon={Play}
+              onClick={(e) => {
+                e.stopPropagation();
+                onTriggerSupervisor();
+              }}
+              size={'small'}
+              title={onTriggerSupervisorTooltip || 'Trigger supervisor decision'}
+            />
+          )
         )}
       </SortableList.Item>
     );

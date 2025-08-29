@@ -80,6 +80,8 @@ export default {
       memberSettings: '成员设置',
       orchestrator: '主持人',
       orchestratorThinking: '主持人正在思考中...',
+      stopOrchestrator: '停止思考',
+      triggerOrchestrator: '触发决策',
       removeMember: '移除成员',
     },
     tabs: {

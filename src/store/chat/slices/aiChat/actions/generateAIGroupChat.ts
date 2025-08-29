@@ -205,6 +205,18 @@ export const generateAIGroupChat: StateCreator<
       return;
     }
 
+    // Create AbortController for this supervisor decision
+    const abortController = new AbortController();
+    
+    // Store the AbortController in state
+    set(
+      produce((state: ChatStoreState) => {
+        state.supervisorDecisionAbortControllers[groupId] = abortController;
+      }),
+      false,
+      n(`setSupervisorAbortController/${groupId}`),
+    );
+
     internal_toggleSupervisorLoading(true, groupId);
 
     const groupConfig = chatGroupSelectors.currentGroupConfig(useChatGroupStore.getState());
@@ -222,6 +234,7 @@ export const generateAIGroupChat: StateCreator<
         provider: groupConfig.orchestratorProvider || 'google',
         userName: realUserName,
         systemPrompt: groupConfig.systemPrompt,
+        abortController,
       };
 
       const decisions: SupervisorDecisionList = await supervisor.makeDecision(context);
@@ -232,9 +245,22 @@ export const generateAIGroupChat: StateCreator<
         await get().internal_executeAgentResponses(groupId, decisions);
       }
     } catch (error) {
-      console.error('Supervisor decision failed:', error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log('Supervisor decision was aborted for group:', groupId);
+      } else {
+        console.error('Supervisor decision failed:', error);
+      }
     } finally {
       internal_toggleSupervisorLoading(false, groupId);
+      
+      // Clean up AbortController from state
+      set(
+        produce((state: ChatStoreState) => {
+          delete state.supervisorDecisionAbortControllers[groupId];
+        }),
+        false,
+        n(`cleanupSupervisorAbortController/${groupId}`),
+      );
     }
   },
 
@@ -491,12 +517,21 @@ export const generateAIGroupChat: StateCreator<
   },
 
   internal_cancelSupervisorDecision: (groupId: string) => {
-    const { supervisorDebounceTimers } = get();
+    const { supervisorDebounceTimers, supervisorDecisionAbortControllers, internal_toggleSupervisorLoading } = get();
     const existingTimer = supervisorDebounceTimers[groupId];
+    const existingAbortController = supervisorDecisionAbortControllers[groupId];
 
+    console.log(`Attempting to cancel supervisor decision for group ${groupId}`, {
+      existingTimer: !!existingTimer,
+      existingAbortController: !!existingAbortController,
+      allTimers: Object.keys(supervisorDebounceTimers),
+      allAbortControllers: Object.keys(supervisorDecisionAbortControllers)
+    });
+
+    // Cancel pending debounced timer
     if (existingTimer) {
       clearTimeout(existingTimer);
-      console.log(`Cancelled pending supervisor decision for group ${groupId}`);
+      console.log(`Cancelled pending supervisor decision timer for group ${groupId}`);
 
       // Remove timer from state
       set(
@@ -507,25 +542,60 @@ export const generateAIGroupChat: StateCreator<
         n(`cancelSupervisorTimer/${groupId}`),
       );
     }
+
+    // Abort ongoing supervisor decision request
+    if (existingAbortController) {
+      existingAbortController.abort('User cancelled supervisor decision');
+      console.log(`Aborted ongoing supervisor decision request for group ${groupId}`);
+
+      // Remove abort controller from state  
+      set(
+        produce((state: ChatStoreState) => {
+          delete state.supervisorDecisionAbortControllers[groupId];
+        }),
+        false,
+        n(`cancelSupervisorAbortController/${groupId}`),
+      );
+    }
+
+    // Stop the loading state
+    internal_toggleSupervisorLoading(false, groupId);
+    console.log(`Stopped supervisor loading state for group ${groupId}`);
   },
 
   internal_cancelAllSupervisorDecisions: () => {
-    const { supervisorDebounceTimers } = get();
-    const groupIds = Object.keys(supervisorDebounceTimers);
+    const { supervisorDebounceTimers, supervisorDecisionAbortControllers } = get();
+    const timerGroupIds = Object.keys(supervisorDebounceTimers);
+    const abortControllerGroupIds = Object.keys(supervisorDecisionAbortControllers);
 
-    if (groupIds.length > 0) {
+    if (timerGroupIds.length > 0 || abortControllerGroupIds.length > 0) {
       console.log('Cancelling all pending supervisor decisions for session change/cleanup');
 
       // Cancel all timers
-      groupIds.forEach((groupId) => {
+      timerGroupIds.forEach((groupId) => {
         const timer = supervisorDebounceTimers[groupId];
         if (timer) {
           clearTimeout(timer);
         }
       });
 
-      // Clear all timers from state
-      set({ supervisorDebounceTimers: {} }, false, n('cancelAllSupervisorTimers'));
+      // Abort all ongoing requests
+      abortControllerGroupIds.forEach((groupId) => {
+        const abortController = supervisorDecisionAbortControllers[groupId];
+        if (abortController) {
+          abortController.abort('Session cleanup');
+        }
+      });
+
+      // Clear all timers and abort controllers from state
+      set(
+        { 
+          supervisorDebounceTimers: {},
+          supervisorDecisionAbortControllers: {}
+        }, 
+        false, 
+        n('cancelAllSupervisorDecisions')
+      );
     }
   },
 });

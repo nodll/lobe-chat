@@ -21,6 +21,7 @@ export interface SupervisorContext {
   // Real user name for group member list
   systemPrompt?: string; 
   userName?: string; // Custom system prompt from group config
+  abortController?: AbortController; // For request cancellation
 }
 
 /**
@@ -75,6 +76,7 @@ export class GroupChatSupervisor {
     let res = '';
 
     await chatService.fetchPresetTaskResult({
+      abortController: context.abortController,
       onFinish: async (content) => {
         console.log('Supervisor LLM response:', content);
         res = content.trim();

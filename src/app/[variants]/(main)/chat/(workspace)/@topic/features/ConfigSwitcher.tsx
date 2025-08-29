@@ -5,25 +5,14 @@ import { memo } from 'react';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
 
-import GroupChatSidebar from './features/GroupChatSidebar';
-import Header from './features/Header';
-import SystemRole from './features/SystemRole';
-import TopicListContent from './features/TopicListContent';
+import GroupConfig from './GroupConfig';
+import SystemRole from './SystemRole';
 
 const SidebarSelector = memo(() => {
   const isGroupSession = useSessionStore(sessionSelectors.isCurrentSessionGroupSession);
+  const ConfigRender = isGroupSession ? GroupConfig : SystemRole;
 
-  if (isGroupSession) {
-    return <GroupChatSidebar />;
-  }
-
-  return (
-    <>
-      <SystemRole />
-      <Header />
-      <TopicListContent />
-    </>
-  );
+  return <ConfigRender />;
 });
 
 SidebarSelector.displayName = 'SidebarSelector';

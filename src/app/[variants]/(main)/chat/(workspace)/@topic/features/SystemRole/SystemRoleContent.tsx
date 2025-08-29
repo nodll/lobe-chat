@@ -61,9 +61,9 @@ const SystemRole = memo(() => {
     setOpen(true);
   };
 
-  const handleOpen = () => {
+  const handleOpen = (e: MouseEvent) => {
     if (isLoading) return;
-
+    if (e.altKey) handleOpenWithEdit(e);
     setOpen(true);
   };
 
@@ -90,15 +90,15 @@ const SystemRole = memo(() => {
         className={cx(styles.promptBox, styles.animatedContainer)}
         height={expanded ? 200 : 0}
         onClick={handleOpen}
-        onDoubleClick={(e) => {
-          if (e.altKey) handleOpenWithEdit(e);
+        onDoubleClick={() => {
+          return;
         }}
         paddingInline={16}
-        size={25}
+        size={12}
         style={{
           opacity: expanded ? 1 : 0,
-          overflow: 'hidden',
-          transition: 'height 0.3s ease',
+          paddingBottom: 16,
+          transition: 'all 0.3s ease',
         }}
       >
         {isLoading ? (

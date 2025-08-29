@@ -16,6 +16,5 @@ export const useStyles = createStyles(({ css, token }) => ({
   `,
   promptBox: css`
     position: relative;
-    border-block-end: 1px solid ${token.colorBorderSecondary};
   `,
 }));

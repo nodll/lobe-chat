@@ -10,7 +10,7 @@ import { useChatGroupStore } from '@/store/chatGroup';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
 
-import DMChatItem from './DMChatItem';
+import ThreadChatItem from './ThreadChatItem';
 
 const ThreadChatList = memo(() => {
   const { t } = useTranslation('chat');
@@ -26,7 +26,7 @@ const ThreadChatList = memo(() => {
   const data = useChatStore(chatSelectors.getThreadMessageIDs(activeThreadAgentId));
 
   const itemContent = useCallback(
-    (index: number, id: string) => <DMChatItem id={id} index={index} />,
+    (index: number, id: string) => <ThreadChatItem id={id} index={index} />,
     [],
   );
 

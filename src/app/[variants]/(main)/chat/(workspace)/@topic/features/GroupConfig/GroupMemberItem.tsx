@@ -48,6 +48,7 @@ const GroupMemberItem = memo<GroupMemberItemProps>(
             e.stopPropagation();
             onClick?.();
           }}
+          style={{ overflow: 'hidden' }}
         >
           {pin ? (
             <SortableList.DragHandle
@@ -61,7 +62,12 @@ const GroupMemberItem = memo<GroupMemberItemProps>(
             <SortableList.DragHandle />
           )}
           <Flexbox flex={1} gap={8} horizontal style={{ overflow: 'hidden' }}>
-            <Avatar avatar={avatar || DEFAULT_AVATAR} background={background} size={24} />
+            <Avatar
+              avatar={avatar || DEFAULT_AVATAR}
+              background={background}
+              size={24}
+              style={{ flex: 'none' }}
+            />
             <Text ellipsis>{title}</Text>
           </Flexbox>
         </Flexbox>

@@ -77,6 +77,7 @@ export default {
   groupSidebar: {
     members: {
       addMember: '添加成员',
+      memberSettings: '成员设置',
       orchestrator: '主持人',
       orchestratorThinking: '主持人正在思考中...',
       removeMember: '移除成员',

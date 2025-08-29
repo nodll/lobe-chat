@@ -5,9 +5,9 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
-import { StoreApiWithSelector } from '@/utils/zustand';
 
 import { Store, store } from './action';
+import { StoreApiWithSelector } from '@/types/zustand';
 
 export type { State } from './initialState';
 

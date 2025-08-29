@@ -316,8 +316,8 @@ export default {
     },
     submit: '更新群聊',
     systemPrompt: {
-      placeholder: '请输入系统提示词',
-      title: '系统提示词',
+      placeholder: '请输入主持人系统提示词',
+      title: '主持人系统提示词',
     },
     title: '群聊信息',
   },
@@ -360,7 +360,7 @@ export default {
       placeholder: '请输入自定义主持人系统提示词...',
       title: '主持人系统提示词',
     },
-    title: '聊天设置'
+    title: '聊天设置',
   },
   settingGroupMembers: {
     edit: '编辑成员',

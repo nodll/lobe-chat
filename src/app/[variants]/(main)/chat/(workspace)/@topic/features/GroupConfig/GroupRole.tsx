@@ -67,7 +67,7 @@ const GroupRole = memo<GroupRoleProps>(
           onEditingChange={setEditing}
           onOpenChange={setEditorModalOpen}
           openModal={editorModalOpen}
-          placeholder={`${t('settingAgent.prompt.placeholder', { ns: 'setting' })}...`}
+          placeholder={`${t('settingGroup.systemPrompt.placeholder', { ns: 'setting' })}...`}
           styles={{
             markdown: {
               opacity: groupConfig?.systemPrompt ? undefined : 0.5,
@@ -78,7 +78,7 @@ const GroupRole = memo<GroupRoleProps>(
             cancel: t('cancel', { ns: 'common' }),
             confirm: t('ok', { ns: 'common' }),
             edit: t('edit', { ns: 'common' }),
-            title: 'Group System Role',
+            title: t('settingGroup.systemPrompt.title', { ns: 'setting' }),
           }}
           value={groupConfig?.systemPrompt || ''}
         />

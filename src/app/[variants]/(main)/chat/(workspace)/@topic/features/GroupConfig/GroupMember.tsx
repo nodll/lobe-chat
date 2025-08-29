@@ -1,7 +1,7 @@
 'use client';
 
 import { ActionIcon, SortableList } from '@lobehub/ui';
-import { MessageSquare, UserMinus } from 'lucide-react';
+import { Settings, UserMinus } from 'lucide-react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
@@ -77,6 +77,11 @@ const GroupMember = memo<GroupMemberProps>(
     };
 
     const handleMemberClick = (agentId: string) => {
+      toggleThread(agentId);
+      togglePortal(true);
+    };
+
+    const handleOpenMemberSettings = (agentId: string) => {
       setSelectedAgentId(agentId);
       setAgentSettingsOpen(true);
     };
@@ -126,14 +131,13 @@ const GroupMember = memo<GroupMemberProps>(
                   actions={
                     <>
                       <ActionIcon
-                        icon={MessageSquare}
+                        icon={Settings}
                         onClick={(e) => {
                           e.stopPropagation();
-                          toggleThread(item.id);
-                          togglePortal(true);
+                          handleOpenMemberSettings(item.id);
                         }}
                         size={'small'}
-                        title={t('dm.tooltip')}
+                        title={t('groupSidebar.members.memberSettings')}
                       />
                       <ActionIcon
                         danger

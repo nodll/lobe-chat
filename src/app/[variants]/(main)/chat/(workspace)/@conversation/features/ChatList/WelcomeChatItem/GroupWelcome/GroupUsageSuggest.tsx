@@ -59,8 +59,26 @@ const useStyles = createStyles(({ css, token, responsive }) => ({
 
 // All available activity keys
 const allActivities = [
-  'a01', 'a02', 'a03', 'a04', 'a05', 'a06', 'a07', 'a08', 'a09', 'a10',
-  'a11', 'a12', 'a13', 'a14', 'a15', 'a16', 'a17', 'a18', 'a19', 'a20',
+  'a01',
+  'a02',
+  'a03',
+  'a04',
+  'a05',
+  'a06',
+  'a07',
+  'a08',
+  'a09',
+  'a10',
+  'a11',
+  'a12',
+  'a13',
+  'a14',
+  'a15',
+  'a16',
+  'a17',
+  'a18',
+  'a19',
+  'a20',
 ];
 
 const GroupUsageSuggest = memo<{ mobile?: boolean }>(({ mobile }) => {
@@ -68,11 +86,11 @@ const GroupUsageSuggest = memo<{ mobile?: boolean }>(({ mobile }) => {
   const [updateInputMessage] = useChatStore((s) => [s.updateInputMessage]);
   const { styles } = useStyles();
   const { send: sendMessage } = useSendMessage();
-  
+
   const itemsPerPage = mobile ? 2 : 4;
-  
+
   const [shuffledActivities, setShuffledActivities] = useState(() => shuffle(allActivities));
-  
+
   const displayedActivities = shuffledActivities.slice(0, itemsPerPage);
 
   const handleRefresh = () => {
@@ -82,9 +100,7 @@ const GroupUsageSuggest = memo<{ mobile?: boolean }>(({ mobile }) => {
   return (
     <Flexbox gap={8} width={'100%'}>
       <Flexbox align={'center'} horizontal justify={'space-between'}>
-        <div className={styles.title}>
-          Popular Group Activities:
-        </div>
+        <div className={styles.title}>{t('guide.groupActivities.title')}</div>
         <ActionIcon
           icon={RefreshCw}
           onClick={handleRefresh}
@@ -97,7 +113,7 @@ const GroupUsageSuggest = memo<{ mobile?: boolean }>(({ mobile }) => {
           const title = t(`guide.groupActivities.${activityKey}.title` as any);
           const emoji = t(`guide.groupActivities.${activityKey}.emoji` as any);
           const description = t(`guide.groupActivities.${activityKey}.description` as any);
-          
+
           return (
             <Block
               className={styles.card}

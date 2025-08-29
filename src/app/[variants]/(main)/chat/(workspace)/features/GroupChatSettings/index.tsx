@@ -10,13 +10,17 @@ import BrandWatermark from '@/components/BrandWatermark';
 import PanelTitle from '@/components/PanelTitle';
 import { isDesktop } from '@/const/version';
 import { TITLE_BAR_HEIGHT } from '@/features/ElectronTitlebar';
-import { GroupCategory, GroupChatSettingsProvider, GroupSettings } from '@/features/GroupChatSettings';
+import {
+  GroupCategory,
+  GroupChatSettingsProvider,
+  GroupSettings,
+} from '@/features/GroupChatSettings';
+import Footer from '@/features/Setting/Footer';
+import { useInitGroupConfig } from '@/hooks/useInitGroupConfig';
 import { useChatGroupStore } from '@/store/chatGroup';
 import { chatGroupSelectors } from '@/store/chatGroup/selectors';
 import { GroupSettingsTabs } from '@/store/global/initialState';
 import { useSessionStore } from '@/store/session';
-import Footer from '@/features/Setting/Footer';
-import { useInitGroupConfig } from '@/hooks/useInitGroupConfig';
 
 // Counterpart: src/app/[variants]/(main)/chat/(workspace)/features/AgentSettings/index.tsx
 const GroupChatSettings = memo(() => {
@@ -26,7 +30,11 @@ const GroupChatSettings = memo(() => {
   const meta = useChatGroupStore(chatGroupSelectors.currentGroupMeta, isEqual);
   const { isLoading } = useInitGroupConfig();
 
-  const [showGroupSetting, updateGroupConfig, updateGroupMeta] = useChatGroupStore((s) => [s.showGroupSetting, s.updateGroupConfig, s.updateGroupMeta]);
+  const [showGroupSetting, updateGroupConfig, updateGroupMeta] = useChatGroupStore((s) => [
+    s.showGroupSetting,
+    s.updateGroupConfig,
+    s.updateGroupMeta,
+  ]);
 
   const [tab, setTab] = useState(GroupSettingsTabs.Settings);
 
@@ -53,7 +61,7 @@ const GroupChatSettings = memo(() => {
               minHeight: '100%',
             }}
           >
-            <PanelTitle desc={t('header.groupDesc', 'Manage your group settings')} title={t('header.group', 'Group Settings')} />
+            <PanelTitle desc={t('header.groupDesc')} title={t('header.group')} />
             <GroupCategory setTab={setTab} tab={tab} />
             <BrandWatermark paddingInline={12} />
           </Flexbox>

@@ -42,7 +42,6 @@ const ChatGroupMeta = memo(() => {
         label: t('settingGroup.description.title'),
         name: 'description',
       },
-
     ],
     title: t('settingGroup.title'),
   };
@@ -53,7 +52,7 @@ const ChatGroupMeta = memo(() => {
         <Form.SubmitFooter
           texts={{
             reset: t('submitFooter.reset'),
-            submit: 'Update Group',
+            submit: t('submitFooter.submit'),
             unSaved: t('submitFooter.unSaved'),
             unSavedWarning: t('submitFooter.unSavedWarning'),
           }}

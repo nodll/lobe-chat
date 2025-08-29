@@ -41,13 +41,13 @@ const GroupMemberItem = memo<GroupMemberItemProps>(
       <SortableList.Item className={styles.memberItem} id={id} justify={'space-between'}>
         <Flexbox
           align={'center'}
+          flex={1}
           gap={4}
           horizontal
           onClick={(e) => {
             e.stopPropagation();
             onClick?.();
           }}
-          style={{ cursor: 'pointer', flex: '1 1 0', minWidth: 0 }}
         >
           {pin ? (
             <SortableList.DragHandle

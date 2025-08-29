@@ -10,7 +10,8 @@ export const useStyles = createStyles(({ css, token }) => ({
     align-items: center;
 
     width: 100%;
-    padding: 8px;
+    padding-block: 8px;
+    padding-inline: 4px 12px;
     border-radius: ${token.borderRadius}px;
 
     transition: all 0.2s ease;

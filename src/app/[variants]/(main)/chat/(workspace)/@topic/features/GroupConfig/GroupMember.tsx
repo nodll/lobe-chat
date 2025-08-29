@@ -1,8 +1,7 @@
 'use client';
 
-import { ActionIcon, Avatar, Icon, SortableList, Text } from '@lobehub/ui';
-import { createStyles } from 'antd-style';
-import { LoaderCircle, MessageSquare, PinIcon, UserMinus } from 'lucide-react';
+import { ActionIcon, SortableList } from '@lobehub/ui';
+import { MessageSquare, UserMinus } from 'lucide-react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
@@ -17,35 +16,7 @@ import { userProfileSelectors } from '@/store/user/selectors';
 import { LobeSession } from '@/types/session';
 
 import AgentSettings from '../../../features/AgentSettings';
-
-const useStyles = createStyles(({ css, token }) => ({
-  memberItem: css`
-    cursor: pointer;
-
-    display: flex;
-    flex-direction: row;
-    gap: 4px;
-    align-items: center;
-
-    width: 100%;
-    padding: 8px;
-    border-radius: ${token.borderRadius}px;
-
-    transition: all 0.2s ease;
-
-    .show-on-hover {
-      opacity: 0;
-    }
-
-    &:hover {
-      background: ${token.colorFillSecondary};
-
-      .show-on-hover {
-        opacity: 1;
-      }
-    }
-  `,
-}));
+import GroupMemberItem from './GroupMemberItem';
 
 interface GroupMemberProps {
   addModalOpen: boolean;
@@ -56,7 +27,6 @@ interface GroupMemberProps {
 
 const GroupMember = memo<GroupMemberProps>(
   ({ currentSession, addModalOpen, onAddModalOpenChange, sessionId }) => {
-    const { styles } = useStyles();
     const { t } = useTranslation('chat');
 
     const addAgentsToGroup = useChatGroupStore((s) => s.addAgentsToGroup);
@@ -118,35 +88,30 @@ const GroupMember = memo<GroupMemberProps>(
 
     return (
       <>
-        <Flexbox padding={6}>
+        <Flexbox gap={2} padding={6}>
           {/* Orchestrator */}
-          <SortableList.Item className={styles.memberItem} id={'orchestrator'}>
-            <SortableList.DragHandle disabled icon={PinIcon} />
-            <Flexbox flex={1} gap={8} horizontal style={{ overflow: 'hidden' }}>
-              <Avatar avatar={'🎙️'} size={24} />
-              <Text ellipsis>{t('groupSidebar.members.orchestrator')}</Text>
-            </Flexbox>
-            {isSupervisorLoading && (
-              <Icon
-                icon={LoaderCircle}
-                size={14}
-                spin
-                title={t('groupSidebar.members.orchestratorThinking')}
-              />
-            )}
-          </SortableList.Item>
+          <GroupMemberItem
+            avatar={'🎙️'}
+            id={'orchestrator'}
+            loading={isSupervisorLoading}
+            loadingTooltip={t('groupSidebar.members.orchestratorThinking')}
+            pin
+            showActionsOnHover={false}
+            title={t('groupSidebar.members.orchestrator')}
+          />
 
           {/* Current User */}
-          <SortableList.Item className={styles.memberItem} id={'currentUser'}>
-            <SortableList.DragHandle disabled icon={PinIcon} />
-            <Flexbox flex={1} gap={8} horizontal style={{ overflow: 'hidden' }}>
-              <Avatar avatar={currentUser.avatar} size={24} />
-              <Text ellipsis>{currentUser.name}</Text>
-            </Flexbox>
-          </SortableList.Item>
+          <GroupMemberItem
+            avatar={currentUser.avatar}
+            id={'currentUser'}
+            pin
+            showActionsOnHover={false}
+            title={currentUser.name || ''}
+          />
 
           {Boolean(members && members.length > 0) && (
             <SortableList
+              gap={2}
               items={members}
               onChange={async (items: any[]) => {
                 setMembers(items);
@@ -157,55 +122,38 @@ const GroupMember = memo<GroupMemberProps>(
                 });
               }}
               renderItem={(item: any) => (
-                <SortableList.Item
-                  className={styles.memberItem}
-                  id={item.id}
-                  justify={'space-between'}
-                >
-                  <Flexbox
-                    align={'center'}
-                    gap={4}
-                    horizontal
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleMemberClick(item.id);
-                    }}
-                    style={{ cursor: 'pointer', flex: '1 1 0', minWidth: 0 }}
-                  >
-                    <SortableList.DragHandle />
-                    <Flexbox flex={1} gap={8} horizontal style={{ overflow: 'hidden' }}>
-                      <Avatar
-                        avatar={item.avatar || DEFAULT_AVATAR}
-                        background={item.backgroundColor!}
-                        size={24}
+                <GroupMemberItem
+                  actions={
+                    <>
+                      <ActionIcon
+                        icon={MessageSquare}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleThread(item.id);
+                          togglePortal(true);
+                        }}
+                        size={'small'}
+                        title={t('dm.tooltip')}
                       />
-                      <Text ellipsis>{item.title || t('defaultSession', { ns: 'common' })}</Text>
-                    </Flexbox>
-                  </Flexbox>
-                  <Flexbox className={'show-on-hover'} gap={4} horizontal>
-                    <ActionIcon
-                      icon={MessageSquare}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleThread(item.id);
-                        togglePortal(true);
-                      }}
-                      size={'small'}
-                      title={t('dm.tooltip')}
-                    />
-                    <ActionIcon
-                      danger
-                      icon={UserMinus}
-                      loading={removingMemberIds.includes(item.id)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveMember(item.id);
-                      }}
-                      size={'small'}
-                      title={t('groupSidebar.members.removeMember')}
-                    />
-                  </Flexbox>
-                </SortableList.Item>
+                      <ActionIcon
+                        danger
+                        icon={UserMinus}
+                        loading={removingMemberIds.includes(item.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveMember(item.id);
+                        }}
+                        size={'small'}
+                        title={t('groupSidebar.members.removeMember')}
+                      />
+                    </>
+                  }
+                  avatar={item.avatar || DEFAULT_AVATAR}
+                  background={item.backgroundColor}
+                  id={item.id}
+                  onClick={() => handleMemberClick(item.id)}
+                  title={item.title || t('defaultSession', { ns: 'common' })}
+                />
               )}
               style={{ margin: 0 }}
             />

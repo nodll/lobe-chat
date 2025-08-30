@@ -1,4 +1,4 @@
-import { ChatModelCard, ModelAbilities } from '@lobechat/types';
+import { ChatModelCard } from '@lobechat/types';
 import { IconAvatarProps, ModelIcon, ProviderIcon } from '@lobehub/icons';
 import { Avatar, Icon, Tag, Text, Tooltip } from '@lobehub/ui';
 import { createStyles, useResponsive } from 'antd-style';
@@ -12,6 +12,7 @@ import {
   ToyBrick,
   Video,
 } from 'lucide-react';
+import { ModelAbilities } from 'model-bank';
 import numeral from 'numeral';
 import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -115,6 +115,16 @@ export class ServerService implements IMessageService {
     });
   };
 
+  removeMessagesByGroup: IMessageService['removeMessagesByGroup'] = async (
+    groupId,
+    topicId,
+  ) => {
+    return lambdaClient.message.removeMessagesByGroup.mutate({
+      groupId,
+      topicId,
+    });
+  };
+
   removeAllMessages: IMessageService['removeAllMessages'] = async () => {
     return lambdaClient.message.removeAllMessages.mutate();
   };

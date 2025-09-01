@@ -55,7 +55,7 @@ Guidelines:
 - Stay in character as ${agentId} (${agentTitle})
 - Be concise and natural, behave like a real person
 - Engage naturally in the conversation flow
-- Your message is automatically sent privately or publicly to the group, so you don't need to mention it, just respond as you would in a real conversation. The supervisor will decide whether to send it privately or publicly, so you just need to say the actuall content, even it's a DM to a specific member. Do not pretend you've sent it.
+- The group supervisor will decide whether to send it privately or publicly, so you just need to say the actuall content, even it's a DM to a specific member. Do not pretend you've sent it.
 - Be collaborative and build upon others' responses when appropriate
 - Keep your responses concise and relevant to the ongoing discussion
 - Each message should no more than 100 words
@@ -81,7 +81,6 @@ export const buildSupervisorPrompt = ({
   systemPrompt,
   userName,
 }: SupervisorPromptParams): string => {
-  // Build member descriptions for the supervisor (including user)
   const members = [
     {
       id: 'user',
@@ -100,18 +99,26 @@ export const buildSupervisorPrompt = ({
     .map((member) => `  <member id="${member.id}" name="${member.name}" />`)
     .join('\n');
 
-  const memberDescriptions = `<group_members>
-${memberList}
-</group_members>`;
-
   const prompt = `
-You are a conversation orchestrator for a group chat with multiple AI agents. Your role is to decide which agents should respond next based on the conversation context.
+You are a conversation orchestrator for a group chat with multiple AI agents. Your role is to decide which agents should respond next based on the conversation context. Here's the group detail:
+
+<group_role>
+${systemPrompt || ''}
+</group_role>
+
+<group_members>
+${memberList}
+</group_members>
+
+<conversation_history>
+${conversationHistory}
+</conversation_history>
 
 Rules:
 - Return an array of objects where each object has an "id" field for the agent who should respond
-- If a response should be a direct message (DM) to a specific member, include a "target" field with the target member ID or "user"
+- If a response should be a direct message to a specific member, include a "target" field with the target member ID or "user"
 - If no "target" field is provided, the response will be a group message visible to everyone
-- If the conversation seems complete, return empty array []
+- If the conversation seems complete, or no one needs reply, return empty array []
 - Your goal is to make the conversation as natural as possible. For example, if user DM to an agent, the agent is likely to respond to the user privately too
 - Return ONLY a JSON array of objects, nothing else
 
@@ -121,15 +128,7 @@ Examples:
 - Mixed responses: [{"id": "agt_01"}, {"id": "agt_02", "target": "user"}]
 - Stop conversation: []
 
-<group_role>
-${systemPrompt || ''}
-</group_role>
-
-${memberDescriptions}
-
-<conversation_history>
-${conversationHistory}
-</conversation_history>
+Now return an array of objects where each object has an "id" field for the agent who should respond.
 `;
 
   return prompt.trim();
@@ -141,50 +140,56 @@ export const groupChatPrompts = {
 };
 
 export const filterMessagesForAgent = (messages: ChatMessage[], agentId: string): ChatMessage[] => {
-  return messages.filter((message) => {
-    // Always include system messages
+  return messages.map((message) => {
+    // Always include system messages as-is
     if (message.role === 'system') {
-      return true;
+      return message;
     }
 
     // For user messages, check DM targeting rules
     if (message.role === 'user') {
-      // If no target specified, it's a group message - include it
+      // If no target specified, it's a group message - include it as-is
       if (!message.targetId) {
-        return true;
+        return message;
       }
 
-      // If the message is targeted to this agent, include it
+      // If the message is targeted to this agent, include it as-is
       if (message.targetId === agentId) {
-        return true;
+        return message;
       }
 
-      // Otherwise, it's a DM to another agent - exclude it
-      return false;
+      // Otherwise, it's a DM to another agent - replace content with "***"
+      return {
+        ...message,
+        content: '***',
+      };
     }
 
     // For assistant messages, check DM targeting rules
     if (message.role === 'assistant') {
-      // If no target specified, it's a group message - include it
+      // If no target specified, it's a group message - include it as-is
       if (!message.targetId) {
-        return true;
+        return message;
       }
 
-      // If the agent is the target of the DM, include it
+      // If the agent is the target of the DM, include it as-is
       if (message.targetId === agentId) {
-        return true;
+        return message;
       }
 
-      // If the agent sent the message, include it
+      // If the agent sent the message, include it as-is
       if (message.agentId === agentId) {
-        return true;
+        return message;
       }
 
-      // Otherwise, it's a DM not involving this agent - exclude it
-      return false;
+      // Otherwise, it's a DM not involving this agent - replace content with "***"
+      return {
+        ...message,
+        content: '***',
+      };
     }
 
-    // Default: include the message
-    return true;
+    // Default: include the message as-is
+    return message;
   });
 };

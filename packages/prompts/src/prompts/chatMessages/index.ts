@@ -32,53 +32,60 @@ ${messages.map((m) => chatMessage(m)).join('\n')}
  * - Agent sees DMs where they are the target
  * - Agent sees DMs they sent
  * - Agent sees user messages that are group messages or targeted to them
+ * - For DM messages not involving the agent, content is replaced with "***"
  */
 export const filterMessagesForAgent = (messages: ChatMessage[], agentId: string): ChatMessage[] => {
-  return messages.filter(message => {
-    // Always include system messages
+  return messages.map(message => {
+    // Always include system messages as-is
     if (message.role === 'system') {
-      return true;
+      return message;
     }
 
     // For user messages, check DM targeting rules
     if (message.role === 'user') {
-      // If no target specified, it's a group message - include it
+      // If no target specified, it's a group message - include it as-is
       if (!message.targetId) {
-        return true;
+        return message;
       }
 
-      // If the message is targeted to this agent, include it
+      // If the message is targeted to this agent, include it as-is
       if (message.targetId === agentId) {
-        return true;
+        return message;
       }
 
-      // Otherwise, it's a DM to another agent - exclude it
-      return false;
+      // Otherwise, it's a DM to another agent - replace content with "***"
+      return {
+        ...message,
+        content: '***',
+      };
     }
 
     // For assistant messages, check DM targeting rules
     if (message.role === 'assistant') {
-      // If no target specified, it's a group message - include it
+      // If no target specified, it's a group message - include it as-is
       if (!message.targetId) {
-        return true;
+        return message;
       }
 
-      // If the agent is the target of the DM, include it
+      // If the agent is the target of the DM, include it as-is
       if (message.targetId === agentId) {
-        return true;
+        return message;
       }
 
-      // If the agent sent the message, include it
+      // If the agent sent the message, include it as-is
       if (message.agentId === agentId) {
-        return true;
+        return message;
       }
 
-      // Otherwise, it's a DM not involving this agent - exclude it
-      return false;
+      // Otherwise, it's a DM not involving this agent - replace content with "***"
+      return {
+        ...message,
+        content: '***',
+      };
     }
 
-    // Default: include the message
-    return true;
+    // Default: include the message as-is
+    return message;
   });
 };
 

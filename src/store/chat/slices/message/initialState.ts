@@ -43,13 +43,13 @@ export interface ChatMessageState {
    */
   supervisorDebounceTimers: Record<string, number>;
   /**
-   * Supervisor decision loading states
-   */
-  supervisorDecisionLoading: string[];
-  /**
    * Supervisor decision abort controllers by group ID
    */
   supervisorDecisionAbortControllers: Record<string, AbortController>;
+  /**
+   * Supervisor decision loading states
+   */
+  supervisorDecisionLoading: string[];
 }
 
 export const initialMessageState: ChatMessageState = {
@@ -64,6 +64,6 @@ export const initialMessageState: ChatMessageState = {
   messagesInit: false,
   messagesMap: {},
   supervisorDebounceTimers: {},
-  supervisorDecisionLoading: [],
   supervisorDecisionAbortControllers: {},
+  supervisorDecisionLoading: [],
 };

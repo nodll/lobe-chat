@@ -14,6 +14,7 @@ import { useAgentStore } from '@/store/agent';
 import { agentChatConfigSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
 import { chatSelectors } from '@/store/chat/selectors';
+import { chatGroupSelectors, useChatGroupStore } from '@/store/chatGroup';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
 import { useUserStore } from '@/store/user';
@@ -248,6 +249,12 @@ const Item = memo<ChatListItemProps>(
     // DM tag logic - show for assistant messages with targetId when not in thread panel
     const isDM = !!item?.targetId && !inPortalThread && item?.role === 'assistant';
 
+    const isToCurrentUser = item?.targetId === 'user';
+
+    const groupConfig = useChatGroupStore(chatGroupSelectors.currentGroupConfig);
+
+    const revealDMContent = groupConfig?.revealDM;
+
     return (
       item && (
         <InPortalThreadContext.Provider value={inPortalThread}>
@@ -265,7 +272,11 @@ const Item = memo<ChatListItemProps>(
               errorMessage={errorMessage}
               loading={isProcessing}
               markdownProps={markdownProps}
-              message={message}
+              message={
+                isDM && !isToCurrentUser && !revealDMContent
+                  ? `*${t('hideForYou', { ns: 'chat' })}*`
+                  : message
+              }
               messageExtra={messageExtra}
               onAvatarClick={onAvatarsClick}
               onChange={onChange}

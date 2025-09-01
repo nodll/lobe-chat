@@ -63,22 +63,22 @@ const isToolCallMessage = (message: ChatMessage): boolean => {
  */
 const shouldAvoidSupervisorDecision = (messages: ChatMessage[]): boolean => {
   if (messages.length === 0) return true;
-  
+
   const lastMessage = messages.at(-1);
   if (!lastMessage) return true;
-  
+
   // Don't make decisions if the last message is a tool calling message
   // (it needs a follow-up assistant message)
   if (isToolCallMessage(lastMessage)) {
     return true;
   }
-  
+
   // Don't make decisions if the last message is a tool response
   // (the conversation might still be in a tool calling sequence)
   if (lastMessage.role === 'tool') {
     return true;
   }
-  
+
   return false;
 };
 
@@ -207,7 +207,7 @@ export const generateAIGroupChat: StateCreator<
 
     // Create AbortController for this supervisor decision
     const abortController = new AbortController();
-    
+
     // Store the AbortController in state
     set(
       produce((state: ChatStoreState) => {
@@ -252,7 +252,7 @@ export const generateAIGroupChat: StateCreator<
       }
     } finally {
       internal_toggleSupervisorLoading(false, groupId);
-      
+
       // Clean up AbortController from state
       set(
         produce((state: ChatStoreState) => {
@@ -373,7 +373,7 @@ export const generateAIGroupChat: StateCreator<
       const userMessage: ChatMessage = {
         id: 'group-user',
         role: 'user',
-        content: `Now it's your turn to respond. Based on supervisor decision, your message will be sent to ${targetId ? targetId : 'the group publicly'}. Please respond as this agent would, considering the full conversation history provided above. Directly return the message content, no other text. You do not need add author name or anything else.`,
+        content: `Now it's your turn to respond. You are sending message to ${targetId ? targetId : 'the group publicly'}. Please respond as this agent would, considering the full conversation history provided above. Directly return the message content, no other text. You do not need add author name or anything else.`,
         createdAt: Date.now(),
         updatedAt: Date.now(),
         meta: {},
@@ -517,7 +517,11 @@ export const generateAIGroupChat: StateCreator<
   },
 
   internal_cancelSupervisorDecision: (groupId: string) => {
-    const { supervisorDebounceTimers, supervisorDecisionAbortControllers, internal_toggleSupervisorLoading } = get();
+    const {
+      supervisorDebounceTimers,
+      supervisorDecisionAbortControllers,
+      internal_toggleSupervisorLoading,
+    } = get();
     const existingTimer = supervisorDebounceTimers[groupId];
     const existingAbortController = supervisorDecisionAbortControllers[groupId];
 
@@ -525,7 +529,7 @@ export const generateAIGroupChat: StateCreator<
       existingTimer: !!existingTimer,
       existingAbortController: !!existingAbortController,
       allTimers: Object.keys(supervisorDebounceTimers),
-      allAbortControllers: Object.keys(supervisorDecisionAbortControllers)
+      allAbortControllers: Object.keys(supervisorDecisionAbortControllers),
     });
 
     // Cancel pending debounced timer
@@ -548,7 +552,7 @@ export const generateAIGroupChat: StateCreator<
       existingAbortController.abort('User cancelled supervisor decision');
       console.log(`Aborted ongoing supervisor decision request for group ${groupId}`);
 
-      // Remove abort controller from state  
+      // Remove abort controller from state
       set(
         produce((state: ChatStoreState) => {
           delete state.supervisorDecisionAbortControllers[groupId];
@@ -589,12 +593,12 @@ export const generateAIGroupChat: StateCreator<
 
       // Clear all timers and abort controllers from state
       set(
-        { 
+        {
           supervisorDebounceTimers: {},
-          supervisorDecisionAbortControllers: {}
-        }, 
-        false, 
-        n('cancelAllSupervisorDecisions')
+          supervisorDecisionAbortControllers: {},
+        },
+        false,
+        n('cancelAllSupervisorDecisions'),
       );
     }
   },

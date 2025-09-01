@@ -75,7 +75,6 @@ export default {
     title: '群组',
   },
   groupDescription: '群组描述',
-
   groupSidebar: {
     members: {
       addMember: '添加成员',
@@ -91,6 +90,8 @@ export default {
       role: '设定',
     },
   },
+
+  hideForYou: '私信内容已经隐藏，请在设置中开启【显示私信内容】以查看',
 
   history: {
     title: '助手将只记住最后{{count}}条消息',

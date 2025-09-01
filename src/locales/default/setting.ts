@@ -363,10 +363,18 @@ export default {
     title: '聊天设置',
   },
   settingGroupMembers: {
+    addToGroup: '加入群组',
+    availableAgents: '可用助手',
+    defaultAgent: '自定义助手',
     edit: '编辑成员',
     empty: '该群聊中暂无代理。点击 + 按钮添加成员。',
+    groupMembers: '群组成员',
+    noAvailableAgents: '暂无可用助手',
+    noDescription: '暂无描述',
+    noMembersInGroup: '群组暂无成员',
     owner: '你（所有者）',
     remove: '移除成员',
+    removeFromGroup: '移出群组',
     you: '你',
   },
   settingModel: {

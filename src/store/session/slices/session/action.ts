@@ -277,6 +277,7 @@ export const createSessionSlice: StateCreator<
               description: session.meta?.description || '',
 
               id: session.id,
+              groupId: session.group || null, // Add the missing groupId property
 
               // Will be set by the backend
               pinned: session.pinned || false,

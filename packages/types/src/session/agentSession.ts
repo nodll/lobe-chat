@@ -3,11 +3,17 @@ import { ChatGroupAgentItem } from '@/database/schemas/chatGroup';
 import { LobeAgentConfig } from '../agent';
 import { MetaData } from '../meta';
 import { SessionGroupId } from './sessionGroup';
+import { AgentItem } from '@/database/schemas/agent';
 
 export enum LobeSessionType {
   Agent = 'agent',
   Group = 'group',
 }
+
+/**
+ * Extended group member that includes both relation data and agent details
+ */
+export type GroupMemberWithAgent = ChatGroupAgentItem & AgentItem;
 
 /**
  * Lobe Agent Session
@@ -32,7 +38,7 @@ export interface LobeGroupSession {
   createdAt: Date;
   group?: SessionGroupId;
   id: string; // Start with 'cg_'
-  members?: ChatGroupAgentItem[];
+  members?: GroupMemberWithAgent[];
   meta: MetaData;
   pinned?: boolean;
   tags?: string[];

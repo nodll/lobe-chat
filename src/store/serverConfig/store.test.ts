@@ -1,7 +1,7 @@
 import { act } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { DEFAULT_FEATURE_FLAGS } from '@/config/featureFlags';
+import { DEFAULT_FEATURE_FLAGS, mapFeatureFlagsEnvToState } from '@/config/featureFlags';
 
 import { ServerConfigStore, createServerConfigStore, initServerConfigStore } from './store';
 
@@ -30,7 +30,10 @@ describe('createServerConfigStore', () => {
 
   it('should initialize store with custom initial state', () => {
     const initialState: Partial<ServerConfigStore> = {
-      featureFlags: { isAgentEditable: false },
+      featureFlags: { 
+        ...mapFeatureFlagsEnvToState(DEFAULT_FEATURE_FLAGS),
+        isAgentEditable: false 
+      },
       serverConfig: { telemetry: { langfuse: true }, aiProvider: {} },
     };
 
@@ -47,7 +50,12 @@ describe('createServerConfigStore', () => {
     const store = createServerConfigStore();
 
     act(() => {
-      store.setState({ featureFlags: { showDalle: false } });
+      store.setState({ 
+        featureFlags: { 
+          ...store.getState().featureFlags,
+          showDalle: false 
+        } 
+      });
     });
 
     expect(store.getState().featureFlags.showDalle).toBeFalsy();

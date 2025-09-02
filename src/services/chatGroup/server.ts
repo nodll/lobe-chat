@@ -1,4 +1,4 @@
-import { ChatGroupAgentItem, ChatGroupItem, NewChatGroup } from '@/database/schemas/chatGroup';
+import { ChatGroupAgentItem, ChatGroupItem, NewChatGroup } from '@/database/schemas';
 import { lambdaClient } from '@/libs/trpc/client';
 
 import { IChatGroupService } from './type';
@@ -41,7 +41,11 @@ export class ServerService implements IChatGroupService {
     return lambdaClient.group.updateAgentInGroup.mutate({
       agentId,
       groupId,
-      updates,
+      updates: {
+        enabled: updates.enabled === null ? undefined : updates.enabled,
+        order: updates.order === null ? undefined : updates.order,
+        role: updates.role === null ? undefined : updates.role,
+      },
     });
   }
 

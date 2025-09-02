@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { DEFAULT_FEATURE_FLAGS, mapFeatureFlagsEnvToState } from '@/config/featureFlags';
+
 import { featureFlagsSelectors, serverConfigSelectors } from './selectors';
 import { initServerConfigStore } from './store';
 
@@ -9,6 +11,7 @@ describe('featureFlagsSelectors', () => {
   it('should return feature flags from store', () => {
     const store = initServerConfigStore({
       featureFlags: {
+        ...mapFeatureFlagsEnvToState(DEFAULT_FEATURE_FLAGS),
         enableWebrtc: false,
         isAgentEditable: false,
         showLLM: false,

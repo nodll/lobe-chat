@@ -2,12 +2,11 @@ import {
   ChatGroupAgentItem,
   ChatGroupItem,
   NewChatGroup,
-} from '@/database/schemas/chatGroup';
+} from '@/database/schemas';
 
 export interface IChatGroupService {
   addAgentsToGroup(groupId: string, agentIds: string[]): Promise<ChatGroupAgentItem[]>;
   createGroup(params: Omit<NewChatGroup, 'userId'>): Promise<ChatGroupItem>;
-  deleteAllGroups(): Promise<any>;
   deleteGroup(id: string): Promise<any>;
   getGroup(id: string): Promise<ChatGroupItem | undefined>;
   getGroupAgents(groupId: string): Promise<ChatGroupAgentItem[]>;

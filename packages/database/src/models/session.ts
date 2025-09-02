@@ -473,10 +473,26 @@ export class SessionModel {
 
     if (type === 'group') {
       // For group sessions, return without agent-specific fields
+      // Transform agentsToSessions to include both relationship and agent data
+      const members = agentsToSessions?.map((item, index) => {
+        const member = {
+          // Start with agent properties for compatibility
+          ...item.agent,
+          // Override with ChatGroupAgentItem properties
+          agentId: item.agent.id,
+          chatGroupId: res.id,
+          enabled: true,
+          order: index,
+          role: 'participant',
+          // Keep agent timestamps for now (could be overridden if needed)
+        };
+        return member;
+      }) || [];
+
       return {
         ...res,
         group: groupId,
-        members: ['user', 'assistant-ai', 'expert-ai'], // Default test members
+        members,
         meta,
         type: 'group',
       } as LobeGroupSession;

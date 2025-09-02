@@ -13,9 +13,9 @@ export interface CreateTopicParams {
 }
 
 export interface QueryTopicParams {
+  containerId?: string | null; // sessionId or groupId
   current?: number;
   pageSize?: number;
-  containerId?: string | null; // sessionId or groupId
 }
 
 class _TopicModel extends BaseModel {

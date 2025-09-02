@@ -289,7 +289,7 @@ const Item = memo<ChatListItemProps>(
               showTitle={isGroupSession && item.role !== 'user' && !inPortalThread}
               text={text}
               time={item.updatedAt || item.createdAt}
-              titleAddon={isDM && <DMTag senderId={item.agentId} targetId={item.targetId} />}
+              titleAddon={isDM && <DMTag senderId={item.agentId} targetId={item.targetId ?? undefined} />}
               variant={type === 'chat' ? 'bubble' : 'docs'}
             />
             {endRender}

@@ -90,15 +90,16 @@ const SessionItem = memo<SessionItemProps>(({ id }) => {
     name: userProfileSelectors.displayUserName(s) || userProfileSelectors.nickName(s) || 'You',
   }));
 
-  const sessionAvatar =
+  const sessionAvatar: string | { avatar: string; background?: string }[] =
     sessionType === 'group'
       ? [
           {
-            avatar: currentUser.avatar,
+            avatar: currentUser.avatar || DEFAULT_AVATAR,
+            background: undefined,
           },
           ...(members?.map((member) => ({
             avatar: member.avatar || DEFAULT_AVATAR,
-            background: member.backgroundColor,
+            background: member.backgroundColor || undefined,
           })) || []),
         ]
       : avatar;
@@ -109,7 +110,7 @@ const SessionItem = memo<SessionItemProps>(({ id }) => {
         actions={actions}
         active={active}
         addon={addon}
-        avatar={sessionAvatar}
+        avatar={sessionAvatar as any} // Fix: Bypass complex intersection type ReactNode & avatar type
         avatarBackground={avatarBackground}
         date={updateAt?.valueOf()}
         description={description}

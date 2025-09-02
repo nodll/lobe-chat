@@ -30,7 +30,18 @@ export const groupRouter = router({
   createGroup: groupProcedure
     .input(insertChatGroupSchema.omit({ userId: true }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.chatGroupModel.create(input);
+      return ctx.chatGroupModel.create({
+        ...input,
+        config: input.config as {
+          maxResponseInRow?: number;
+          orchestratorModel?: string;
+          orchestratorProvider?: string;
+          responseOrder?: 'sequential' | 'natural';
+          responseSpeed?: 'slow' | 'medium' | 'fast';
+          revealDM?: boolean;
+          systemPrompt?: string;
+        } | null | undefined,
+      });
     }),
 
   deleteGroup: groupProcedure
@@ -90,7 +101,18 @@ export const groupRouter = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.chatGroupModel.update(input.id, input.value);
+      return ctx.chatGroupModel.update(input.id, {
+        ...input.value,
+        config: input.value.config as {
+          maxResponseInRow?: number;
+          orchestratorModel?: string;
+          orchestratorProvider?: string;
+          responseOrder?: 'sequential' | 'natural';
+          responseSpeed?: 'slow' | 'medium' | 'fast';
+          revealDM?: boolean;
+          systemPrompt?: string;
+        } | null | undefined,
+      });
     }),
 });
 

@@ -40,7 +40,7 @@ const Header = memo(() => {
         <Flexbox align={'center'} gap={8} horizontal>
           <Avatar
             avatar={currentAgent?.avatar || DEFAULT_AVATAR}
-            background={currentAgent?.backgroundColor}
+            background={currentAgent?.backgroundColor ?? undefined}
             size={20}
           />
           <div style={{ fontWeight: 600 }}>

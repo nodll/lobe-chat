@@ -199,7 +199,7 @@ class DataSync {
     const updateSyncEvent = throttle(onEvent, 1000);
 
     // 定义一个变量来保存定时器的ID
-    let debounceTimer: number;
+    let debounceTimer: ReturnType<typeof setTimeout>;
 
     yItemMap?.observe(async (event) => {
       // abort local change

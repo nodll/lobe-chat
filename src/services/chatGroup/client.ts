@@ -1,6 +1,11 @@
 import { clientDB } from '@/database/client/db';
 import { ChatGroupModel } from '@/database/models/chatGroup';
-import { ChatGroupAgentItem, ChatGroupItem, NewChatGroup } from '@/database/schemas/chatGroup';
+import {
+  ChatGroupAgentItem,
+  ChatGroupItem,
+  NewChatGroup,
+  NewChatGroupAgent,
+} from '@/database/schemas/chatGroup';
 import { BaseClientService } from '@/services/baseClientService';
 
 import { IChatGroupService } from './type';
@@ -10,7 +15,6 @@ export class ClientService extends BaseClientService implements IChatGroupServic
     return new ChatGroupModel(clientDB as any, this.userId);
   }
 
-  // Group management
   async createGroup(params: Omit<NewChatGroup, 'userId'>): Promise<ChatGroupItem> {
     return this.chatGroupModel.create(params);
   }
@@ -48,7 +52,7 @@ export class ClientService extends BaseClientService implements IChatGroupServic
   async updateAgentInGroup(
     groupId: string,
     agentId: string,
-    updates: Partial<Pick<ChatGroupAgentItem, 'enabled' | 'order' | 'role'>>,
+    updates: Partial<Pick<NewChatGroupAgent, 'order' | 'role'>>,
   ): Promise<ChatGroupAgentItem> {
     return this.chatGroupModel.updateAgentInGroup(groupId, agentId, updates);
   }

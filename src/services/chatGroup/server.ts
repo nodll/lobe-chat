@@ -1,16 +1,29 @@
-import { ChatGroupAgentItem, ChatGroupItem, NewChatGroup } from '@/database/schemas';
+import {
+  ChatGroupAgentItem,
+  ChatGroupItem,
+  NewChatGroup,
+  NewChatGroupAgent,
+} from '@/database/schemas';
 import { lambdaClient } from '@/libs/trpc/client';
 
 import { IChatGroupService } from './type';
 
 export class ServerService implements IChatGroupService {
-  // Group management
   createGroup(params: Omit<NewChatGroup, 'userId'>): Promise<ChatGroupItem> {
-    return lambdaClient.group.createGroup.mutate(params);
+    return lambdaClient.group.createGroup.mutate({
+      ...params,
+      config: params.config as any,
+    });
   }
 
   updateGroup(id: string, value: Partial<ChatGroupItem>): Promise<ChatGroupItem> {
-    return lambdaClient.group.updateGroup.mutate({ id, value });
+    return lambdaClient.group.updateGroup.mutate({
+      id,
+      value: {
+        ...value,
+        config: value.config as any,
+      },
+    });
   }
 
   deleteGroup(id: string): Promise<any> {
@@ -36,13 +49,12 @@ export class ServerService implements IChatGroupService {
   updateAgentInGroup(
     groupId: string,
     agentId: string,
-    updates: Partial<Pick<ChatGroupAgentItem, 'enabled' | 'order' | 'role'>>,
+    updates: Partial<Pick<NewChatGroupAgent, 'order' | 'role'>>,
   ): Promise<ChatGroupAgentItem> {
     return lambdaClient.group.updateAgentInGroup.mutate({
       agentId,
       groupId,
       updates: {
-        enabled: updates.enabled === null ? undefined : updates.enabled,
         order: updates.order === null ? undefined : updates.order,
         role: updates.role === null ? undefined : updates.role,
       },

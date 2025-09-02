@@ -15,7 +15,7 @@ export class ClientService extends BaseClientService implements IMessageService 
   createMessage: IMessageService['createMessage'] = async ({ sessionId, ...params }) => {
     const { id } = await this.messageModel.create({
       ...params,
-      sessionId: sessionId ? this.toDbSessionId(sessionId) as string : undefined,
+      sessionId: sessionId ? (this.toDbSessionId(sessionId) as string) : '',
     });
 
     return id;
@@ -48,7 +48,7 @@ export class ClientService extends BaseClientService implements IMessageService 
     // Use full query to hydrate fileList/imageList like single chat
     const data = await this.messageModel.query(
       {
-        groupId,
+        sessionId: groupId,
         topicId,
       },
       {
@@ -145,11 +145,8 @@ export class ClientService extends BaseClientService implements IMessageService 
     return this.messageModel.deleteMessagesBySession(this.toDbSessionId(sessionId), topicId);
   };
 
-  removeMessagesByGroup: IMessageService['removeMessagesByGroup'] = async (
-    groupId,
-    topicId,
-  ) => {
-    return this.messageModel.deleteMessagesBySession(null, topicId, groupId);
+  removeMessagesByGroup: IMessageService['removeMessagesByGroup'] = async (groupId, topicId) => {
+    return this.messageModel.deleteMessagesBySession(groupId, topicId);
   };
 
   removeAllMessages: IMessageService['removeAllMessages'] = async () => {

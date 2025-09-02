@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 import { ChatGroupModel } from '@/database/models/chatGroup';
 import { insertChatGroupSchema } from '@/database/schemas/chatGroup';
+import { ChatGroupConfig } from '@/database/types/chatGroup';
 import { authedProcedure, router } from '@/libs/trpc/lambda';
 import { serverDatabase } from '@/libs/trpc/lambda/middleware';
-import { ChatGroupConfig } from '@/database/types/chatGroup';
 
 const groupProcedure = authedProcedure.use(serverDatabase).use(async (opts) => {
   const { ctx } = opts;
@@ -96,15 +96,7 @@ export const groupRouter = router({
     .mutation(async ({ input, ctx }) => {
       return ctx.chatGroupModel.update(input.id, {
         ...input.value,
-        config: input.value.config as {
-          maxResponseInRow?: number;
-          orchestratorModel?: string;
-          orchestratorProvider?: string;
-          responseOrder?: 'sequential' | 'natural';
-          responseSpeed?: 'slow' | 'medium' | 'fast';
-          revealDM?: boolean;
-          systemPrompt?: string;
-        } | null | undefined,
+        config: input.value.config as ChatGroupConfig,
       });
     }),
 });

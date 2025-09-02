@@ -2,6 +2,7 @@ import {
   ChatGroupAgentItem,
   ChatGroupItem,
   NewChatGroup,
+  NewChatGroupAgent,
 } from '@/database/schemas';
 
 export interface IChatGroupService {
@@ -15,7 +16,7 @@ export interface IChatGroupService {
   updateAgentInGroup(
     groupId: string,
     agentId: string,
-    updates: Partial<Pick<ChatGroupAgentItem, 'enabled' | 'order' | 'role'>>,
+    updates: Partial<Pick<NewChatGroupAgent, 'order' | 'role'>>,
   ): Promise<ChatGroupAgentItem>;
   updateGroup(id: string, value: Partial<ChatGroupItem>): Promise<ChatGroupItem>;
-} 
+}

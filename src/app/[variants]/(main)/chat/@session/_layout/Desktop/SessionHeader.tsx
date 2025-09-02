@@ -35,7 +35,7 @@ const Header = memo(() => {
   const { t } = useTranslation('chat');
   const [createSession] = useSessionStore((s) => [s.createSession]);
   const [createGroup] = useChatGroupStore((s) => [s.createGroup]);
-  const { enableWebrtc, showCreateSession, enableGroupChat } = useServerConfigStore(featureFlagsSelectors);
+  const { showCreateSession, enableGroupChat } = useServerConfigStore(featureFlagsSelectors);
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
 
   // We need pass inital member list so we cannot use mutate
@@ -101,16 +101,18 @@ const Header = memo(() => {
                       mutateAgent();
                     },
                   },
-                  ...(enableGroupChat ? [
-                    {
-                      icon: <Icon icon={UsersRound} />,
-                      key: 'newGroup',
-                      label: t('newGroupChat'),
-                      onClick: () => {
-                        setIsGroupModalOpen(true);
-                      },
-                    },
-                  ] : []),
+                  ...(enableGroupChat
+                    ? [
+                        {
+                          icon: <Icon icon={UsersRound} />,
+                          key: 'newGroup',
+                          label: t('newGroupChat'),
+                          onClick: () => {
+                            setIsGroupModalOpen(true);
+                          },
+                        },
+                      ]
+                    : []),
                 ],
               }}
               trigger={['hover']}

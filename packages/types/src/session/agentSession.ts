@@ -1,9 +1,8 @@
+import { AgentItem } from '@/database/schemas/agent';
 import { ChatGroupAgentItem } from '@/database/schemas/chatGroup';
 
 import { LobeAgentConfig } from '../agent';
 import { MetaData } from '../meta';
-import { SessionGroupId } from './sessionGroup';
-import { AgentItem } from '@/database/schemas/agent';
 
 export enum LobeSessionType {
   Agent = 'agent',
@@ -21,7 +20,7 @@ export type GroupMemberWithAgent = ChatGroupAgentItem & AgentItem;
 export interface LobeAgentSession {
   config: LobeAgentConfig;
   createdAt: Date;
-  group?: SessionGroupId;
+  group?: string;
   id: string;
   meta: MetaData;
   model: string;
@@ -36,7 +35,7 @@ export interface LobeAgentSession {
  */
 export interface LobeGroupSession {
   createdAt: Date;
-  group?: SessionGroupId;
+  group?: string;
   id: string; // Start with 'cg_'
   members?: GroupMemberWithAgent[];
   meta: MetaData;

@@ -151,7 +151,7 @@ export class ChatGroupModel {
     if (!group) throw new Error('Group not found');
 
     const existingAgents = await this.getGroupAgents(groupId);
-    const existingAgentIds = new Set(existingAgents.map((a) => a.agentId));
+    const existingAgentIds = new Set(existingAgents.map((a) => a.id));
 
     const newAgentIds = agentIds.filter((id) => !existingAgentIds.has(id));
 
@@ -178,7 +178,7 @@ export class ChatGroupModel {
   async updateAgentInGroup(
     groupId: string,
     agentId: string,
-    updates: Partial<Pick<ChatGroupAgentItem, 'enabled' | 'order' | 'role'>>,
+    updates: Partial<Pick<NewChatGroupAgent, 'order' | 'role'>>,
   ): Promise<ChatGroupAgentItem> {
     const [result] = await this.db
       .update(chatGroupsAgents)

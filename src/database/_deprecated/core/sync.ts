@@ -286,8 +286,8 @@ class DataSync {
 
     if (!awareness) return;
 
-    const state = Array.from(awareness.getStates().values()).map((s) => ({
-      ...s.user,
+    const state = Array.from(awareness.getStates().values()).map((s: any) => ({
+      ...(s.user || {}),
       clientID: s.clientID,
       current: s.clientID === awareness.clientID,
     }));

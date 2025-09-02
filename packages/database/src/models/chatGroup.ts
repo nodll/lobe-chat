@@ -91,7 +91,7 @@ export class ChatGroupModel {
   async createWithAgents(
     groupParams: Omit<NewChatGroup, 'userId'>,
     agentIds: string[],
-  ): Promise<{ agents: ChatGroupAgentItem[]; group: ChatGroupItem }> {
+  ): Promise<{ agents: NewChatGroupAgent[]; group: ChatGroupItem }> {
     const group = await this.create(groupParams);
 
     if (agentIds.length === 0) {
@@ -101,9 +101,8 @@ export class ChatGroupModel {
     const agentParams: NewChatGroupAgent[] = agentIds.map((agentId, index) => ({
       agentId,
       chatGroupId: group.id,
-      enabled: true,
       order: index,
-      role: 'participant',
+      role: 'assistant',
       userId: this.userId,
     }));
 
@@ -132,13 +131,12 @@ export class ChatGroupModel {
     groupId: string,
     agentId: string,
     options?: { order?: number; role?: string },
-  ): Promise<ChatGroupAgentItem> {
+  ): Promise<NewChatGroupAgent> {
     const params: NewChatGroupAgent = {
       agentId,
       chatGroupId: groupId,
-      enabled: true,
       order: options?.order || 0,
-      role: options?.role || 'participant',
+      role: options?.role || 'assistant',
       userId: this.userId,
     };
 
@@ -179,7 +177,7 @@ export class ChatGroupModel {
     groupId: string,
     agentId: string,
     updates: Partial<Pick<NewChatGroupAgent, 'order' | 'role'>>,
-  ): Promise<ChatGroupAgentItem> {
+  ): Promise<NewChatGroupAgent> {
     const [result] = await this.db
       .update(chatGroupsAgents)
       .set({ ...updates, updatedAt: new Date() })

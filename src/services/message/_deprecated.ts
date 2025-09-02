@@ -132,6 +132,10 @@ export class ClientService implements IMessageService {
     return MessageModel.batchDelete(assistantId, topicId);
   }
 
+  async removeMessagesByGroup(groupId: string, topicId?: string) {
+    return MessageModel.batchDelete(groupId, topicId);
+  }
+
   async removeAllMessages() {
     return MessageModel.clearTable();
   }

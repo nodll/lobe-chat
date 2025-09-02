@@ -1,5 +1,5 @@
 import { AgentItem } from '@/database/schemas/agent';
-import { ChatGroupAgentItem } from '@/database/schemas/chatGroup';
+import { NewChatGroupAgent } from '@/database/schemas/chatGroup';
 
 import { LobeAgentConfig } from '../agent';
 import { MetaData } from '../meta';
@@ -12,7 +12,7 @@ export enum LobeSessionType {
 /**
  * Extended group member that includes both relation data and agent details
  */
-export type GroupMemberWithAgent = ChatGroupAgentItem & AgentItem;
+export type GroupMemberWithAgent = NewChatGroupAgent & AgentItem;
 
 /**
  * Lobe Agent Session

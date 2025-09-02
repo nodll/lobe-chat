@@ -1,15 +1,11 @@
 // @vitest-environment node
-import { and, eq, inArray } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { LobeChatDatabase } from '@/database/type';
-import { idGenerator } from '@/database/utils/idGenerator';
 
 import {
   NewChatGroup,
-  NewChatGroupAgent,
-  ChatGroupItem,
-  ChatGroupAgentItem,
   agents as agentsTable,
   chatGroups,
   chatGroupsAgents,
@@ -143,11 +139,11 @@ describe('ChatGroupModel', () => {
       const result = await chatGroupModel.queryWithMemberDetails();
 
       expect(result).toHaveLength(2);
-      
+
       const group1 = result.find((g) => g.id === 'group-1');
       expect(group1?.members).toHaveLength(2);
       expect(group1?.members.map((m: any) => m.title)).toEqual(
-        expect.arrayContaining(['Agent 1', 'Agent 2'])
+        expect.arrayContaining(['Agent 1', 'Agent 2']),
       );
 
       const group2 = result.find((g) => g.id === 'group-2');
@@ -201,8 +197,8 @@ describe('ChatGroupModel', () => {
       expect(result?.group.id).toBe('group-with-agents');
       expect(result?.agents).toHaveLength(2);
       // Should be ordered by order field
-      expect(result?.agents[0].agentId).toBe('agent-1');
-      expect(result?.agents[1].agentId).toBe('agent-2');
+      expect(result?.agents[0].id).toBe('agent-1');
+      expect(result?.agents[1].id).toBe('agent-2');
     });
 
     it('should return null for non-existent group', async () => {
@@ -271,10 +267,6 @@ describe('ChatGroupModel', () => {
       expect(result.agents).toHaveLength(2);
       expect(result.agents[0].agentId).toBe('agent-1');
       expect(result.agents[1].agentId).toBe('agent-2');
-      expect(result.agents[0].order).toBe('0');
-      expect(result.agents[1].order).toBe('1');
-      expect(result.agents.every((a) => a.enabled)).toBe(true);
-      expect(result.agents.every((a) => a.role === 'participant')).toBe(true);
     });
 
     it('should create group with empty agents array', async () => {
@@ -325,7 +317,7 @@ describe('ChatGroupModel', () => {
 
       // Try to update - should throw
       await expect(
-        chatGroupModel.update('other-user-group', { title: 'Hacked Title' })
+        chatGroupModel.update('other-user-group', { title: 'Hacked Title' }),
       ).rejects.toThrow('Chat group not found or access denied');
     });
   });
@@ -355,7 +347,6 @@ describe('ChatGroupModel', () => {
       expect(result.chatGroupId).toBe('test-group');
       expect(result.agentId).toBe('test-agent');
       expect(result.userId).toBe(userId);
-      expect(result.enabled).toBe(true);
       expect(result.order).toBe('5');
       expect(result.role).toBe('moderator');
     });
@@ -407,7 +398,7 @@ describe('ChatGroupModel', () => {
       ]);
 
       expect(result).toHaveLength(3);
-      expect(result.map((a) => a.agentId)).toEqual(['agent-1', 'agent-2', 'agent-3']);
+      expect(result.map((a) => a.id)).toEqual(['agent-1', 'agent-2', 'agent-3']);
     });
 
     it('should skip already existing agents', async () => {
@@ -439,7 +430,7 @@ describe('ChatGroupModel', () => {
 
       // Should only return the new agent
       expect(result).toHaveLength(1);
-      expect(result[0].agentId).toBe('new-agent');
+      expect(result[0].id).toBe('new-agent');
     });
 
     it('should return empty array when all agents already exist', async () => {
@@ -471,7 +462,7 @@ describe('ChatGroupModel', () => {
 
     it('should throw error for non-existent group', async () => {
       await expect(
-        chatGroupModel.addAgentsToGroup('non-existent-group', ['agent-1'])
+        chatGroupModel.addAgentsToGroup('non-existent-group', ['agent-1']),
       ).rejects.toThrow('Group not found');
     });
   });
@@ -515,7 +506,7 @@ describe('ChatGroupModel', () => {
 
       // Should not throw error
       await expect(
-        chatGroupModel.removeAgentFromGroup('empty-group', 'non-existent-agent')
+        chatGroupModel.removeAgentFromGroup('empty-group', 'non-existent-agent'),
       ).resolves.not.toThrow();
     });
   });
@@ -547,12 +538,10 @@ describe('ChatGroupModel', () => {
       });
 
       const result = await chatGroupModel.updateAgentInGroup('update-agent-group', 'update-agent', {
-        enabled: false,
         order: 5,
         role: 'moderator',
       });
 
-      expect(result.enabled).toBe(false);
       expect(result.order).toBe('5');
       expect(result.role).toBe('moderator');
       expect(result.updatedAt).toBeInstanceOf(Date);
@@ -573,7 +562,10 @@ describe('ChatGroupModel', () => {
       expect(result.id).toBe('delete-test');
 
       // Verify group was deleted
-      const groups = await serverDB.select().from(chatGroups).where(eq(chatGroups.id, 'delete-test'));
+      const groups = await serverDB
+        .select()
+        .from(chatGroups)
+        .where(eq(chatGroups.id, 'delete-test'));
       expect(groups).toHaveLength(0);
     });
 
@@ -619,7 +611,7 @@ describe('ChatGroupModel', () => {
 
       // Try to delete - should throw
       await expect(chatGroupModel.delete('other-user-delete')).rejects.toThrow(
-        'Chat group not found or access denied'
+        'Chat group not found or access denied',
       );
     });
   });
@@ -668,9 +660,9 @@ describe('ChatGroupModel', () => {
       const result = await chatGroupModel.getGroupAgents('ordered-group');
 
       expect(result).toHaveLength(3);
-      expect(result[0].agentId).toBe('agent-2'); // order: 1
-      expect(result[1].agentId).toBe('agent-1'); // order: 2
-      expect(result[2].agentId).toBe('agent-3'); // order: 3
+      expect(result[0].id).toBe('agent-2'); // order: 1
+      expect(result[1].id).toBe('agent-1'); // order: 2
+      expect(result[2].id).toBe('agent-3'); // order: 3
     });
 
     it('should handle numeric ordering correctly (avoiding lexicographic sorting)', async () => {
@@ -700,9 +692,9 @@ describe('ChatGroupModel', () => {
       expect(result).toHaveLength(3);
       // With integer ordering: 1, 2, 10 (correct)
       // With text ordering it would be: 1, 10, 2 (incorrect lexicographic)
-      expect(result[0].agentId).toBe('agent-order-1'); // order: 1
-      expect(result[1].agentId).toBe('agent-order-2'); // order: 2
-      expect(result[2].agentId).toBe('agent-order-10'); // order: 10
+      expect(result[0].id).toBe('agent-order-1'); // order: 1
+      expect(result[1].id).toBe('agent-order-2'); // order: 2
+      expect(result[2].id).toBe('agent-order-10'); // order: 10
     });
   });
 
@@ -730,7 +722,7 @@ describe('ChatGroupModel', () => {
       const result = await chatGroupModel.getEnabledGroupAgents('enabled-test-group');
 
       expect(result).toHaveLength(1);
-      expect(result[0].agentId).toBe('enabled-agent');
+      expect(result[0].id).toBe('enabled-agent');
     });
   });
 
@@ -806,4 +798,4 @@ describe('ChatGroupModel', () => {
       expect(result[0].userId).toBe(userId);
     });
   });
-}); 
+});

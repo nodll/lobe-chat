@@ -267,6 +267,7 @@ const Item = memo<ChatListItemProps>(
               actions={actionBar}
               avatar={item.meta}
               belowMessage={belowMessage}
+              disabled={isDM && !isToCurrentUser && !revealDMContent}
               editing={editing}
               error={error}
               errorMessage={errorMessage}

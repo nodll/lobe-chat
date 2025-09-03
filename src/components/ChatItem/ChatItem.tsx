@@ -47,10 +47,12 @@ const ChatItem = memo<ChatItemProps>(
     actionsWrapWidth = 54,
     showAvatar = true,
     titleAddon,
+    disabled = false,
     ...rest
   }) => {
     const { mobile } = useResponsive();
     const { cx, styles } = useStyles({
+      disabled,
       editing,
       placement,
       primary,
@@ -148,6 +150,7 @@ const ChatItem = memo<ChatItemProps>(
                 <ErrorContent error={error} message={errorMessage} placement={placement} />
               ) : (
                 <MessageContent
+                  disabled={disabled}
                   editing={editing}
                   fontSize={fontSize}
                   markdownProps={markdownProps}

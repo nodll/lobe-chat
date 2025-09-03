@@ -16,6 +16,7 @@ This rule explains how group chat (multi-agent orchestration) works. Not confuse
 
 - src/store/chat/slices/message/supervisor.ts
 - src/store/chat/slices/aiChat/actions/generateAIGroupChat.ts
+- src/prompts/groupChat/index.ts (All prompts here)
 
 ## Snippets
 

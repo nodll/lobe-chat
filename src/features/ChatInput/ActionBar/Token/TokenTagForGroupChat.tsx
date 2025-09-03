@@ -10,9 +10,9 @@ import { Center, Flexbox } from 'react-layout-kit';
 import { useModelContextWindowTokens } from '@/hooks/useModelContextWindowTokens';
 import { useModelSupportToolUse } from '@/hooks/useModelSupportToolUse';
 import { useTokenCount } from '@/hooks/useTokenCount';
-import { groupChatPrompts } from '@/prompts/groupChat';
+import { groupChatPrompts, GroupMemberInfo } from '@/prompts/groupChat';
 import { useAgentStore } from '@/store/agent';
-import { agentChatConfigSelectors, agentSelectors } from '@/store/agent/selectors';
+import { agentSelectors } from '@/store/agent/selectors';
 import { useChatStore } from '@/store/chat';
 import { chatSelectors } from '@/store/chat/selectors';
 import { chatGroupSelectors } from '@/store/chatGroup/selectors';
@@ -37,14 +37,10 @@ const TokenTagForGroupChat = memo<TokenTagForGroupChatProps>(({ total: messageSt
 
   const input = useChatStore((s) => s.inputMessage);
 
-  const [systemRole, model, provider] = useAgentStore((s) => {
+  const [model, provider] = useAgentStore((s) => {
     return [
-      agentSelectors.currentAgentSystemRole(s),
       agentSelectors.currentAgentModel(s) as string,
       agentSelectors.currentAgentModelProvider(s) as string,
-      // add these two params to enable the component to re-render
-      agentChatConfigSelectors.historyCount(s),
-      agentChatConfigSelectors.enableHistoryCount(s),
     ];
   });
 
@@ -52,26 +48,79 @@ const TokenTagForGroupChat = memo<TokenTagForGroupChatProps>(({ total: messageSt
   const groupAgents = useSessionStore(sessionSelectors.currentGroupAgents);
   const groupConfig = useChatGroupStore(chatGroupSelectors.currentGroupConfig);
 
-  const [historyCount, enableHistoryCount] = useAgentStore((s) => [
-    agentChatConfigSelectors.historyCount(s),
-    agentChatConfigSelectors.enableHistoryCount(s),
-  ]);
-
   const maxTokens = useModelContextWindowTokens(model, provider);
 
-  // Tool usage token
+  // Tool usage token - collect all plugins from all agents in the group
   const canUseTool = useModelSupportToolUse(model, provider);
-  const plugins = useAgentStore(agentSelectors.currentAgentPlugins);
+  const allGroupPlugins = useMemo(() => {
+    if (!groupAgents || groupAgents.length === 0) return [];
+
+    // Collect unique plugins from all group agents
+    const pluginSet = new Set<string>();
+    groupAgents.forEach((agent) => {
+      if (agent.plugins) {
+        agent.plugins.forEach((plugin) => pluginSet.add(plugin));
+      }
+    });
+
+    return Array.from(pluginSet);
+  }, [groupAgents]);
+
   const toolsString = useToolStore((s) => {
-    const pluginSystemRoles = toolSelectors.enabledSystemRoles(plugins)(s);
+    const pluginSystemRoles = toolSelectors.enabledSystemRoles(allGroupPlugins)(s);
     const schemaNumber = toolSelectors
-      .enabledSchema(plugins)(s)
+      .enabledSchema(allGroupPlugins)(s)
       .map((i) => JSON.stringify(i))
       .join('');
 
     return pluginSystemRoles + schemaNumber;
   });
   const toolsToken = useTokenCount(canUseTool ? toolsString : '');
+
+  // System role token calculation for group chat
+  // Calculate the tokens for system message + user message that are sent per agent response
+  const systemRolePerAgentString = useMemo(() => {
+    if (!groupAgents || groupAgents.length === 0) return '';
+
+    try {
+      const chats = chatSelectors.mainAIChatsWithHistoryConfig(useChatStore.getState());
+      
+      // Get real user name from user store
+      const userStoreState = getUserStoreState();
+      const realUserName = userProfileSelectors.nickName(userStoreState) || 'User';
+
+      const agentTitleMap: GroupMemberInfo[] = [
+        { id: 'user', title: realUserName },
+        ...(groupAgents || []).map((agent) => ({ id: agent.id || '', title: agent.title || '' })),
+      ];
+
+      // Calculate tokens for a representative agent's system prompt and user instruction
+      const firstAgent = groupAgents[0];
+      if (!firstAgent) return '';
+
+      const baseSystemRole = firstAgent.systemRole || '';
+      const members: GroupMemberInfo[] = agentTitleMap as GroupMemberInfo[];
+      
+      // Build the group chat system prompt (same as used in agent processing)
+      const groupChatSystemPrompt = groupChatPrompts.buildGroupChatSystemPrompt({
+        agentId: firstAgent.id || '',
+        baseSystemRole,
+        groupMembers: members,
+        messages: chats,
+      });
+
+      // Build the user message (instruction for agent to respond)
+      const userInstruction = `Now it's your turn to respond. You are sending message to the group publicly. Please respond as this agent would, considering the full conversation history provided above. Directly return the message content, no other text. You do not need add author name or anything else.`;
+
+      // Return combined system + user message tokens
+      return groupChatSystemPrompt + '\n\n' + userInstruction;
+    } catch (error) {
+      console.warn('Failed to calculate system role tokens:', error);
+      return '';
+    }
+  }, [groupAgents, messageString]);
+
+  const systemRoleToken = useTokenCount(systemRolePerAgentString);
 
   // Supervisor token calculation for group chat
   const supervisorPrompt = useMemo(() => {
@@ -105,7 +154,7 @@ const TokenTagForGroupChat = memo<TokenTagForGroupChatProps>(({ total: messageSt
       console.warn('Failed to calculate supervisor tokens:', error);
       return '';
     }
-  }, [groupAgents, groupConfig.systemPrompt, messageString, historyCount, enableHistoryCount]);
+  }, [groupAgents, groupConfig.systemPrompt, messageString]);
 
   const supervisorToken = useTokenCount(supervisorPrompt);
 
@@ -115,14 +164,11 @@ const TokenTagForGroupChat = memo<TokenTagForGroupChatProps>(({ total: messageSt
   const chatsString = useMemo(() => {
     const chats = chatSelectors.mainAIChatsWithHistoryConfig(useChatStore.getState());
     return chats.map((chat) => chat.content).join('');
-  }, [messageString, historyCount, enableHistoryCount]);
+  }, [messageString]);
 
   const chatsToken = useTokenCount(chatsString) + inputTokenCount;
 
-  // SystemRole token
-  const systemRoleToken = useTokenCount(systemRole);
-
-  // Total token (include supervisor tokens for group chat)
+  // Total token (include supervisor tokens and system role tokens for group chat)
   const totalToken = systemRoleToken + toolsToken + chatsToken + supervisorToken;
 
   const content = (

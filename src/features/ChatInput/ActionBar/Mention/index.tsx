@@ -3,9 +3,9 @@ import { AtSign } from 'lucide-react';
 import { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useMentionStore } from '@/store/mention';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
-import { useMentionStore } from '@/store/mention';
 import type { LobeGroupSession } from '@/types/session';
 
 import Action from '../components/Action';
@@ -59,7 +59,7 @@ const Mention = memo(() => {
         minWidth: 200,
       }}
       icon={AtSign}
-      title={t('mention.title', { defaultValue: 'Mention Member' })}
+      title={t('mention.title')}
     />
   );
 });

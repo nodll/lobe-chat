@@ -154,6 +154,10 @@ export default {
 
   members: 'Members',
 
+  mention: {
+    title: '提及成员',
+  },
+
   messageAction: {
     delAndRegenerate: '删除并重新生成',
     deleteDisabledByThreads: '存在子话题，不能删除',

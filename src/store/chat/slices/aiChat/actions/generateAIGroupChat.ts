@@ -68,24 +68,24 @@ const isToolCallMessage = (message: ChatMessage): boolean => {
  */
 const countConsecutiveAssistantMessages = (messages: ChatMessage[]): number => {
   let count = 0;
-  
+
   // Count from the end of the array backwards
   for (let i = messages.length - 1; i >= 0; i--) {
     const message = messages[i];
-    
+
     // Stop counting if we hit a user message
     if (message.role === 'user') {
       break;
     }
-    
+
     // Count assistant messages (including those from agents)
     if (message.role === 'assistant') {
       count++;
     }
-    
+
     // Skip system and tool messages, continue counting
   }
-  
+
   return count;
 };
 
@@ -94,9 +94,9 @@ const countConsecutiveAssistantMessages = (messages: ChatMessage[]): number => {
  * Returns true if the conversation flow should continue without supervisor intervention
  */
 const shouldAvoidSupervisorDecision = (
-  messages: ChatMessage[], 
-  maxResponseInRow?: number, 
-  isManualTrigger: boolean = false
+  messages: ChatMessage[],
+  maxResponseInRow?: number,
+  isManualTrigger: boolean = false,
 ): boolean => {
   if (messages.length === 0) return true;
 
@@ -119,7 +119,9 @@ const shouldAvoidSupervisorDecision = (
   if (!isManualTrigger && maxResponseInRow && maxResponseInRow > 0) {
     const consecutiveCount = countConsecutiveAssistantMessages(messages);
     if (consecutiveCount >= maxResponseInRow) {
-      console.log(`Avoiding automatic supervisor decision: ${consecutiveCount} consecutive assistant messages exceed limit of ${maxResponseInRow}`);
+      console.log(
+        `Avoiding automatic supervisor decision: ${consecutiveCount} consecutive assistant messages exceed limit of ${maxResponseInRow}`,
+      );
       return true;
     }
   }
@@ -248,9 +250,9 @@ export const generateAIGroupChat: StateCreator<
 
     // Skip supervisor decision if we're in the middle of tool calling sequence or exceeded maxResponseInRow (for automatic triggers only)
     if (shouldAvoidSupervisorDecision(messages, groupConfig?.maxResponseInRow, isManualTrigger)) {
-      const reason = isManualTrigger ? 
-        'waiting for tool calling sequence to complete' : 
-        'waiting for tool calling sequence to complete or max responses exceeded';
+      const reason = isManualTrigger
+        ? 'waiting for tool calling sequence to complete'
+        : 'waiting for tool calling sequence to complete or max responses exceeded';
       console.log(`Skipping supervisor decision - ${reason}`);
       return;
     }
@@ -319,30 +321,31 @@ export const generateAIGroupChat: StateCreator<
     const agents = sessionSelectors.currentGroupAgents(useSessionStore.getState());
 
     // Sort decisions by member order if response order is sequential
-    const sortedDecisions = groupConfig?.responseOrder === 'sequential' 
-      ? [...decisions].sort((a, b) => {
-          const agentA = agents?.find(agent => agent.id === a.id);
-          const agentB = agents?.find(agent => agent.id === b.id);
-          
-          // Default to order 0 if not found or not set
-          const orderA = agentA?.order ?? 0;
-          const orderB = agentB?.order ?? 0;
-          
-          return orderA - orderB;
-        })
-      : decisions;
+    const sortedDecisions =
+      groupConfig?.responseOrder === 'sequential'
+        ? [...decisions].sort((a, b) => {
+            const agentA = agents?.find((agent) => agent.id === a.id);
+            const agentB = agents?.find((agent) => agent.id === b.id);
+
+            // Default to order 0 if not found or not set
+            const orderA = agentA?.order ?? 0;
+            const orderB = agentB?.order ?? 0;
+
+            return orderA - orderB;
+          })
+        : decisions;
 
     try {
       if (groupConfig?.responseOrder === 'sequential') {
         // Process agents sequentially with delay
-        for (let i = 0; i < sortedDecisions.length; i++) {
-          const decision = sortedDecisions[i];
-          
+        for (const [index, decision] of sortedDecisions.entries()) {
           // Add delay between agents (except for the first one)
-          if (i > 0) {
-            await new Promise(resolve => setTimeout(resolve, SEQUENTIAL_RESPONSE_DELAY));
+          if (index > 0) {
+            await new Promise((resolve) => {
+              setTimeout(resolve, SEQUENTIAL_RESPONSE_DELAY);
+            });
           }
-          
+
           await internal_processAgentMessage(groupId, decision.id, decision.target);
         }
       } else {

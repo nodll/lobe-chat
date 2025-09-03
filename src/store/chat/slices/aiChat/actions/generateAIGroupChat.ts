@@ -63,10 +63,41 @@ const isToolCallMessage = (message: ChatMessage): boolean => {
 };
 
 /**
+ * Count consecutive assistant messages from the end of the message list
+ * This helps enforce maxResponseInRow limit
+ */
+const countConsecutiveAssistantMessages = (messages: ChatMessage[]): number => {
+  let count = 0;
+  
+  // Count from the end of the array backwards
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const message = messages[i];
+    
+    // Stop counting if we hit a user message
+    if (message.role === 'user') {
+      break;
+    }
+    
+    // Count assistant messages (including those from agents)
+    if (message.role === 'assistant') {
+      count++;
+    }
+    
+    // Skip system and tool messages, continue counting
+  }
+  
+  return count;
+};
+
+/**
  * Check if we should avoid supervisor decisions based on recent messages
  * Returns true if the conversation flow should continue without supervisor intervention
  */
-const shouldAvoidSupervisorDecision = (messages: ChatMessage[]): boolean => {
+const shouldAvoidSupervisorDecision = (
+  messages: ChatMessage[], 
+  maxResponseInRow?: number, 
+  isManualTrigger: boolean = false
+): boolean => {
   if (messages.length === 0) return true;
 
   const lastMessage = messages.at(-1);
@@ -84,6 +115,15 @@ const shouldAvoidSupervisorDecision = (messages: ChatMessage[]): boolean => {
     return true;
   }
 
+  // Only check maxResponseInRow limit for automatic triggers, not manual ones
+  if (!isManualTrigger && maxResponseInRow && maxResponseInRow > 0) {
+    const consecutiveCount = countConsecutiveAssistantMessages(messages);
+    if (consecutiveCount >= maxResponseInRow) {
+      console.log(`Avoiding automatic supervisor decision: ${consecutiveCount} consecutive assistant messages exceed limit of ${maxResponseInRow}`);
+      return true;
+    }
+  }
+
   return false;
 };
 
@@ -98,7 +138,7 @@ export interface AIGroupChatAction {
   /**
    * Triggers supervisor decision for group chat
    */
-  internal_triggerSupervisorDecision: (groupId: string) => Promise<void>;
+  internal_triggerSupervisorDecision: (groupId: string, isManualTrigger?: boolean) => Promise<void>;
 
   /**
    * Triggers supervisor decision with debounce logic (dynamic threshold based on group responseSpeed setting)
@@ -196,7 +236,7 @@ export const generateAIGroupChat: StateCreator<
 
   // ========= ↓ Group Chat Internal Methods ↓ ========== //
 
-  internal_triggerSupervisorDecision: async (groupId: string) => {
+  internal_triggerSupervisorDecision: async (groupId: string, isManualTrigger: boolean = false) => {
     const { messagesMap, internal_toggleSupervisorLoading, activeTopicId } = get();
 
     const messages = messagesMap[messageMapKey(groupId, activeTopicId)] || [];
@@ -204,9 +244,14 @@ export const generateAIGroupChat: StateCreator<
 
     if (messages.length === 0) return;
 
-    // Skip supervisor decision if we're in the middle of tool calling sequence
-    if (shouldAvoidSupervisorDecision(messages)) {
-      console.log('Skipping supervisor decision - waiting for tool calling sequence to complete');
+    const groupConfig = chatGroupSelectors.currentGroupConfig(useChatGroupStore.getState());
+
+    // Skip supervisor decision if we're in the middle of tool calling sequence or exceeded maxResponseInRow (for automatic triggers only)
+    if (shouldAvoidSupervisorDecision(messages, groupConfig?.maxResponseInRow, isManualTrigger)) {
+      const reason = isManualTrigger ? 
+        'waiting for tool calling sequence to complete' : 
+        'waiting for tool calling sequence to complete or max responses exceeded';
+      console.log(`Skipping supervisor decision - ${reason}`);
       return;
     }
 
@@ -223,8 +268,6 @@ export const generateAIGroupChat: StateCreator<
     );
 
     internal_toggleSupervisorLoading(true, groupId);
-
-    const groupConfig = chatGroupSelectors.currentGroupConfig(useChatGroupStore.getState());
 
     // Get real user name from user store
     const userStoreState = getUserStoreState();
@@ -536,7 +579,7 @@ export const generateAIGroupChat: StateCreator<
       );
 
       try {
-        await internal_triggerSupervisorDecision(groupId);
+        await internal_triggerSupervisorDecision(groupId, false); // false = automatic trigger
       } catch (error) {
         console.error(`Failed to execute supervisor decision for group ${groupId}:`, error);
       }

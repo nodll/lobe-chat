@@ -83,7 +83,7 @@ const ChatGroupSettings = memo(() => {
         name: 'responseOrder',
       },
       {
-        children: <SliderWithInput max={16} min={0} step={1} unlimitedInput={true} />,
+        children: <SliderWithInput max={32} min={0} step={1} unlimitedInput={true} />,
         desc: t('settingGroupChat.maxResponseInRow.desc'),
         divider: false,
         label: t('settingGroupChat.maxResponseInRow.title'),

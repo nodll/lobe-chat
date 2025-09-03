@@ -100,7 +100,7 @@ const GroupMember = memo<GroupMemberProps>(
 
     const handleTriggerSupervisor = () => {
       if (!sessionId) return;
-      triggerSupervisorDecision(sessionId);
+      triggerSupervisorDecision(sessionId, true); // true = manual trigger, bypasses maxResponseInRow
     };
 
     return (

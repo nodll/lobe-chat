@@ -18,6 +18,11 @@ export interface ChatItemProps extends Omit<FlexboxProps, 'children' | 'onChange
   avatarProps?: AvatarProps;
   belowMessage?: ReactNode;
   /**
+   * @description Whether the chat item is disabled
+   * @default false
+   */
+  disabled?: boolean;
+  /**
    * @description Whether the chat item is in editing mode
    */
   editing?: boolean;
@@ -83,9 +88,4 @@ export interface ChatItemProps extends Omit<FlexboxProps, 'children' | 'onChange
    * @default 'bubble'
    */
   variant?: 'bubble' | 'docs';
-  /**
-   * @description Whether the chat item is disabled
-   * @default false
-   */
-  disabled?: boolean;
 }

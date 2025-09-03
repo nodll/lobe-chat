@@ -28,4 +28,7 @@ const isGroupSession = useSessionStore(sessionSelectors.isCurrentSessionGroupSes
 const addAgentsToGroup = useChatGroupStore((s) => s.addAgentsToGroup);
 const removeAgentFromGroup = useChatGroupStore((s) => s.removeAgentFromGroup);
 const persistReorder = useChatGroupStore((s) => s.reorderGroupMembers);
+
+// Get group config
+const groupConfig = useChatGroupStore(chatGroupSelectors.currentGroupConfig);
 ```

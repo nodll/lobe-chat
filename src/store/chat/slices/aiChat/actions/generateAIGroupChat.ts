@@ -33,6 +33,11 @@ const n = setNamespace('aiGroupChat');
 
 const supervisor = new GroupChatSupervisor();
 
+/**
+ * Delay between sequential agent responses in milliseconds
+ */
+const SEQUENTIAL_RESPONSE_DELAY = 1500;
+
 const getDebounceThreshold = (responseSpeed?: 'slow' | 'medium' | 'fast'): number => {
   switch (responseSpeed) {
     case 'fast': {
@@ -267,16 +272,47 @@ export const generateAIGroupChat: StateCreator<
   internal_executeAgentResponses: async (groupId: string, decisions: SupervisorDecisionList) => {
     const { internal_processAgentMessage, internal_triggerSupervisorDecisionDebounced } = get();
 
-    const responsePromises = decisions.map((decision) =>
-      internal_processAgentMessage(groupId, decision.id, decision.target),
-    );
+    const groupConfig = chatGroupSelectors.currentGroupConfig(useChatGroupStore.getState());
+    const agents = sessionSelectors.currentGroupAgents(useSessionStore.getState());
+
+    // Sort decisions by member order if response order is sequential
+    const sortedDecisions = groupConfig?.responseOrder === 'sequential' 
+      ? [...decisions].sort((a, b) => {
+          const agentA = agents?.find(agent => agent.id === a.id);
+          const agentB = agents?.find(agent => agent.id === b.id);
+          
+          // Default to order 0 if not found or not set
+          const orderA = agentA?.order ?? 0;
+          const orderB = agentB?.order ?? 0;
+          
+          return orderA - orderB;
+        })
+      : decisions;
 
     try {
-      await Promise.all(responsePromises);
+      if (groupConfig?.responseOrder === 'sequential') {
+        // Process agents sequentially with delay
+        for (let i = 0; i < sortedDecisions.length; i++) {
+          const decision = sortedDecisions[i];
+          
+          // Add delay between agents (except for the first one)
+          if (i > 0) {
+            await new Promise(resolve => setTimeout(resolve, SEQUENTIAL_RESPONSE_DELAY));
+          }
+          
+          await internal_processAgentMessage(groupId, decision.id, decision.target);
+        }
+      } else {
+        // Process agents in parallel for natural response order
+        const responsePromises = sortedDecisions.map((decision) =>
+          internal_processAgentMessage(groupId, decision.id, decision.target),
+        );
+        await Promise.all(responsePromises);
+      }
 
       // Only trigger next supervisor decision after ALL agents have completed their responses
       // This prevents rapid-fire agent responses and gives time for conversation to settle
-      if (decisions.length > 0) {
+      if (sortedDecisions.length > 0) {
         internal_triggerSupervisorDecisionDebounced(groupId);
       }
     } catch (error) {

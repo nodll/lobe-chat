@@ -12,7 +12,7 @@ import { sessionSelectors } from '@/store/session/selectors';
 import Footer from './Footer';
 import TextArea from './TextArea';
 
-// DM Actions
+// Default Actions
 const leftActions = [
   'model',
   'search',
@@ -26,7 +26,13 @@ const leftActions = [
 ] as ActionKeys[];
 
 // Group Chat Actions
-const leftActionsForGroup = ['stt', 'mention', 'fileUpload', 'knowledgeBase'] as ActionKeys[];
+const leftActionsForGroup = [
+  'stt',
+  'mention',
+  'fileUpload',
+  'knowledgeBase',
+  'mainToken',
+] as ActionKeys[];
 
 // Group Chat Actions for Thread (without mention)
 const leftActionsForGroupThread = ['stt', 'fileUpload', 'knowledgeBase'] as ActionKeys[];

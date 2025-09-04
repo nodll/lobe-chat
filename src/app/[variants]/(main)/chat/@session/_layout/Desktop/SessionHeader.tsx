@@ -52,13 +52,7 @@ const Header = memo(() => {
     try {
       await createGroup(
         {
-          title: 'New Group Chat',
-        },
-        selectedAgents,
-      );
-      await createGroup(
-        {
-          title: 'New Group Chat',
+          title: t('defaultGroupChat'),
         },
         selectedAgents,
       );

@@ -29,11 +29,12 @@ export interface AgentSettingsProps {
   open?: boolean;
 }
 
-const AgentSettings = memo<AgentSettingsProps>(({
-  agentId,
-  onClose,
-  open,
-}) => {
+/**
+ * Support both agent ID and session ID
+ * Consider choose agent id first, since
+ * session ID will soon be deprecated
+ */
+const AgentSettings = memo<AgentSettingsProps>(({ agentId, onClose, open }) => {
   const { t } = useTranslation('setting');
 
   // Use provided agentId or fall back to current active session
@@ -41,18 +42,29 @@ const AgentSettings = memo<AgentSettingsProps>(({
   const id = agentId || activeId;
 
   // Get agent config and meta based on the provided or active agent ID
-  const config = useAgentStore((s) =>
-    id ? agentSelectors.getAgentConfigById(id)(s) : agentSelectors.currentAgentConfig(s),
-    isEqual
-  );
-  const meta = useSessionStore((s) =>
-    agentId
-      ? sessionMetaSelectors.getAgentMetaByAgentId(agentId)(s)
-      : sessionMetaSelectors.currentAgentMeta(s),
-    isEqual
-  );
+  const config = useAgentStore((s) => {
+    if (agentId) {
+      // Use the new selector that works with agent IDs
+      return agentSelectors.getAgentConfigByAgentId(agentId)(s);
+    } else if (id) {
+      // Use the existing selector for session IDs
+      return agentSelectors.getAgentConfigById(id)(s);
+    } else {
+      // Use current agent config
+      return agentSelectors.currentAgentConfig(s);
+    }
+  }, isEqual);
+  const meta = useSessionStore((s) => {
+    if (agentId) {
+      // Use the selector that works with agent IDs
+      return sessionMetaSelectors.getAgentMetaByAgentId(agentId)(s);
+    } else {
+      // Use current agent meta for session-based access
+      return sessionMetaSelectors.currentAgentMeta(s);
+    }
+  }, isEqual);
 
-  const { isLoading } = useInitAgentConfig();
+  const { isLoading } = useInitAgentConfig(agentId);
 
   // Handle global store state or use props
   const [showAgentSetting, globalUpdateAgentConfig] = useAgentStore((s) => [
@@ -70,7 +82,7 @@ const AgentSettings = memo<AgentSettingsProps>(({
       // Find the agent session ID from the agent ID
       const sessions = useSessionStore.getState().sessions || [];
       const agentSession = sessions.find(
-        session => session.type === LobeSessionType.Agent && session.config?.id === agentId
+        (session) => session.type === LobeSessionType.Agent && session.config?.id === agentId,
       );
 
       if (agentSession) {
@@ -88,7 +100,7 @@ const AgentSettings = memo<AgentSettingsProps>(({
       // Find the agent session ID from the agent ID
       const sessions = useSessionStore.getState().sessions || [];
       const agentSession = sessions.find(
-        session => session.type === LobeSessionType.Agent && session.config?.id === agentId
+        (session) => session.type === LobeSessionType.Agent && session.config?.id === agentId,
       );
 
       if (agentSession) {

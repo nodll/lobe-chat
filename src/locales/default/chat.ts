@@ -27,6 +27,7 @@ export default {
   confirmRemoveSessionItemAlert: '即将删除该助手，删除后该将无法找回，请确认你的操作',
   confirmRemoveSessionSuccess: '助手删除成功',
   defaultAgent: '自定义助手',
+  defaultGroupChat: '群聊',
   defaultList: '默认列表',
   defaultSession: '自定义助手',
   dm: {

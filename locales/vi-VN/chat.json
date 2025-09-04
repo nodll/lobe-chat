@@ -21,10 +21,12 @@
   },
   "clearCurrentMessages": "Xóa tin nhắn hiện tại",
   "confirmClearCurrentMessages": "Bạn sắp xóa tin nhắn hiện tại. Hành động này không thể hoàn tác, vui lòng xác nhận.",
+  "confirmRemoveChatGroupItemAlert": "Bạn sắp xóa nhóm trò chuyện này, các thành viên trong nhóm sẽ không bị ảnh hưởng, vui lòng xác nhận thao tác của bạn",
   "confirmRemoveGroupItemAlert": "Bạn sắp xóa nhóm này. Sau khi xóa, các trợ lý trong nhóm sẽ được chuyển sang danh sách mặc định. Vui lòng xác nhận hành động của bạn.",
   "confirmRemoveSessionItemAlert": "Bạn sắp xóa trợ lý này. Hành động này không thể hoàn tác, vui lòng xác nhận.",
   "confirmRemoveSessionSuccess": "Xóa trợ lý thành công",
   "defaultAgent": "Trợ lý mặc định",
+  "defaultGroupChat": "Nhóm trò chuyện",
   "defaultList": "Danh sách mặc định",
   "defaultSession": "Trợ lý mặc định",
   "dm": {
@@ -68,9 +70,27 @@
   "group": {
     "desc": "Cộng tác với nhiều trợ lý AI trong không gian hội thoại chung。",
     "memberTooltip": "Nhóm có {{count}} thành viên",
+    "orchestratorThinking": "Người điều phối đang suy nghĩ...",
+    "removeMember": "Xóa thành viên",
     "title": "Nhóm"
   },
   "groupDescription": "Mô tả nhóm",
+  "groupSidebar": {
+    "members": {
+      "addMember": "Thêm thành viên",
+      "memberSettings": "Cài đặt thành viên",
+      "orchestrator": "Người điều phối",
+      "orchestratorThinking": "Người điều phối đang suy nghĩ...",
+      "removeMember": "Xóa thành viên",
+      "stopOrchestrator": "Dừng suy nghĩ",
+      "triggerOrchestrator": "Bắt đầu nhóm trò chuyện"
+    },
+    "tabs": {
+      "members": "Thành viên",
+      "role": "Thiết lập"
+    }
+  },
+  "hideForYou": "Nội dung tin nhắn riêng tư đã bị ẩn, vui lòng bật 【Hiển thị nội dung tin nhắn riêng tư】 trong cài đặt để xem",
   "history": {
     "title": "Trợ lý sẽ chỉ nhớ {{count}} tin nhắn cuối cùng"
   },
@@ -115,12 +135,16 @@
   },
   "memberSelection": {
     "addMember": "Thêm thành viên",
-    "noAvailableAgents": "Không có đại lý nào khả dụng",
-    "noSelectedAgents": "Chưa chọn đại lý nào",
-    "searchAgents": "Tìm kiếm đại lý...",
-    "setInitialMembers": "Thiết lập thành viên ban đầu"
+    "createGroup": "Tạo nhóm trò chuyện",
+    "noAvailableAgents": "Không có trợ lý nào để mời",
+    "noSelectedAgents": "Chưa chọn trợ lý nào",
+    "searchAgents": "Tìm trợ lý...",
+    "setInitialMembers": "Chọn thành viên nhóm"
   },
   "members": "Thành viên",
+  "mention": {
+    "title": "Nhắc đến thành viên"
+  },
   "messageAction": {
     "delAndRegenerate": "Xóa và tạo lại",
     "deleteDisabledByThreads": "Có chủ đề con, không thể xóa",
@@ -128,7 +152,7 @@
   },
   "messages": {
     "dm": {
-      "sentTo": "Gửi cho",
+      "sentTo": "Chỉ hiển thị với {{name}}",
       "title": "Tin nhắn riêng"
     },
     "modelCard": {
@@ -230,6 +254,8 @@
     "confirmRemoveGroupAlert": "Bạn sẽ xóa nhóm này, sau khi xóa, trợ lý của nhóm sẽ được di chuyển vào danh sách mặc định, vui lòng xác nhận hành động của bạn",
     "createAgentSuccess": "Tạo trợ lý thành công",
     "createGroup": "Thêm nhóm mới",
+    "createGroupFailed": "Tạo nhóm trò chuyện thất bại",
+    "createGroupSuccess": "Tạo nhóm trò chuyện thành công",
     "createSuccess": "Tạo thành công",
     "creatingAgent": "Đang tạo trợ lý...",
     "inputPlaceholder": "Vui lòng nhập tên nhóm...",
@@ -272,6 +298,7 @@
     "chats": "Tin nhắn trò chuyện",
     "historySummary": "Tóm tắt lịch sử",
     "rest": "Còn lại",
+    "supervisor": "Người điều phối nhóm",
     "systemRole": "Vai trò hệ thống",
     "title": "Chi tiết Ngữ cảnh",
     "tools": "Công cụ",

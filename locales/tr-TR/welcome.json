@@ -126,7 +126,8 @@
         "emoji": "🔬",
         "prompt": "Hadi bilimi keşfedelim! Deneyler yapmamıza ve bulgularımızı paylaşmamıza yardımcı olur musun?",
         "title": "Bilim Sergisi"
-      }
+      },
+      "title": "Grup Sohbeti Kullanım Önerileri"
     },
     "groupMessage": "Grup sohbetine hoş geldiniz! Paylaşılan bir konuşma alanında birden fazla yapay zeka asistanıyla işbirliği yapın。",
     "qa": {

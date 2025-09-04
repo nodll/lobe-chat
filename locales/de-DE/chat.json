@@ -21,10 +21,12 @@
   },
   "clearCurrentMessages": "Aktuelle Nachrichten löschen",
   "confirmClearCurrentMessages": "Möchtest du wirklich die aktuellen Nachrichten löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "confirmRemoveChatGroupItemAlert": "Die Gruppenunterhaltung wird gelöscht, die Mitglieder bleiben davon unberührt. Bitte bestätigen Sie Ihre Aktion.",
   "confirmRemoveGroupItemAlert": "Sie sind dabei, diese Gruppe zu löschen. Nach der Löschung werden die Assistenten dieser Gruppe in die Standardliste verschoben. Bitte bestätigen Sie Ihre Aktion.",
   "confirmRemoveSessionItemAlert": "Möchtest du diesen Assistenten wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
   "confirmRemoveSessionSuccess": "Hilfe wurde erfolgreich entfernt",
   "defaultAgent": "Standardassistent",
+  "defaultGroupChat": "Gruppenchat",
   "defaultList": "Standardliste",
   "defaultSession": "Standardassistent",
   "dm": {
@@ -68,9 +70,27 @@
   "group": {
     "desc": "Mit mehreren KI‑Assistenten in einem gemeinsamen Gesprächsraum zusammenarbeiten.",
     "memberTooltip": "In der Gruppe sind {{count}} Mitglieder",
+    "orchestratorThinking": "Der Moderator denkt nach...",
+    "removeMember": "Mitglied entfernen",
     "title": "Gruppe"
   },
   "groupDescription": "Gruppenbeschreibung",
+  "groupSidebar": {
+    "members": {
+      "addMember": "Mitglied hinzufügen",
+      "memberSettings": "Mitgliedereinstellungen",
+      "orchestrator": "Moderator",
+      "orchestratorThinking": "Der Moderator denkt nach...",
+      "removeMember": "Mitglied entfernen",
+      "stopOrchestrator": "Nachdenken beenden",
+      "triggerOrchestrator": "Gruppenchat starten"
+    },
+    "tabs": {
+      "members": "Mitglieder",
+      "role": "Einstellungen"
+    }
+  },
+  "hideForYou": "Private Nachrichten sind ausgeblendet. Bitte aktivieren Sie in den Einstellungen „Private Nachrichten anzeigen“, um sie zu sehen.",
   "history": {
     "title": "Der Assistent wird nur die letzten {{count}} Nachrichten speichern"
   },
@@ -115,12 +135,16 @@
   },
   "memberSelection": {
     "addMember": "Mitglied hinzufügen",
-    "noAvailableAgents": "Keine verfügbaren Agenten",
-    "noSelectedAgents": "Keine Agenten ausgewählt",
-    "searchAgents": "Agenten suchen...",
-    "setInitialMembers": "Anfangsmitglieder festlegen"
+    "createGroup": "Gruppenchat erstellen",
+    "noAvailableAgents": "Keine verfügbaren Assistenten zum Einladen",
+    "noSelectedAgents": "Noch keine Assistenten ausgewählt",
+    "searchAgents": "Assistenten suchen...",
+    "setInitialMembers": "Gruppenmitglieder auswählen"
   },
   "members": "Mitglieder",
+  "mention": {
+    "title": "Mitglieder erwähnen"
+  },
   "messageAction": {
     "delAndRegenerate": "Löschen und neu generieren",
     "deleteDisabledByThreads": "Es gibt Unterthemen, die Löschung ist nicht möglich.",
@@ -128,7 +152,7 @@
   },
   "messages": {
     "dm": {
-      "sentTo": "Senden an",
+      "sentTo": "Nur für {{name}} sichtbar",
       "title": "Direktnachricht"
     },
     "modelCard": {
@@ -230,6 +254,8 @@
     "confirmRemoveGroupAlert": "Die Gruppe wird bald gelöscht. Nach dem Löschen werden die Assistenten in die Standardliste verschoben. Bitte bestätigen Sie Ihre Aktion.",
     "createAgentSuccess": "Assistent erfolgreich erstellt",
     "createGroup": "Neue Gruppe erstellen",
+    "createGroupFailed": "Gruppenerstellung fehlgeschlagen",
+    "createGroupSuccess": "Gruppe erfolgreich erstellt",
     "createSuccess": "Erstellung erfolgreich",
     "creatingAgent": "Assistent wird erstellt...",
     "inputPlaceholder": "Geben Sie den Gruppennamen ein...",
@@ -272,6 +298,7 @@
     "chats": "Chats",
     "historySummary": "Historische Zusammenfassung",
     "rest": "Verbleibend",
+    "supervisor": "Gruppenmoderator",
     "systemRole": "Systemrolle",
     "title": "Kontextdetails",
     "tools": "Werkzeuge",

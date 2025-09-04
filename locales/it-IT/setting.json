@@ -43,6 +43,8 @@
   "header": {
     "desc": "Preferenze e impostazioni del modello.",
     "global": "Impostazioni globali",
+    "group": "Impostazioni chat di gruppo",
+    "groupDesc": "Gestisci la chat di gruppo corrente",
     "session": "Impostazioni della sessione",
     "sessionDesc": "Impostazioni del personaggio e preferenze di sessione.",
     "sessionWithName": "Impostazioni della sessione · {{name}}",
@@ -301,65 +303,74 @@
   },
   "settingGroup": {
     "description": {
-      "placeholder": "Inserisci la descrizione del gruppo",
-      "title": "Descrizione del gruppo"
+      "placeholder": "Inserisci la descrizione della chat di gruppo",
+      "title": "Descrizione della chat di gruppo"
     },
     "name": {
-      "placeholder": "Inserisci il nome del gruppo",
-      "title": "Nome del gruppo"
+      "placeholder": "Inserisci il nome della chat di gruppo",
+      "title": "Nome della chat di gruppo"
     },
-    "submit": "Aggiorna gruppo",
+    "submit": "Aggiorna chat di gruppo",
     "systemPrompt": {
-      "placeholder": "Inserisci il prompt di sistema",
-      "title": "Prompt di sistema"
+      "placeholder": "Inserisci il prompt di sistema del moderatore",
+      "title": "Prompt di sistema del moderatore"
     },
-    "title": "Informazioni sul gruppo"
+    "title": "Informazioni chat di gruppo"
   },
   "settingGroupChat": {
     "maxResponseInRow": {
-      "desc": "Scegli quante risposte consecutive i membri possono inviare. Imposta su 0 per disabilitare.",
-      "title": "Numero massimo di messaggi consecutivi"
+      "desc": "Seleziona quante risposte consecutive un membro può inviare. Imposta a 0 per disabilitare questo limite.",
+      "title": "Numero di risposte consecutive"
     },
     "model": {
-      "desc": "Scegli il modello da utilizzare per le conversazioni di gruppo",
-      "title": "Modello orchestratore"
+      "desc": "Seleziona il modello da utilizzare per moderare la conversazione di gruppo. Gli interventi dei membri non saranno influenzati.",
+      "title": "Modello moderatore"
     },
+    "orchestratorTitle": "Impostazioni moderatore",
     "responseOrder": {
-      "desc": "Gli agenti risponderanno nell'ordine in cui sono impostati nel gruppo",
+      "desc": "Gli agenti risponderanno nell'ordine stabilito nella chat di gruppo",
       "options": {
         "natural": "Naturale",
         "sequential": "Sequenziale"
       },
-      "placeholder": "Seleziona l'ordine delle risposte",
-      "title": "Ordine delle risposte"
+      "placeholder": "Seleziona l'ordine di risposta",
+      "title": "Ordine di risposta"
     },
     "responseSpeed": {
-      "desc": "Scegli come gli agenti devono rispondere nelle conversazioni di gruppo",
+      "desc": "Controlla la velocità complessiva della chat di gruppo",
       "options": {
         "fast": "Veloce",
-        "medium": "Medio",
-        "slow": "Lento"
+        "medium": "Media",
+        "slow": "Lenta"
       },
       "placeholder": "Seleziona la velocità di risposta",
       "title": "Velocità di risposta"
     },
     "revealDM": {
-      "desc": "Rendi visibili a te i contenuti dei messaggi diretti inviati ad altri membri.",
-      "title": "Mostra DM"
+      "desc": "Rendi visibili i messaggi privati inviati ad altri membri.",
+      "title": "Mostra contenuti messaggi privati"
     },
     "submit": "Aggiorna impostazioni",
     "systemPrompt": {
-      "desc": "Prompt di sistema personalizzato per l'orchestratore delle conversazioni di gruppo. Questo sovrascrive il comportamento predefinito dell'orchestratore.",
-      "placeholder": "Inserisci il prompt di sistema personalizzato per l'orchestratore...",
-      "title": "Prompt di sistema dell'orchestratore"
+      "desc": "Prompt di sistema personalizzato per il moderatore della chat di gruppo. Può influenzare il comportamento predefinito del moderatore.",
+      "placeholder": "Inserisci un prompt di sistema personalizzato per il moderatore...",
+      "title": "Prompt di sistema del moderatore"
     },
     "title": "Impostazioni chat"
   },
   "settingGroupMembers": {
+    "addToGroup": "Aggiungi al gruppo",
+    "availableAgents": "Assistenti disponibili",
+    "defaultAgent": "Assistente personalizzato",
     "edit": "Modifica membro",
-    "empty": "Non ci sono ancora agenti in questo gruppo. Fai clic sul pulsante + per aggiungere membri.",
-    "owner": "Tu (Proprietario)",
+    "empty": "Nessun agente presente in questa chat di gruppo. Clicca il pulsante + per aggiungere membri.",
+    "groupMembers": "Membri del gruppo",
+    "noAvailableAgents": "Nessun assistente disponibile",
+    "noDescription": "Nessuna descrizione",
+    "noMembersInGroup": "Nessun membro nel gruppo",
+    "owner": "Tu (proprietario)",
     "remove": "Rimuovi membro",
+    "removeFromGroup": "Rimuovi dal gruppo",
     "you": "Tu"
   },
   "settingModel": {

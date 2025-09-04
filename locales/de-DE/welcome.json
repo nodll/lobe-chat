@@ -126,7 +126,8 @@
         "emoji": "🔬",
         "prompt": "Lassen Sie uns zusammen die Wissenschaft erkunden! Können Sie uns helfen, Experimente durchzuführen und unsere Erkenntnisse zu teilen?",
         "title": "Wissenschaftsausstellung"
-      }
+      },
+      "title": "Empfehlungen zur Nutzung von Gruppenchats"
     },
     "groupMessage": "Willkommen im Gruppenchat! Kollaborieren Sie mit mehreren KI-Assistenten in einem gemeinsamen Gesprächsraum.",
     "qa": {

@@ -43,6 +43,8 @@
   "header": {
     "desc": "Preferencje i ustawienia modelu.",
     "global": "Ustawienia globalne",
+    "group": "Ustawienia czatu grupowego",
+    "groupDesc": "Zarządzaj bieżącym czatem grupowym",
     "session": "Ustawienia sesji",
     "sessionDesc": "Ustawienia postaci i preferencje sesji.",
     "sessionWithName": "Ustawienia sesji · {{name}}",
@@ -301,31 +303,32 @@
   },
   "settingGroup": {
     "description": {
-      "placeholder": "Wprowadź opis grupy",
-      "title": "Opis grupy"
+      "placeholder": "Wprowadź opis czatu grupowego",
+      "title": "Opis czatu grupowego"
     },
     "name": {
-      "placeholder": "Wprowadź nazwę grupy",
-      "title": "Nazwa grupy"
+      "placeholder": "Wprowadź nazwę czatu grupowego",
+      "title": "Nazwa czatu grupowego"
     },
-    "submit": "Zaktualizuj grupę",
+    "submit": "Aktualizuj czat grupowy",
     "systemPrompt": {
-      "placeholder": "Wprowadź polecenie systemowe",
-      "title": "Polecenie systemowe"
+      "placeholder": "Wprowadź systemową wskazówkę prowadzącego",
+      "title": "Systemowa wskazówka prowadzącego"
     },
-    "title": "Informacje o grupie"
+    "title": "Informacje o czacie grupowym"
   },
   "settingGroupChat": {
     "maxResponseInRow": {
-      "desc": "Wybierz, ile odpowiedzi z rzędu mogą wysyłać członkowie. Ustaw 0, aby wyłączyć.",
-      "title": "Maks. wiadomości z rzędu"
+      "desc": "Wybierz, ile wiadomości członek może odpowiedzieć z rzędu. Ustaw na 0, aby wyłączyć to ograniczenie.",
+      "title": "Liczba kolejnych odpowiedzi"
     },
     "model": {
-      "desc": "Wybierz model używany w konwersacjach grupowych",
-      "title": "Model orkiestratora"
+      "desc": "Wybierz model używany do prowadzenia rozmowy w czacie grupowym. Wypowiedzi członków grupy nie są zmieniane.",
+      "title": "Model prowadzącego"
     },
+    "orchestratorTitle": "Ustawienia prowadzącego",
     "responseOrder": {
-      "desc": "Agenci będą odpowiadać w kolejności, w jakiej są ustawieni w grupie",
+      "desc": "Agent będzie odpowiadał zgodnie z kolejnością ustaloną w czacie grupowym",
       "options": {
         "natural": "Naturalna",
         "sequential": "Sekwencyjna"
@@ -334,32 +337,40 @@
       "title": "Kolejność odpowiedzi"
     },
     "responseSpeed": {
-      "desc": "Wybierz sposób odpowiadania agentów w konwersacjach grupowych",
+      "desc": "Kontroluj ogólne tempo czatu grupowego",
       "options": {
-        "fast": "Szybko",
-        "medium": "Średnio",
-        "slow": "Wolno"
+        "fast": "Szybkie",
+        "medium": "Średnie",
+        "slow": "Wolne"
       },
       "placeholder": "Wybierz prędkość odpowiedzi",
-      "title": "Szybkość odpowiedzi"
+      "title": "Prędkość odpowiedzi"
     },
     "revealDM": {
-      "desc": "Spraw, aby treść prywatnych wiadomości wysyłanych do innych członków była dla Ciebie widoczna.",
-      "title": "Pokaż prywatne wiadomości"
+      "desc": "Umożliw wyświetlanie prywatnych wiadomości wysłanych do innych członków.",
+      "title": "Pokaż treść prywatnych wiadomości"
     },
     "submit": "Aktualizuj ustawienia",
     "systemPrompt": {
-      "desc": "Niestandardowy komunikat systemowy dla orkiestratora rozmów grupowych. Zastępuje domyślne zachowanie orkiestratora.",
-      "placeholder": "Wprowadź niestandardowy komunikat systemowy orkiestratora...",
-      "title": "Komunikat systemowy orkiestratora"
+      "desc": "Niestandardowa systemowa wskazówka dla prowadzącego rozmowę w czacie grupowym. Może wpłynąć na domyślne zachowanie prowadzącego.",
+      "placeholder": "Wprowadź niestandardową systemową wskazówkę prowadzącego...",
+      "title": "Systemowa wskazówka prowadzącego"
     },
     "title": "Ustawienia czatu"
   },
   "settingGroupMembers": {
+    "addToGroup": "Dołącz do grupy",
+    "availableAgents": "Dostępni asystenci",
+    "defaultAgent": "Niestandardowy asystent",
     "edit": "Edytuj członka",
-    "empty": "W tej grupie nie ma jeszcze agentów. Kliknij przycisk +, aby dodać członków.",
+    "empty": "Brak agentów w tym czacie grupowym. Kliknij przycisk +, aby dodać członków.",
+    "groupMembers": "Członkowie grupy",
+    "noAvailableAgents": "Brak dostępnych asystentów",
+    "noDescription": "Brak opisu",
+    "noMembersInGroup": "Brak członków w grupie",
     "owner": "Ty (właściciel)",
     "remove": "Usuń członka",
+    "removeFromGroup": "Usuń z grupy",
     "you": "Ty"
   },
   "settingModel": {

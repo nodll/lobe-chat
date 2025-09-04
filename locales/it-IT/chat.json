@@ -21,10 +21,12 @@
   },
   "clearCurrentMessages": "Cancella messaggi attuali",
   "confirmClearCurrentMessages": "Stai per cancellare i messaggi attuali, questa operazione non potrà essere annullata. Confermi?",
+  "confirmRemoveChatGroupItemAlert": "Stai per eliminare questa chat di gruppo, i membri del gruppo non saranno influenzati, conferma la tua azione",
   "confirmRemoveGroupItemAlert": "Stai per eliminare questo gruppo. Dopo l'eliminazione, gli assistenti contenuti in esso verranno spostati nell'elenco predefinito. Confermi l'operazione?",
   "confirmRemoveSessionItemAlert": "Stai per rimuovere questo assistente, l'operazione non potrà essere annullata. Confermi?",
   "confirmRemoveSessionSuccess": "Session eliminata con successo",
   "defaultAgent": "Assistente predefinito",
+  "defaultGroupChat": "Chat di gruppo",
   "defaultList": "Lista predefinita",
   "defaultSession": "Sessione predefinita",
   "dm": {
@@ -68,9 +70,27 @@
   "group": {
     "desc": "Collaborare con più assistenti IA in uno spazio di conversazione condiviso.",
     "memberTooltip": "Nel gruppo ci sono {{count}} membri",
+    "orchestratorThinking": "L'organizzatore sta riflettendo...",
+    "removeMember": "Rimuovi membro",
     "title": "Gruppi"
   },
   "groupDescription": "Descrizione del gruppo",
+  "groupSidebar": {
+    "members": {
+      "addMember": "Aggiungi membro",
+      "memberSettings": "Impostazioni membro",
+      "orchestrator": "Organizzatore",
+      "orchestratorThinking": "L'organizzatore sta riflettendo...",
+      "removeMember": "Rimuovi membro",
+      "stopOrchestrator": "Interrompi riflessione",
+      "triggerOrchestrator": "Avvia chat di gruppo"
+    },
+    "tabs": {
+      "members": "Membri",
+      "role": "Impostazioni"
+    }
+  },
+  "hideForYou": "Il contenuto del messaggio privato è stato nascosto, abilita 【Mostra contenuto messaggi privati】 nelle impostazioni per visualizzarlo",
   "history": {
     "title": "L'assistente ricorderà solo gli ultimi {{count}} messaggi"
   },
@@ -115,12 +135,16 @@
   },
   "memberSelection": {
     "addMember": "Aggiungi membro",
-    "noAvailableAgents": "Nessun agente disponibile",
-    "noSelectedAgents": "Nessun agente selezionato",
-    "searchAgents": "Cerca agenti...",
-    "setInitialMembers": "Imposta membri iniziali"
+    "createGroup": "Crea chat di gruppo",
+    "noAvailableAgents": "Nessun assistente disponibile da invitare",
+    "noSelectedAgents": "Nessun assistente selezionato",
+    "searchAgents": "Cerca assistenti...",
+    "setInitialMembers": "Seleziona membri del gruppo"
   },
   "members": "Membri",
+  "mention": {
+    "title": "Menziona membri"
+  },
   "messageAction": {
     "delAndRegenerate": "Elimina e rigenera",
     "deleteDisabledByThreads": "Esistono sottoargomenti, non è possibile eliminare",
@@ -128,7 +152,7 @@
   },
   "messages": {
     "dm": {
-      "sentTo": "Invia a",
+      "sentTo": "Visibile solo a {{name}}",
       "title": "Messaggio privato"
     },
     "modelCard": {
@@ -230,6 +254,8 @@
     "confirmRemoveGroupAlert": "Stai per rimuovere questo gruppo. Dopo la rimozione, gli assistenti di questo gruppo verranno spostati nella lista predefinita. Confermi l'operazione?",
     "createAgentSuccess": "Assistente creato con successo",
     "createGroup": "Aggiungi nuovo gruppo",
+    "createGroupFailed": "Creazione della chat di gruppo fallita",
+    "createGroupSuccess": "Chat di gruppo creata con successo",
     "createSuccess": "Creazione riuscita",
     "creatingAgent": "Creazione dell'assistente in corso...",
     "inputPlaceholder": "Inserisci il nome del gruppo...",
@@ -272,6 +298,7 @@
     "chats": "Chat",
     "historySummary": "Riepilogo storico",
     "rest": "Rimanenti",
+    "supervisor": "Organizzatore del gruppo",
     "systemRole": "Ruolo di sistema",
     "title": "Dettagli del Token",
     "tools": "Strumenti",

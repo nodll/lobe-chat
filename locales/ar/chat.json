@@ -21,10 +21,12 @@
   },
   "clearCurrentMessages": "مسح رسائل الجلسة الحالية",
   "confirmClearCurrentMessages": "سيتم مسح رسائل الجلسة الحالية قريبًا، وبمجرد المسح لن يمكن استعادتها، يرجى تأكيد الإجراء الخاص بك",
+  "confirmRemoveChatGroupItemAlert": "سيتم حذف هذه المحادثة الجماعية، ولن يتأثر أعضاء المجموعة، يرجى تأكيد العملية الخاصة بك",
   "confirmRemoveGroupItemAlert": "سيتم حذف هذه المجموعة قريبًا. بعد الحذف، سيُنتقل المساعدون في هذه المجموعة إلى القائمة الافتراضية. يرجى تأكيد إجراء الحذف.",
   "confirmRemoveSessionItemAlert": "سيتم حذف هذا المساعد قريبًا، وبمجرد الحذف لن يمكن استعادته، يرجى تأكيد الإجراء الخاص بك",
   "confirmRemoveSessionSuccess": "تم حذف المساعد بنجاح",
   "defaultAgent": "المساعد الافتراضي",
+  "defaultGroupChat": "المحادثة الجماعية",
   "defaultList": "القائمة الافتراضية",
   "defaultSession": "المساعد الافتراضي",
   "dm": {
@@ -68,9 +70,27 @@
   "group": {
     "desc": "التعاون مع عدة مساعدين للذكاء الاصطناعي في مساحة محادثة مشتركة.",
     "memberTooltip": "هناك {{count}} عضوًا في المجموعة",
+    "orchestratorThinking": "المُنسق يفكر...",
+    "removeMember": "إزالة عضو",
     "title": "مجموعة"
   },
   "groupDescription": "وصف المجموعة",
+  "groupSidebar": {
+    "members": {
+      "addMember": "إضافة عضو",
+      "memberSettings": "إعدادات العضو",
+      "orchestrator": "المُنسق",
+      "orchestratorThinking": "المُنسق يفكر...",
+      "removeMember": "إزالة عضو",
+      "stopOrchestrator": "إيقاف التفكير",
+      "triggerOrchestrator": "بدء المحادثة الجماعية"
+    },
+    "tabs": {
+      "members": "الأعضاء",
+      "role": "الإعداد"
+    }
+  },
+  "hideForYou": "تم إخفاء محتوى الرسائل الخاصة، يرجى تفعيل خيار 【عرض محتوى الرسائل الخاصة】 في الإعدادات للعرض",
   "history": {
     "title": "سيتذكر المساعد آخر {{count}} رسالة فقط"
   },
@@ -115,12 +135,16 @@
   },
   "memberSelection": {
     "addMember": "إضافة عضو",
-    "noAvailableAgents": "لا يوجد أي وكلاء متاحين",
-    "noSelectedAgents": "لم يتم اختيار أي وكلاء",
-    "searchAgents": "ابحث عن وكلاء...",
-    "setInitialMembers": "تعيين الأعضاء المبدئيين"
+    "createGroup": "إنشاء محادثة جماعية",
+    "noAvailableAgents": "لا يوجد مساعدين متاحين للدعوة",
+    "noSelectedAgents": "لم يتم اختيار مساعدين بعد",
+    "searchAgents": "البحث عن مساعدين...",
+    "setInitialMembers": "اختيار أعضاء المجموعة"
   },
   "members": "الأعضاء",
+  "mention": {
+    "title": "الإشارة إلى الأعضاء"
+  },
   "messageAction": {
     "delAndRegenerate": "حذف وإعادة الإنشاء",
     "deleteDisabledByThreads": "يوجد موضوعات فرعية، لا يمكن الحذف",
@@ -128,7 +152,7 @@
   },
   "messages": {
     "dm": {
-      "sentTo": "إرسال إلى",
+      "sentTo": "مرئي فقط لـ {{name}}",
       "title": "الرسائل الخاصة"
     },
     "modelCard": {
@@ -230,6 +254,8 @@
     "confirmRemoveGroupAlert": "سيتم حذف هذه المجموعة قريبًا، وبعد الحذف، سيتم نقل مساعدي هذه المجموعة إلى القائمة الافتراضية، يرجى تأكيد إجراءك",
     "createAgentSuccess": "تم إنشاء المساعد بنجاح",
     "createGroup": "إضافة مجموعة جديدة",
+    "createGroupFailed": "فشل إنشاء المحادثة الجماعية",
+    "createGroupSuccess": "تم إنشاء المحادثة الجماعية بنجاح",
     "createSuccess": "تم الإنشاء بنجاح",
     "creatingAgent": "جاري إنشاء المساعد...",
     "inputPlaceholder": "الرجاء إدخال اسم المجموعة...",
@@ -272,6 +298,7 @@
     "chats": "رسائل المحادثة",
     "historySummary": "ملخص التاريخ",
     "rest": "المتبقي",
+    "supervisor": "مُنسق المجموعة",
     "systemRole": "تعيين الدور",
     "title": "تفاصيل الرمز",
     "tools": "تعيين الإضافات",

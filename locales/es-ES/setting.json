@@ -43,6 +43,8 @@
   "header": {
     "desc": "Preferencias y configuración del modelo.",
     "global": "Configuración global",
+    "group": "Configuración del grupo",
+    "groupDesc": "Gestionar el grupo actual",
     "session": "Configuración de la sesión",
     "sessionDesc": "Configuración de roles y preferencias de sesión.",
     "sessionWithName": "Configuración de la sesión · {{name}}",
@@ -301,65 +303,74 @@
   },
   "settingGroup": {
     "description": {
-      "placeholder": "Introduce la descripción del grupo",
+      "placeholder": "Por favor, ingrese la descripción del grupo",
       "title": "Descripción del grupo"
     },
     "name": {
-      "placeholder": "Introduce el nombre del grupo",
+      "placeholder": "Por favor, ingrese el nombre del grupo",
       "title": "Nombre del grupo"
     },
     "submit": "Actualizar grupo",
     "systemPrompt": {
-      "placeholder": "Introduce el mensaje del sistema",
-      "title": "Mensaje del sistema"
+      "placeholder": "Por favor, ingrese la indicación del sistema para el anfitrión",
+      "title": "Indicación del sistema para el anfitrión"
     },
     "title": "Información del grupo"
   },
   "settingGroupChat": {
     "maxResponseInRow": {
-      "desc": "Elija cuántos mensajes puede responder un miembro de forma consecutiva. Establezca 0 para desactivar.",
-      "title": "Máximo de mensajes consecutivos"
+      "desc": "Seleccione cuántos mensajes puede responder un miembro de forma consecutiva. Establecer en 0 desactiva esta limitación.",
+      "title": "Número de respuestas consecutivas"
     },
     "model": {
-      "desc": "Elija el modelo a utilizar en las conversaciones grupales",
-      "title": "Modelo del orquestador"
+      "desc": "Seleccione el modelo utilizado para dirigir la conversación del grupo. No afecta las intervenciones de los miembros.",
+      "title": "Modelo del anfitrión"
     },
+    "orchestratorTitle": "Configuración del anfitrión",
     "responseOrder": {
-      "desc": "Los agentes responderán en el orden establecido en el grupo",
+      "desc": "Los agentes responderán en el orden establecido en el grupo.",
       "options": {
         "natural": "Natural",
         "sequential": "Secuencial"
       },
-      "placeholder": "Seleccionar orden de respuesta",
+      "placeholder": "Seleccione el orden de respuesta",
       "title": "Orden de respuesta"
     },
     "responseSpeed": {
-      "desc": "Elija la rapidez con la que responden los agentes en conversaciones grupales",
+      "desc": "Controla la velocidad general del chat grupal.",
       "options": {
-        "fast": "Rápida",
-        "medium": "Media",
-        "slow": "Lenta"
+        "fast": "Rápido",
+        "medium": "Medio",
+        "slow": "Lento"
       },
-      "placeholder": "Seleccionar velocidad de respuesta",
+      "placeholder": "Seleccione la velocidad de respuesta",
       "title": "Velocidad de respuesta"
     },
     "revealDM": {
-      "desc": "Haz que el contenido de los mensajes directos enviados a otros miembros sea visible para ti.",
-      "title": "Mostrar mensajes directos"
+      "desc": "Permite ver los mensajes privados enviados a otros miembros.",
+      "title": "Mostrar contenido de mensajes privados"
     },
-    "submit": "Actualizar ajustes",
+    "submit": "Actualizar configuración",
     "systemPrompt": {
-      "desc": "Instrucción del sistema personalizada para el orquestador de conversaciones grupales. Esto sobrescribe el comportamiento predeterminado del orquestador.",
-      "placeholder": "Introduzca una instrucción del sistema personalizada para el orquestador...",
-      "title": "Instrucción del sistema del orquestador"
+      "desc": "Indicación personalizada del sistema para el anfitrión del chat grupal. Esto puede afectar el comportamiento predeterminado del anfitrión.",
+      "placeholder": "Por favor, ingrese una indicación personalizada para el anfitrión...",
+      "title": "Indicación del sistema para el anfitrión"
     },
-    "title": "Ajustes de chat"
+    "title": "Configuración del chat"
   },
   "settingGroupMembers": {
+    "addToGroup": "Unirse al grupo",
+    "availableAgents": "Asistentes disponibles",
+    "defaultAgent": "Asistente personalizado",
     "edit": "Editar miembro",
-    "empty": "Todavía no hay agentes en este grupo. Haz clic en el botón + para añadir miembros.",
+    "empty": "No hay agentes en este grupo. Haga clic en el botón + para agregar miembros.",
+    "groupMembers": "Miembros del grupo",
+    "noAvailableAgents": "No hay asistentes disponibles",
+    "noDescription": "Sin descripción",
+    "noMembersInGroup": "El grupo no tiene miembros",
     "owner": "Tú (propietario)",
     "remove": "Eliminar miembro",
+    "removeFromGroup": "Eliminar del grupo",
     "you": "Tú"
   },
   "settingModel": {

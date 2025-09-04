@@ -126,7 +126,8 @@
         "emoji": "🔬",
         "prompt": "Let's explore science together! Can you help us conduct experiments and share our findings?",
         "title": "Science Expo"
-      }
+      },
+      "title": "Group Chat Usage Recommendations"
     },
     "groupMessage": "Welcome to group chat! Collaborate with multiple AI assistants in a shared conversation space.",
     "qa": {

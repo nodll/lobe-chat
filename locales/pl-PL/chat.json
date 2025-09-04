@@ -21,10 +21,12 @@
   },
   "clearCurrentMessages": "Wyczyść bieżącą rozmowę",
   "confirmClearCurrentMessages": "Czy na pewno chcesz wyczyścić bieżącą rozmowę? Tej operacji nie można cofnąć.",
+  "confirmRemoveChatGroupItemAlert": "Grupa czatu zostanie usunięta, członkowie grupy nie zostaną dotknięci, potwierdź swoją operację",
   "confirmRemoveGroupItemAlert": "Zaraz zostanie usunięta ta grupa. Po jej usunięciu asystenci z tej grupy zostaną przeniesieni do listy domyślnej. Potwierdź swoją operację",
   "confirmRemoveSessionItemAlert": "Czy na pewno chcesz usunąć tego asystenta? Tej operacji nie można cofnąć.",
   "confirmRemoveSessionSuccess": "Sesja usunięta pomyślnie",
   "defaultAgent": "Domyślny asystent",
+  "defaultGroupChat": "Grupa czatu",
   "defaultList": "Domyślna lista",
   "defaultSession": "Domyślna sesja",
   "dm": {
@@ -68,9 +70,27 @@
   "group": {
     "desc": "Współpracuj z wieloma asystentami AI w wspólnej przestrzeni konwersacji.",
     "memberTooltip": "W grupie jest {{count}} członków",
+    "orchestratorThinking": "Organizator myśli...",
+    "removeMember": "Usuń członka",
     "title": "Grupa"
   },
   "groupDescription": "Opis grupy",
+  "groupSidebar": {
+    "members": {
+      "addMember": "Dodaj członka",
+      "memberSettings": "Ustawienia członka",
+      "orchestrator": "Organizator",
+      "orchestratorThinking": "Organizator myśli...",
+      "removeMember": "Usuń członka",
+      "stopOrchestrator": "Zatrzymaj myślenie",
+      "triggerOrchestrator": "Rozpocznij czat grupowy"
+    },
+    "tabs": {
+      "members": "Członkowie",
+      "role": "Ustawienia"
+    }
+  },
+  "hideForYou": "Treść prywatnej wiadomości została ukryta, włącz opcję 【Pokaż treść prywatnych wiadomości】 w ustawieniach, aby zobaczyć",
   "history": {
     "title": "Asystent zapamięta tylko ostatnie {{count}} wiadomości"
   },
@@ -115,12 +135,16 @@
   },
   "memberSelection": {
     "addMember": "Dodaj członka",
-    "noAvailableAgents": "Brak dostępnych agentów",
-    "noSelectedAgents": "Nie wybrano agentów",
-    "searchAgents": "Wyszukaj agentów...",
-    "setInitialMembers": "Ustaw początkowych członków"
+    "createGroup": "Utwórz grupę czatu",
+    "noAvailableAgents": "Brak dostępnych asystentów do zaproszenia",
+    "noSelectedAgents": "Nie wybrano jeszcze asystentów",
+    "searchAgents": "Szukaj asystentów...",
+    "setInitialMembers": "Wybierz członków grupy"
   },
   "members": "Członkowie",
+  "mention": {
+    "title": "Wzmianka o członkach"
+  },
   "messageAction": {
     "delAndRegenerate": "Usuń i wygeneruj ponownie",
     "deleteDisabledByThreads": "Istnieją podwątki, nie można usunąć",
@@ -128,7 +152,7 @@
   },
   "messages": {
     "dm": {
-      "sentTo": "Wyślij do",
+      "sentTo": "Widoczne tylko dla {{name}}",
       "title": "Wiadomość prywatna"
     },
     "modelCard": {
@@ -230,6 +254,8 @@
     "confirmRemoveGroupAlert": "Czy na pewno chcesz usunąć tę grupę? Po usunięciu asystenci z tej grupy zostaną przeniesieni do domyślnej listy. Potwierdź swoje działanie.",
     "createAgentSuccess": "Utworzenie asystenta zakończone sukcesem",
     "createGroup": "Dodaj nową grupę",
+    "createGroupFailed": "Nie udało się utworzyć grupy czatu",
+    "createGroupSuccess": "Grupa czatu została utworzona pomyślnie",
     "createSuccess": "Utworzono pomyślnie",
     "creatingAgent": "Tworzenie asystenta...",
     "inputPlaceholder": "Wprowadź nazwę grupy...",
@@ -272,6 +298,7 @@
     "chats": "Rozmowy",
     "historySummary": "Podsumowanie historii",
     "rest": "Pozostałe",
+    "supervisor": "Organizator grupy",
     "systemRole": "Rola systemowa",
     "title": "Szczegóły tokena",
     "tools": "Narzędzia",

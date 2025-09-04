@@ -21,10 +21,12 @@
   },
   "clearCurrentMessages": "Effacer les messages actuels",
   "confirmClearCurrentMessages": "Vous êtes sur le point d'effacer les messages de cette session. Cette action est irréversible. Veuillez confirmer.",
+  "confirmRemoveChatGroupItemAlert": "Vous êtes sur le point de supprimer ce groupe de discussion, les membres du groupe ne seront pas affectés, veuillez confirmer votre action",
   "confirmRemoveGroupItemAlert": "Vous êtes sur le point de supprimer ce groupe. Après la suppression, les assistants de ce groupe seront déplacés vers la liste par défaut. Veuillez confirmer votre action.",
   "confirmRemoveSessionItemAlert": "Vous êtes sur le point de supprimer cet agent. Cette action est irréversible. Veuillez confirmer.",
   "confirmRemoveSessionSuccess": "Agent supprimé avec succès",
   "defaultAgent": "Agent par défaut",
+  "defaultGroupChat": "Groupe de discussion",
   "defaultList": "Liste par défaut",
   "defaultSession": "Session par défaut",
   "dm": {
@@ -68,9 +70,27 @@
   "group": {
     "desc": "Collaborez avec plusieurs assistants IA dans un espace de conversation partagé.",
     "memberTooltip": "Le groupe contient {{count}} membre(s)",
+    "orchestratorThinking": "L'animateur est en train de réfléchir...",
+    "removeMember": "Retirer un membre",
     "title": "Groupe"
   },
   "groupDescription": "Description du groupe",
+  "groupSidebar": {
+    "members": {
+      "addMember": "Ajouter un membre",
+      "memberSettings": "Paramètres des membres",
+      "orchestrator": "Animateur",
+      "orchestratorThinking": "L'animateur est en train de réfléchir...",
+      "removeMember": "Retirer un membre",
+      "stopOrchestrator": "Arrêter la réflexion",
+      "triggerOrchestrator": "Démarrer la discussion de groupe"
+    },
+    "tabs": {
+      "members": "Membres",
+      "role": "Paramètres"
+    }
+  },
+  "hideForYou": "Le contenu du message privé est caché, veuillez activer « Afficher le contenu des messages privés » dans les paramètres pour le voir",
   "history": {
     "title": "L'assistant ne se souviendra que des {{count}} derniers messages"
   },
@@ -115,12 +135,16 @@
   },
   "memberSelection": {
     "addMember": "Ajouter un membre",
-    "noAvailableAgents": "Aucun agent disponible",
-    "noSelectedAgents": "Aucun agent sélectionné",
-    "searchAgents": "Rechercher des agents...",
-    "setInitialMembers": "Définir les membres initiaux"
+    "createGroup": "Créer un groupe de discussion",
+    "noAvailableAgents": "Aucun assistant disponible à inviter",
+    "noSelectedAgents": "Aucun assistant sélectionné",
+    "searchAgents": "Rechercher un assistant...",
+    "setInitialMembers": "Sélectionner les membres du groupe"
   },
   "members": "Membres",
+  "mention": {
+    "title": "Mentionner un membre"
+  },
   "messageAction": {
     "delAndRegenerate": "Supprimer et régénérer",
     "deleteDisabledByThreads": "Il existe des sous-sujets, la suppression n'est pas possible.",
@@ -128,7 +152,7 @@
   },
   "messages": {
     "dm": {
-      "sentTo": "Envoyer à",
+      "sentTo": "Visible uniquement par {{name}}",
       "title": "Message privé"
     },
     "modelCard": {
@@ -230,6 +254,8 @@
     "confirmRemoveGroupAlert": "Vous êtes sur le point de supprimer ce groupe. Une fois supprimé, les agents de ce groupe seront déplacés vers la liste par défaut. Veuillez confirmer votre action.",
     "createAgentSuccess": "Création de l'agent réussie",
     "createGroup": "Créer un nouveau groupe",
+    "createGroupFailed": "Échec de la création du groupe de discussion",
+    "createGroupSuccess": "Groupe de discussion créé avec succès",
     "createSuccess": "Création réussie",
     "creatingAgent": "Création de l'agent en cours...",
     "inputPlaceholder": "Veuillez saisir le nom du groupe...",
@@ -272,6 +298,7 @@
     "chats": "Messages de discussion",
     "historySummary": "Résumé historique",
     "rest": "Restant disponible",
+    "supervisor": "Animateur du groupe",
     "systemRole": "Rôle système",
     "title": "Détails du jeton",
     "tools": "Paramètres du plugin",

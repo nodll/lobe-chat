@@ -43,6 +43,8 @@
   "header": {
     "desc": "Thiết lập Ưu tiên và Mô hình.",
     "global": "Cài đặt toàn cầu",
+    "group": "Cài đặt nhóm trò chuyện",
+    "groupDesc": "Quản lý nhóm trò chuyện hiện tại",
     "session": "Cài đặt cuộc trò chuyện",
     "sessionDesc": "Thiết lập nhân vật và ưu tiên phiên hội thoại.",
     "sessionWithName": "Cài đặt cuộc trò chuyện · {{name}}",
@@ -301,65 +303,74 @@
   },
   "settingGroup": {
     "description": {
-      "placeholder": "Nhập mô tả nhóm",
-      "title": "Mô tả nhóm"
+      "placeholder": "Vui lòng nhập mô tả nhóm trò chuyện",
+      "title": "Mô tả nhóm trò chuyện"
     },
     "name": {
-      "placeholder": "Nhập tên nhóm",
-      "title": "Tên nhóm"
+      "placeholder": "Vui lòng nhập tên nhóm trò chuyện",
+      "title": "Tên nhóm trò chuyện"
     },
-    "submit": "Cập nhật nhóm",
+    "submit": "Cập nhật nhóm trò chuyện",
     "systemPrompt": {
-      "placeholder": "Nhập lời nhắc hệ thống",
-      "title": "Lời nhắc hệ thống"
+      "placeholder": "Vui lòng nhập từ khóa hệ thống cho người dẫn chương trình",
+      "title": "Từ khóa hệ thống người dẫn chương trình"
     },
-    "title": "Thông tin nhóm"
+    "title": "Thông tin nhóm trò chuyện"
   },
   "settingGroupChat": {
     "maxResponseInRow": {
-      "desc": "Chọn số lượng tin nhắn mà mỗi thành viên có thể phản hồi liên tiếp. Đặt là 0 để tắt.",
-      "title": "Số tin nhắn tối đa liên tiếp"
+      "desc": "Chọn số lượng tin nhắn thành viên có thể trả lời liên tiếp. Đặt là 0 để vô hiệu hóa giới hạn này.",
+      "title": "Số tin nhắn trả lời liên tiếp"
     },
     "model": {
-      "desc": "Chọn mô hình để sử dụng cho các cuộc trò chuyện nhóm",
-      "title": "Mô hình điều phối"
+      "desc": "Chọn mô hình dùng để dẫn dắt cuộc trò chuyện nhóm. Lời nói của thành viên nhóm không bị ảnh hưởng.",
+      "title": "Mô hình người dẫn chương trình"
     },
+    "orchestratorTitle": "Cài đặt người dẫn chương trình",
     "responseOrder": {
-      "desc": "Các tác nhân sẽ phản hồi theo thứ tự đã được thiết lập trong nhóm",
+      "desc": "Đại diện sẽ trả lời theo thứ tự được thiết lập trong nhóm trò chuyện",
       "options": {
         "natural": "Tự nhiên",
         "sequential": "Tuần tự"
       },
-      "placeholder": "Chọn thứ tự phản hồi",
-      "title": "Thứ tự phản hồi"
+      "placeholder": "Chọn thứ tự trả lời",
+      "title": "Thứ tự trả lời"
     },
     "responseSpeed": {
-      "desc": "Chọn cách các tác nhân phản hồi trong các cuộc trò chuyện nhóm",
+      "desc": "Điều khiển tốc độ tổng thể của cuộc trò chuyện nhóm",
       "options": {
         "fast": "Nhanh",
         "medium": "Trung bình",
         "slow": "Chậm"
       },
-      "placeholder": "Chọn tốc độ phản hồi",
-      "title": "Tốc độ phản hồi"
+      "placeholder": "Chọn tốc độ trả lời",
+      "title": "Tốc độ trả lời"
     },
     "revealDM": {
-      "desc": "Hiển thị nội dung DM mà các thành viên gửi cho nhau cho bạn.",
-      "title": "Hiển thị DM"
+      "desc": "Hiển thị nội dung tin nhắn riêng gửi cho các thành viên khác cho bạn xem.",
+      "title": "Hiển thị nội dung tin nhắn riêng"
     },
     "submit": "Cập nhật cài đặt",
     "systemPrompt": {
-      "desc": "Prompt hệ thống tùy chỉnh cho bộ điều phối cuộc trò chuyện nhóm. Thiết lập này sẽ ghi đè hành vi mặc định của bộ điều phối.",
-      "placeholder": "Nhập prompt hệ thống tùy chỉnh cho bộ điều phối...",
-      "title": "Prompt hệ thống của bộ điều phối"
+      "desc": "Từ khóa hệ thống tùy chỉnh cho người dẫn chương trình trong cuộc trò chuyện nhóm. Điều này có thể ảnh hưởng đến hành vi mặc định của người dẫn.",
+      "placeholder": "Vui lòng nhập từ khóa hệ thống người dẫn chương trình tùy chỉnh...",
+      "title": "Từ khóa hệ thống người dẫn chương trình"
     },
-    "title": "Cài đặt trò chuyện nhóm"
+    "title": "Cài đặt trò chuyện"
   },
   "settingGroupMembers": {
+    "addToGroup": "Thêm vào nhóm",
+    "availableAgents": "Trợ lý có sẵn",
+    "defaultAgent": "Trợ lý tùy chỉnh",
     "edit": "Chỉnh sửa thành viên",
-    "empty": "Chưa có đại lý nào trong nhóm này. Nhấn nút + để thêm thành viên.",
-    "owner": "Bạn (Chủ sở hữu)",
+    "empty": "Hiện chưa có đại diện trong nhóm này. Nhấn nút + để thêm thành viên.",
+    "groupMembers": "Thành viên nhóm",
+    "noAvailableAgents": "Không có trợ lý khả dụng",
+    "noDescription": "Chưa có mô tả",
+    "noMembersInGroup": "Nhóm chưa có thành viên",
+    "owner": "Bạn (chủ sở hữu)",
     "remove": "Xóa thành viên",
+    "removeFromGroup": "Loại khỏi nhóm",
     "you": "Bạn"
   },
   "settingModel": {

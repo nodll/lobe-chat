@@ -21,10 +21,12 @@
   },
   "clearCurrentMessages": "Mevcut oturum mesajlarını temizle",
   "confirmClearCurrentMessages": "Mevcut oturum mesajlarını temizlemek üzeresiniz. Temizlendikten sonra geri alınamazlar. Lütfen eyleminizi onaylayın.",
+  "confirmRemoveChatGroupItemAlert": "Bu grup sohbeti silinecek, grup üyeleri etkilenmeyecektir, lütfen işleminizi onaylayın",
   "confirmRemoveGroupItemAlert": "Bu grubu silmek üzeresiniz; silindikten sonra bu gruba ait asistanlar varsayılan listeye taşınacaktır. Lütfen işlemi onaylayın.",
   "confirmRemoveSessionItemAlert": "Bu asistanı silmek üzeresiniz. Silindikten sonra geri alınamaz. Lütfen eyleminizi onaylayın.",
   "confirmRemoveSessionSuccess": "Oturum başarıyla kaldırıldı",
   "defaultAgent": "Varsayılan Asistan",
+  "defaultGroupChat": "Grup Sohbeti",
   "defaultList": "Varsayılan Liste",
   "defaultSession": "Varsayılan Asistan",
   "dm": {
@@ -68,9 +70,27 @@
   "group": {
     "desc": "Birden fazla yapay zeka asistanıyla paylaşılan bir sohbet alanında işbirliği yapın.",
     "memberTooltip": "Bu grupta {{count}} üye var",
+    "orchestratorThinking": "Yönetici düşünüyor...",
+    "removeMember": "Üyeyi Kaldır",
     "title": "Grup"
   },
   "groupDescription": "Grup açıklaması",
+  "groupSidebar": {
+    "members": {
+      "addMember": "Üye Ekle",
+      "memberSettings": "Üye Ayarları",
+      "orchestrator": "Yönetici",
+      "orchestratorThinking": "Yönetici düşünüyor...",
+      "removeMember": "Üyeyi Kaldır",
+      "stopOrchestrator": "Düşünmeyi Durdur",
+      "triggerOrchestrator": "Grup Sohbetini Başlat"
+    },
+    "tabs": {
+      "members": "Üyeler",
+      "role": "Ayarla"
+    }
+  },
+  "hideForYou": "Özel mesaj içeriği gizlendi, görüntülemek için ayarlardan 【Özel Mesaj İçeriğini Göster】 seçeneğini açın",
   "history": {
     "title": "Asistan yalnızca son {{count}} mesajı hatırlayacak"
   },
@@ -115,12 +135,16 @@
   },
   "memberSelection": {
     "addMember": "Üye Ekle",
-    "noAvailableAgents": "Kullanılabilir temsilci yok",
-    "noSelectedAgents": "Seçili temsilci yok",
-    "searchAgents": "Temsilcileri ara...",
-    "setInitialMembers": "Başlangıç Üyelerini Ayarla"
+    "createGroup": "Grup Sohbeti Oluştur",
+    "noAvailableAgents": "Davet edilecek asistan yok",
+    "noSelectedAgents": "Henüz asistan seçilmedi",
+    "searchAgents": "Asistan ara...",
+    "setInitialMembers": "Grup üyelerini seçin"
   },
   "members": "Üyeler",
+  "mention": {
+    "title": "Üyeleri Etiketle"
+  },
   "messageAction": {
     "delAndRegenerate": "Sil ve Yeniden Oluştur",
     "deleteDisabledByThreads": "Alt konular mevcut, silinemez",
@@ -128,7 +152,7 @@
   },
   "messages": {
     "dm": {
-      "sentTo": "Alıcı",
+      "sentTo": "Sadece {{name}} tarafından görülebilir",
       "title": "Özel Mesaj"
     },
     "modelCard": {
@@ -230,6 +254,8 @@
     "confirmRemoveGroupAlert": "Bu grup silinecek, silindikten sonra bu grubun yardımcıları varsayılan listeye taşınacak, işleminizi onaylıyor musunuz?",
     "createAgentSuccess": "Yardımcı oluşturuldu",
     "createGroup": "Yeni Grup Ekle",
+    "createGroupFailed": "Grup sohbeti oluşturulamadı",
+    "createGroupSuccess": "Grup sohbeti başarıyla oluşturuldu",
     "createSuccess": "Oluşturma Başarılı",
     "creatingAgent": "Yardımcı oluşturuluyor...",
     "inputPlaceholder": "Grup adını girin...",
@@ -272,6 +298,7 @@
     "chats": "Sohbetler",
     "historySummary": "Tarih Özeti",
     "rest": "Kalan",
+    "supervisor": "Grup Yöneticisi",
     "systemRole": "Sistem Rolü",
     "title": "Bağlam Detayları",
     "tools": "Araçlar",

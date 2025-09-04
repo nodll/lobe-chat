@@ -126,7 +126,8 @@
         "emoji": "🔬",
         "prompt": "Hãy cùng khám phá khoa học! Bạn có thể giúp chúng tôi tiến hành thí nghiệm và chia sẻ kết quả không?",
         "title": "Triển lãm khoa học"
-      }
+      },
+      "title": "Gợi ý sử dụng trò chuyện nhóm"
     },
     "groupMessage": "Chào mừng đến với chat nhóm! Hợp tác với nhiều trợ lý AI trong không gian hội thoại chung。",
     "qa": {

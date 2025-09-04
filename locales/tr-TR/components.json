@@ -73,6 +73,18 @@
   "GoBack": {
     "back": "Geri dön"
   },
+  "HtmlPreview": {
+    "actions": {
+      "download": "İndir",
+      "preview": "Önizleme"
+    },
+    "iframeTitle": "HTML Önizlemesi",
+    "mode": {
+      "code": "Kod",
+      "preview": "Önizleme"
+    },
+    "title": "HTML Önizlemesi"
+  },
   "ImageUpload": {
     "actions": {
       "changeImage": "Resmi değiştirmek için tıklayın",
@@ -130,6 +142,12 @@
     },
     "progress": {
       "uploadingWithCount": "{{completed}}/{{total}} yüklendi"
+    },
+    "validation": {
+      "fileSizeExceeded": "Dosya boyutu sınırı aşıldı",
+      "fileSizeExceededDetail": "{{fileName}} ({{actualSize}}) maksimum boyut sınırı olan {{maxSize}}'yi aşıyor",
+      "fileSizeExceededMultiple": "{{count}} dosya, maksimum boyut sınırı olan {{maxSize}}'yi aşıyor: {{fileList}}",
+      "imageCountExceeded": "Resim sayısı sınırı aşıldı"
     }
   },
   "OllamaSetupGuide": {

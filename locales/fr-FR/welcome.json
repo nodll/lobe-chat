@@ -126,7 +126,8 @@
         "emoji": "🔬",
         "prompt": "Explorons la science ensemble ! Peux-tu nous aider à mener des expériences et à partager nos découvertes ?",
         "title": "Exposition scientifique"
-      }
+      },
+      "title": "Recommandations d'utilisation du chat de groupe"
     },
     "groupMessage": "Bienvenue dans le chat de groupe ! Collaborez avec plusieurs assistants IA dans un espace de conversation partagé.",
     "qa": {

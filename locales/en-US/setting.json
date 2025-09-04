@@ -43,6 +43,8 @@
   "header": {
     "desc": "Preferences and model settings.",
     "global": "Global Settings",
+    "group": "Group Chat Settings",
+    "groupDesc": "Manage the current group chat",
     "session": "Session Settings",
     "sessionDesc": "Role settings and session preferences.",
     "sessionWithName": "Session Settings · {{name}}",
@@ -301,65 +303,74 @@
   },
   "settingGroup": {
     "description": {
-      "placeholder": "Enter group description",
-      "title": "Group Description"
+      "placeholder": "Please enter the group chat description",
+      "title": "Group Chat Description"
     },
     "name": {
-      "placeholder": "Enter group name",
-      "title": "Group Name"
+      "placeholder": "Please enter the group chat name",
+      "title": "Group Chat Name"
     },
-    "submit": "Update Group",
+    "submit": "Update Group Chat",
     "systemPrompt": {
-      "placeholder": "Enter system prompt",
-      "title": "System Prompt"
+      "placeholder": "Please enter the host system prompt",
+      "title": "Host System Prompt"
     },
-    "title": "Group Information"
+    "title": "Group Chat Information"
   },
   "settingGroupChat": {
     "maxResponseInRow": {
-      "desc": "Choose how many messages members can send in a row. Set to 0 to disable.",
-      "title": "Maximum Consecutive Messages"
+      "desc": "Select how many consecutive messages a member can reply with. Set to 0 to disable this limit.",
+      "title": "Consecutive Reply Count"
     },
     "model": {
-      "desc": "Select the model to use for group conversations.",
-      "title": "Orchestrator Model"
+      "desc": "Select the model used to host the group chat conversation. Group members' messages are unaffected.",
+      "title": "Host Model"
     },
+    "orchestratorTitle": "Host Settings",
     "responseOrder": {
-      "desc": "Agents will respond in the order they are configured within the group.",
+      "desc": "The agent will reply in the order set within the group chat",
       "options": {
         "natural": "Natural",
         "sequential": "Sequential"
       },
-      "placeholder": "Select response order",
-      "title": "Response Order"
+      "placeholder": "Select reply order",
+      "title": "Reply Order"
     },
     "responseSpeed": {
-      "desc": "Choose how quickly agents respond in group conversations.",
+      "desc": "Controls the overall pace of the group chat",
       "options": {
         "fast": "Fast",
         "medium": "Medium",
         "slow": "Slow"
       },
-      "placeholder": "Select response speed",
-      "title": "Response Speed"
+      "placeholder": "Select reply speed",
+      "title": "Reply Speed"
     },
     "revealDM": {
-      "desc": "Make direct messages sent to other members visible to you.",
-      "title": "Reveal DMs"
+      "desc": "Make private messages sent to other members visible to you.",
+      "title": "Show Private Messages"
     },
     "submit": "Update Settings",
     "systemPrompt": {
-      "desc": "Custom system prompt for the group conversation orchestrator. This overrides the default orchestrator behavior.",
-      "placeholder": "Enter custom orchestrator system prompt...",
-      "title": "Orchestrator System Prompt"
+      "desc": "Custom system prompt for the group chat host. This may affect the default host behavior.",
+      "placeholder": "Please enter a custom host system prompt...",
+      "title": "Host System Prompt"
     },
     "title": "Chat Settings"
   },
   "settingGroupMembers": {
+    "addToGroup": "Add to Group",
+    "availableAgents": "Available Assistants",
+    "defaultAgent": "Custom Assistant",
     "edit": "Edit Member",
-    "empty": "No agents in this group yet. Click the + button to add members.",
+    "empty": "No agents in this group chat yet. Click the + button to add members.",
+    "groupMembers": "Group Members",
+    "noAvailableAgents": "No available assistants",
+    "noDescription": "No description",
+    "noMembersInGroup": "No members in the group",
     "owner": "You (Owner)",
     "remove": "Remove Member",
+    "removeFromGroup": "Remove from Group",
     "you": "You"
   },
   "settingModel": {

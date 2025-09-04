@@ -43,6 +43,8 @@
   "header": {
     "desc": "Präferenzen und Modellkonfigurationen.",
     "global": "Global Einstellungen",
+    "group": "Gruppeneinstellungen",
+    "groupDesc": "Verwalten Sie den aktuellen Gruppenchat",
     "session": "Sitzungseinstellungen",
     "sessionDesc": "Rollenkonfiguration und Sitzungspräferenzen.",
     "sessionWithName": "Sitzungseinstellungen · {{name}}",
@@ -301,40 +303,41 @@
   },
   "settingGroup": {
     "description": {
-      "placeholder": "Gruppenbeschreibung eingeben",
-      "title": "Gruppenbeschreibung"
+      "placeholder": "Bitte geben Sie eine Gruppenchat-Beschreibung ein",
+      "title": "Gruppenchat-Beschreibung"
     },
     "name": {
-      "placeholder": "Gruppennamen eingeben",
-      "title": "Gruppenname"
+      "placeholder": "Bitte geben Sie einen Gruppennamen ein",
+      "title": "Gruppenchat-Name"
     },
     "submit": "Gruppe aktualisieren",
     "systemPrompt": {
-      "placeholder": "Systemaufforderung eingeben",
-      "title": "Systemaufforderung"
+      "placeholder": "Bitte geben Sie den Systemhinweis für den Moderator ein",
+      "title": "Systemhinweis des Moderators"
     },
-    "title": "Gruppeninformationen"
+    "title": "Gruppenchat-Informationen"
   },
   "settingGroupChat": {
     "maxResponseInRow": {
-      "desc": "Wählen Sie aus, wie viele Nachrichten Mitglieder hintereinander beantworten können. Auf 0 setzen, um die Funktion zu deaktivieren.",
-      "title": "Max. Nachrichten in Folge"
+      "desc": "Wählen Sie, wie viele Nachrichten ein Mitglied hintereinander antworten kann. Setzen Sie auf 0, um diese Begrenzung zu deaktivieren.",
+      "title": "Anzahl der aufeinanderfolgenden Antworten"
     },
     "model": {
-      "desc": "Wählen Sie das Modell für Gruppengespräche.",
-      "title": "Orchestrator-Modell"
+      "desc": "Wählen Sie das Modell, das für die Moderation des Gruppenchat-Gesprächs verwendet wird. Die Beiträge der Gruppenmitglieder bleiben unbeeinflusst.",
+      "title": "Moderator-Modell"
     },
+    "orchestratorTitle": "Moderatoreinstellungen",
     "responseOrder": {
-      "desc": "Agenten antworten in der Reihenfolge, in der sie in der Gruppe festgelegt sind.",
+      "desc": "Der Agent antwortet in der im Gruppenchat festgelegten Reihenfolge.",
       "options": {
         "natural": "Natürlich",
-        "sequential": "Sequentiell"
+        "sequential": "Sequenziell"
       },
       "placeholder": "Antwortreihenfolge wählen",
       "title": "Antwortreihenfolge"
     },
     "responseSpeed": {
-      "desc": "Wählen Sie, wie schnell Agenten in Gruppengesprächen antworten sollen.",
+      "desc": "Steuert die allgemeine Geschwindigkeit des Gruppenchat-Verlaufs.",
       "options": {
         "fast": "Schnell",
         "medium": "Mittel",
@@ -344,22 +347,30 @@
       "title": "Antwortgeschwindigkeit"
     },
     "revealDM": {
-      "desc": "Macht den Inhalt von DMs, die an andere Mitglieder gesendet wurden, für Sie sichtbar.",
-      "title": "DM anzeigen"
+      "desc": "Macht private Nachrichten, die an andere Mitglieder gesendet wurden, für Sie sichtbar.",
+      "title": "Private Nachrichten anzeigen"
     },
     "submit": "Einstellungen aktualisieren",
     "systemPrompt": {
-      "desc": "Benutzerdefinierte Systemaufforderung für den Gruppenkonversations-Orchestrator. Diese überschreibt das Standardverhalten des Orchestrators.",
-      "placeholder": "Benutzerdefinierte Systemaufforderung für den Orchestrator eingeben...",
-      "title": "Systemaufforderung des Orchestrators"
+      "desc": "Benutzerdefinierter Systemhinweis für den Moderator des Gruppenchats. Dies kann das Standardverhalten des Moderators beeinflussen.",
+      "placeholder": "Bitte geben Sie einen benutzerdefinierten Systemhinweis für den Moderator ein...",
+      "title": "Systemhinweis des Moderators"
     },
     "title": "Chat-Einstellungen"
   },
   "settingGroupMembers": {
-    "edit": "Mitglied bearbeiten",
-    "empty": "In dieser Gruppe sind noch keine Agenten. Klicken Sie auf die '+'-Schaltfläche, um Mitglieder hinzuzufügen.",
+    "addToGroup": "Zur Gruppe hinzufügen",
+    "availableAgents": "Verfügbare Assistenten",
+    "defaultAgent": "Benutzerdefinierter Assistent",
+    "edit": "Mitglieder bearbeiten",
+    "empty": "In diesem Gruppenchat sind keine Agenten vorhanden. Klicken Sie auf die + Schaltfläche, um Mitglieder hinzuzufügen.",
+    "groupMembers": "Gruppenmitglieder",
+    "noAvailableAgents": "Keine verfügbaren Assistenten",
+    "noDescription": "Keine Beschreibung vorhanden",
+    "noMembersInGroup": "Keine Mitglieder in der Gruppe",
     "owner": "Sie (Eigentümer)",
     "remove": "Mitglied entfernen",
+    "removeFromGroup": "Aus der Gruppe entfernen",
     "you": "Sie"
   },
   "settingModel": {

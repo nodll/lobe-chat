@@ -21,10 +21,12 @@
   },
   "clearCurrentMessages": "現在の会話をクリア",
   "confirmClearCurrentMessages": "現在の会話をクリアします。クリアした後は元に戻すことはできません。操作を確認してください。",
+  "confirmRemoveChatGroupItemAlert": "このグループチャットを削除しますが、グループメンバーには影響しません。操作を確認してください。",
   "confirmRemoveGroupItemAlert": "このグループを削除すると、グループ内のアシスタントはデフォルトの一覧に移動します。操作を続行してもよろしいですか？",
   "confirmRemoveSessionItemAlert": "このエージェントを削除します。削除した後は元に戻すことはできません。操作を確認してください。",
   "confirmRemoveSessionSuccess": "セッションが正常に削除されました",
   "defaultAgent": "デフォルトエージェント",
+  "defaultGroupChat": "グループチャット",
   "defaultList": "デフォルトリスト",
   "defaultSession": "デフォルトセッション",
   "dm": {
@@ -68,9 +70,27 @@
   "group": {
     "desc": "複数のAIアシスタントと共有の会話スペースで協力します。",
     "memberTooltip": "グループ内に{{count}}人のメンバーがいます",
+    "orchestratorThinking": "ホストが考え中です...",
+    "removeMember": "メンバーを削除",
     "title": "グループ"
   },
   "groupDescription": "グループの説明",
+  "groupSidebar": {
+    "members": {
+      "addMember": "メンバーを追加",
+      "memberSettings": "メンバー設定",
+      "orchestrator": "ホスト",
+      "orchestratorThinking": "ホストが考え中です...",
+      "removeMember": "メンバーを削除",
+      "stopOrchestrator": "思考を停止",
+      "triggerOrchestrator": "グループチャットを開始"
+    },
+    "tabs": {
+      "members": "メンバー",
+      "role": "設定"
+    }
+  },
+  "hideForYou": "プライベートメッセージの内容は非表示です。設定で【プライベートメッセージの内容を表示】を有効にしてご覧ください。",
   "history": {
     "title": "アシスタントは最後の{{count}}件のメッセージのみを記憶します"
   },
@@ -115,12 +135,16 @@
   },
   "memberSelection": {
     "addMember": "メンバーを追加",
-    "noAvailableAgents": "利用可能なエージェントがいません",
-    "noSelectedAgents": "選択されたエージェントがいません",
-    "searchAgents": "エージェントを検索...",
-    "setInitialMembers": "初期メンバーを設定"
+    "createGroup": "グループチャットを作成",
+    "noAvailableAgents": "招待可能なアシスタントがいません",
+    "noSelectedAgents": "アシスタントが選択されていません",
+    "searchAgents": "アシスタントを検索...",
+    "setInitialMembers": "グループメンバーを選択"
   },
   "members": "メンバー",
+  "mention": {
+    "title": "メンバーをメンション"
+  },
   "messageAction": {
     "delAndRegenerate": "削除して再生成",
     "deleteDisabledByThreads": "サブトピックが存在するため、削除できません。",
@@ -128,7 +152,7 @@
   },
   "messages": {
     "dm": {
-      "sentTo": "宛先",
+      "sentTo": "{{name}} のみ閲覧可能",
       "title": "ダイレクトメッセージ"
     },
     "modelCard": {
@@ -230,6 +254,8 @@
     "confirmRemoveGroupAlert": "このグループを削除します。削除後、このグループのアシスタントはデフォルトリストに移動されます。操作を確認してください。",
     "createAgentSuccess": "エージェントの作成に成功しました",
     "createGroup": "新しいグループを作成",
+    "createGroupFailed": "グループチャットの作成に失敗しました",
+    "createGroupSuccess": "グループチャットが作成されました",
     "createSuccess": "作成が成功しました",
     "creatingAgent": "エージェントの作成中...",
     "inputPlaceholder": "グループ名を入力してください...",
@@ -272,6 +298,7 @@
     "chats": "チャットメッセージ",
     "historySummary": "履歴の要約",
     "rest": "残り利用可能",
+    "supervisor": "グループホスト",
     "systemRole": "システムロール設定",
     "title": "コンテキストの詳細",
     "tools": "ツール設定",

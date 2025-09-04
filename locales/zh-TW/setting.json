@@ -43,6 +43,8 @@
   "header": {
     "desc": "偏好與模型設定",
     "global": "全域設定",
+    "group": "群聊設定",
+    "groupDesc": "管理當前群聊",
     "session": "對話設定",
     "sessionDesc": "角色設定與會話偏好",
     "sessionWithName": "對話設定 · {{name}}",
@@ -301,66 +303,75 @@
   },
   "settingGroup": {
     "description": {
-      "placeholder": "請輸入群組描述",
-      "title": "群組描述"
+      "placeholder": "請輸入群聊描述",
+      "title": "群聊描述"
     },
     "name": {
-      "placeholder": "請輸入群組名稱",
-      "title": "群組名稱"
+      "placeholder": "請輸入群聊名稱",
+      "title": "群聊名稱"
     },
-    "submit": "更新群組",
+    "submit": "更新群聊",
     "systemPrompt": {
-      "placeholder": "請輸入系統提示",
-      "title": "系統提示"
+      "placeholder": "請輸入主持人系統提示詞",
+      "title": "主持人系統提示詞"
     },
-    "title": "群組資訊"
+    "title": "群聊資訊"
   },
   "settingGroupChat": {
     "maxResponseInRow": {
-      "desc": "選擇成員可連續回覆的訊息數。設為 0 即停用。",
-      "title": "連續回覆上限"
+      "desc": "選擇成員可以連續回覆多少條訊息。設定為 0 則禁用此限制。",
+      "title": "連續回覆訊息數"
     },
     "model": {
-      "desc": "選擇用於群組對話的模型",
-      "title": "編排模型"
+      "desc": "選擇用於主持群聊對話的模型。群成員發言不受影響。",
+      "title": "主持人模型"
     },
+    "orchestratorTitle": "主持人設定",
     "responseOrder": {
-      "desc": "代理人將依群組中設定的順序回應",
+      "desc": "代理將按照在群聊中設定的順序進行回覆",
       "options": {
         "natural": "自然",
-        "sequential": "依序"
+        "sequential": "順序"
       },
-      "placeholder": "選擇回應順序",
-      "title": "回應順序"
+      "placeholder": "選擇回覆順序",
+      "title": "回覆順序"
     },
     "responseSpeed": {
-      "desc": "選擇代理人在群組對話中的回應速度",
+      "desc": "控制群聊的整體進行速度",
       "options": {
         "fast": "快速",
         "medium": "中等",
         "slow": "慢速"
       },
-      "placeholder": "選擇回應速度",
-      "title": "回應速度"
+      "placeholder": "選擇回覆速度",
+      "title": "回覆速度"
     },
     "revealDM": {
-      "desc": "使發給其他成員的私訊內容對您可見。",
-      "title": "顯示私訊"
+      "desc": "使發送給其他成員的私訊內容對你可見。",
+      "title": "顯示私訊內容"
     },
     "submit": "更新設定",
     "systemPrompt": {
-      "desc": "群組對話協調器的自訂系統提示，會覆蓋預設的協調器行為。",
-      "placeholder": "請輸入自訂的協調器系統提示...",
-      "title": "協調器系統提示"
+      "desc": "群聊對話主持人的自訂系統提示詞。這可能影響預設的主持人行為。",
+      "placeholder": "請輸入自訂主持人系統提示詞...",
+      "title": "主持人系統提示詞"
     },
     "title": "聊天設定"
   },
   "settingGroupMembers": {
+    "addToGroup": "加入群組",
+    "availableAgents": "可用助理",
+    "defaultAgent": "自訂助理",
     "edit": "編輯成員",
-    "empty": "此群組尚未有任何成員。點選「+」按鈕以新增成員。",
-    "owner": "您（擁有者）",
+    "empty": "該群聊中暫無代理。點擊 + 按鈕添加成員。",
+    "groupMembers": "群組成員",
+    "noAvailableAgents": "暫無可用助理",
+    "noDescription": "暫無描述",
+    "noMembersInGroup": "群組暫無成員",
+    "owner": "你（所有者）",
     "remove": "移除成員",
-    "you": "您"
+    "removeFromGroup": "移出群組",
+    "you": "你"
   },
   "settingModel": {
     "enableMaxTokens": {

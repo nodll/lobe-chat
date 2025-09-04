@@ -21,10 +21,12 @@
   },
   "clearCurrentMessages": "현재 대화 지우기",
   "confirmClearCurrentMessages": "현재 대화를 지우시면 되돌릴 수 없습니다. 작업을 확인하시겠습니까?",
+  "confirmRemoveChatGroupItemAlert": "이 그룹 채팅을 삭제하려고 합니다. 그룹 채팅 멤버는 영향을 받지 않습니다. 작업을 확인해 주세요.",
   "confirmRemoveGroupItemAlert": "해당 그룹을 삭제하려고 합니다. 삭제하면 해당 그룹의 어시스턴트가 기본 목록으로 이동합니다. 계속 진행하시겠습니까?",
   "confirmRemoveSessionItemAlert": "이 도우미를 삭제하시면 되돌릴 수 없습니다. 작업을 확인하시겠습니까?",
   "confirmRemoveSessionSuccess": "도우미가 성공적으로 삭제되었습니다",
   "defaultAgent": "기본 도우미",
+  "defaultGroupChat": "그룹 채팅",
   "defaultList": "기본 목록",
   "defaultSession": "기본 도우미",
   "dm": {
@@ -68,9 +70,27 @@
   "group": {
     "desc": "여러 AI 어시스턴트와 공유된 대화 공간에서 협업합니다.",
     "memberTooltip": "그룹에 {{count}}명의 구성원이 있습니다.",
+    "orchestratorThinking": "주최자가 생각 중입니다...",
+    "removeMember": "멤버 제거",
     "title": "그룹"
   },
   "groupDescription": "그룹 설명",
+  "groupSidebar": {
+    "members": {
+      "addMember": "멤버 추가",
+      "memberSettings": "멤버 설정",
+      "orchestrator": "주최자",
+      "orchestratorThinking": "주최자가 생각 중입니다...",
+      "removeMember": "멤버 제거",
+      "stopOrchestrator": "생각 중지",
+      "triggerOrchestrator": "그룹 채팅 시작"
+    },
+    "tabs": {
+      "members": "멤버",
+      "role": "설정"
+    }
+  },
+  "hideForYou": "개인 메시지 내용이 숨겨져 있습니다. 설정에서 【개인 메시지 내용 표시】를 켜서 확인하세요.",
   "history": {
     "title": "도우미는 마지막 {{count}}개의 메시지만 기억합니다."
   },
@@ -115,12 +135,16 @@
   },
   "memberSelection": {
     "addMember": "멤버 추가",
-    "noAvailableAgents": "사용 가능한 에이전트가 없습니다",
-    "noSelectedAgents": "선택된 에이전트가 없습니다",
-    "searchAgents": "에이전트 검색...",
-    "setInitialMembers": "초기 멤버 설정"
+    "createGroup": "그룹 채팅 생성",
+    "noAvailableAgents": "초대할 보조자가 없습니다",
+    "noSelectedAgents": "아직 보조자를 선택하지 않았습니다",
+    "searchAgents": "보조자 검색...",
+    "setInitialMembers": "그룹 멤버 선택"
   },
   "members": "구성원",
+  "mention": {
+    "title": "멤버 언급"
+  },
   "messageAction": {
     "delAndRegenerate": "삭제하고 다시 생성",
     "deleteDisabledByThreads": "하위 주제가 존재하여 삭제할 수 없습니다.",
@@ -128,7 +152,7 @@
   },
   "messages": {
     "dm": {
-      "sentTo": "받는 사람",
+      "sentTo": "{{name}}만 볼 수 있습니다",
       "title": "쪽지"
     },
     "modelCard": {
@@ -230,6 +254,8 @@
     "confirmRemoveGroupAlert": "이 그룹을 삭제하려고 합니다. 삭제 후 이 그룹의 도우미는 기본 목록으로 이동됩니다. 작업을 확인하십시오.",
     "createAgentSuccess": "에이전트 생성 성공",
     "createGroup": "새 그룹 추가",
+    "createGroupFailed": "그룹 채팅 생성 실패",
+    "createGroupSuccess": "그룹 채팅 생성 성공",
     "createSuccess": "생성 성공",
     "creatingAgent": "에이전트 생성 중...",
     "inputPlaceholder": "그룹 이름을 입력하세요...",
@@ -272,6 +298,7 @@
     "chats": "채팅 메시지",
     "historySummary": "역사 요약",
     "rest": "남은 사용량",
+    "supervisor": "그룹 주최자",
     "systemRole": "시스템 역할",
     "title": "컨텍스트 세부 정보",
     "tools": "도구 설정",

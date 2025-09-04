@@ -130,7 +130,7 @@ const shouldAvoidSupervisorDecision = (
   return false;
 };
 
-export interface AIGroupChatAction {
+export interface ChatGroupChatAction {
   /**
    * Sends a new message to a group chat and triggers agent responses
    */
@@ -197,11 +197,11 @@ export interface AIGroupChatAction {
   ) => Promise<void>;
 }
 
-export const generateAIGroupChat: StateCreator<
+export const chatAiGroupChat: StateCreator<
   ChatStore,
   [['zustand/devtools', never]],
   [],
-  AIGroupChatAction
+  ChatGroupChatAction
 > = (set, get) => ({
   sendGroupMessage: async ({ groupId, message, files, onlyAddUserMessage, targetMemberId }) => {
     const {

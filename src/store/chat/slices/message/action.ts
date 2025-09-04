@@ -338,7 +338,8 @@ export const chatMessage: StateCreator<
   // TODO: The mutate should only be called once, but since we haven't merge session and group,
   // we need to call it twice
   refreshMessages: async () => {
-    await mutate([SWR_USE_FETCH_MESSAGES, get().activeId, get().activeTopicId]);
+    await mutate([SWR_USE_FETCH_MESSAGES, get().activeId, get().activeTopicId, 'session']);
+    await mutate([SWR_USE_FETCH_MESSAGES, get().activeId, get().activeTopicId, 'group']);
   },
   replaceMessages: (messages) => {
     set(

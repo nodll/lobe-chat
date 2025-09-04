@@ -77,9 +77,14 @@ export class GroupChatSupervisor {
     };
 
     let res = '';
+    let error: Error | null = null;
 
     await chatService.fetchPresetTaskResult({
       abortController: context.abortController,
+      onError: (err) => {
+        console.error('Supervisor LLM error:', err);
+        error = err;
+      },
       onFinish: async (content) => {
         console.log('Supervisor LLM response:', content);
         res = content.trim();
@@ -94,6 +99,11 @@ export class GroupChatSupervisor {
         ...supervisorConfig,
       },
     });
+
+    // If there was an error, throw it to be caught by the caller
+    if (error) {
+      throw error;
+    }
 
     return res;
   }

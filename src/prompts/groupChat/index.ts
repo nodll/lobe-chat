@@ -134,7 +134,18 @@ Now return an array of objects where each object has an "id" field for the agent
   return prompt.trim();
 };
 
+/**
+ * Build the prompt for agents to respond in group chat context
+ * This is the most impressive prompt since it's the last message
+ */
+export const buildAgentResponsePrompt = ({ targetId }: { targetId?: string }): string => {
+  const targetText = targetId ? targetId : 'the group publicly';
+
+  return `Now it's your turn to respond. You are sending message to ${targetText}. Please respond as this agent would, considering the full conversation history provided above. Directly return the message content, no other text. You do not need add author name or anything else.`;
+};
+
 export const groupChatPrompts = {
+  buildAgentResponsePrompt,
   buildGroupChatSystemPrompt,
   buildSupervisorPrompt,
 };

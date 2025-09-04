@@ -13,9 +13,9 @@ import { messageService } from '@/services/message';
 import { topicService } from '@/services/topic';
 import { traceService } from '@/services/trace';
 import { ChatStore } from '@/store/chat/store';
+import { messageMapKey } from '@/store/chat/utils/messageMapKey';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
-import { messageMapKey } from '@/store/chat/utils/messageMapKey';
 import {
   ChatMessage,
   ChatMessageError,
@@ -206,7 +206,14 @@ export const chatMessage: StateCreator<
   },
 
   clearMessage: async () => {
-    const { activeId, activeTopicId, refreshMessages, refreshTopic, switchTopic, activeSessionType } = get();
+    const {
+      activeId,
+      activeTopicId,
+      refreshMessages,
+      refreshTopic,
+      switchTopic,
+      activeSessionType,
+    } = get();
 
     // Check if this is a group session - use activeSessionType if available, otherwise check session store
     let isGroupSession = activeSessionType === 'group';
@@ -426,6 +433,8 @@ export const chatMessage: StateCreator<
 
       internal_toggleMessageLoading(true, tempId);
     }
+
+    console.log('internal_createMessafe', message);
 
     try {
       console.log('internal_createMessage: Trying to call messageService.createMessage', message);

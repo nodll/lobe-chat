@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import type { ChatMessage } from '@/types/message';
 
-import { buildGroupChatSystemPrompt, filterMessagesForAgent } from './index';
+import {
+  buildAgentResponsePrompt,
+  buildGroupChatSystemPrompt,
+  filterMessagesForAgent,
+} from './index';
 
 describe('buildGroupChatSystemPrompt', () => {
   const baseSystemRole = 'You are an expert collaborator.';
@@ -70,12 +74,39 @@ describe('buildGroupChatSystemPrompt', () => {
   });
 });
 
+describe('buildAgentResponsePrompt', () => {
+  it('should generate prompt for group message when no targetId provided', () => {
+    const result = buildAgentResponsePrompt({});
+
+    expect(result).toContain('the group publicly');
+    expect(result).toContain("Now it's your turn to respond");
+    expect(result).toContain('Directly return the message content');
+    expect(result).toContain('You do not need add author name');
+  });
+
+  it('should generate prompt for direct message when targetId provided', () => {
+    const result = buildAgentResponsePrompt({ targetId: 'agent-1' });
+
+    expect(result).toContain('agent-1');
+    expect(result).toContain("Now it's your turn to respond");
+    expect(result).toContain('Directly return the message content');
+    expect(result).toContain('You do not need add author name');
+  });
+
+  it('should handle user targetId for DM to user', () => {
+    const result = buildAgentResponsePrompt({ targetId: 'user' });
+
+    expect(result).toContain('user');
+    expect(result).not.toContain('the group publicly');
+  });
+});
+
 describe('filterMessagesForAgent', () => {
   const createMessage = (
     id: string,
     role: 'user' | 'assistant' | 'system',
     content: string,
-    options?: { agentId?: string; targetId?: string }
+    options?: { agentId?: string; targetId?: string },
   ): ChatMessage => ({
     id,
     role,
@@ -89,12 +120,10 @@ describe('filterMessagesForAgent', () => {
   const agentId = 'agent-1';
 
   it('should include system messages as-is', () => {
-    const messages = [
-      createMessage('1', 'system', 'System message'),
-    ];
+    const messages = [createMessage('1', 'system', 'System message')];
 
     const result = filterMessagesForAgent(messages, agentId);
-    
+
     expect(result).toHaveLength(1);
     expect(result[0]).toEqual(messages[0]);
   });
@@ -106,7 +135,7 @@ describe('filterMessagesForAgent', () => {
     ];
 
     const result = filterMessagesForAgent(messages, agentId);
-    
+
     expect(result).toHaveLength(2);
     expect(result[0]).toEqual(messages[0]);
     expect(result[1]).toEqual(messages[1]);
@@ -119,7 +148,7 @@ describe('filterMessagesForAgent', () => {
     ];
 
     const result = filterMessagesForAgent(messages, agentId);
-    
+
     expect(result).toHaveLength(2);
     expect(result[0]).toEqual(messages[0]); // Should include message for this agent
     expect(result[1].content).toBe('***'); // Should replace content for other agent
@@ -133,7 +162,7 @@ describe('filterMessagesForAgent', () => {
     ];
 
     const result = filterMessagesForAgent(messages, agentId);
-    
+
     expect(result).toHaveLength(2);
     expect(result[0]).toEqual(messages[0]); // Should include message targeted to this agent
     expect(result[1].content).toBe('***'); // Should replace content for DM not involving this agent
@@ -143,11 +172,14 @@ describe('filterMessagesForAgent', () => {
     const messages = [
       createMessage('1', 'assistant', 'My message to agent-2', { agentId, targetId: 'agent-2' }),
       createMessage('2', 'assistant', 'My group message', { agentId }),
-      createMessage('3', 'assistant', 'Other agent message', { agentId: 'agent-2', targetId: 'agent-3' }),
+      createMessage('3', 'assistant', 'Other agent message', {
+        agentId: 'agent-2',
+        targetId: 'agent-3',
+      }),
     ];
 
     const result = filterMessagesForAgent(messages, agentId);
-    
+
     expect(result).toHaveLength(3);
     expect(result[0]).toEqual(messages[0]); // Should include this agent's DM
     expect(result[1]).toEqual(messages[1]); // Should include this agent's group message
@@ -158,18 +190,21 @@ describe('filterMessagesForAgent', () => {
     const messages = [
       createMessage('1', 'user', 'Secret message', { targetId: 'agent-2' }),
       createMessage('2', 'assistant', 'Private response', { agentId: 'agent-2', targetId: 'user' }),
-      createMessage('3', 'assistant', 'Agent to agent DM', { agentId: 'agent-2', targetId: 'agent-3' }),
+      createMessage('3', 'assistant', 'Agent to agent DM', {
+        agentId: 'agent-2',
+        targetId: 'agent-3',
+      }),
     ];
 
     const result = filterMessagesForAgent(messages, agentId);
-    
+
     expect(result).toHaveLength(3);
-    
+
     // All should have "***" content since none involve agent-1
     expect(result[0].content).toBe('***');
     expect(result[1].content).toBe('***');
     expect(result[2].content).toBe('***');
-    
+
     // But should preserve other properties
     expect(result[0].id).toBe('1');
     expect(result[0].role).toBe('user');
@@ -191,16 +226,16 @@ describe('filterMessagesForAgent', () => {
     ];
 
     const result = filterMessagesForAgent(messages, agentId);
-    
+
     expect(result).toHaveLength(7);
-    
+
     // Should preserve content for messages involving this agent
     expect(result[0].content).toBe('System prompt'); // System message
     expect(result[1].content).toBe('Hello everyone'); // Group message
     expect(result[2].content).toBe('Hi!'); // This agent's group message
     expect(result[3].content).toBe('DM to agent-1'); // DM to this agent
     expect(result[4].content).toBe('DM response'); // This agent's DM response
-    
+
     // Should replace content for DMs not involving this agent
     expect(result[5].content).toBe('***'); // DM to other agent
     expect(result[6].content).toBe('***'); // Other agent's DM response
@@ -214,13 +249,13 @@ describe('filterMessagesForAgent', () => {
     originalMessage.observationId = 'obs1';
 
     const result = filterMessagesForAgent([originalMessage], agentId);
-    
+
     expect(result).toHaveLength(1);
     const filteredMessage = result[0];
-    
+
     // Content should be replaced
     expect(filteredMessage.content).toBe('***');
-    
+
     // All other properties should be preserved
     expect(filteredMessage.id).toBe(originalMessage.id);
     expect(filteredMessage.role).toBe(originalMessage.role);

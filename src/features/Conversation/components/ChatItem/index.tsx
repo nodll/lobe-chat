@@ -31,6 +31,7 @@ import {
 } from '../../Messages';
 import History from '../History';
 import { markdownElements } from '../MarkdownElements';
+import SupervisorMessage from '../SupervisorMessage';
 import { InPortalThreadContext } from './InPortalThreadContext';
 import { normalizeThinkTags, processWithArtifact } from './utils';
 
@@ -254,6 +255,17 @@ const Item = memo<ChatListItemProps>(
     const groupConfig = useChatGroupStore(chatGroupSelectors.currentGroupConfig);
 
     const revealDMContent = groupConfig?.revealDM;
+
+    // Handle supervisor messages separately
+    if (item?.agentId === 'supervisor') {
+      return (
+        <InPortalThreadContext.Provider value={inPortalThread}>
+          {enableHistoryDivider && <History />}
+          <SupervisorMessage message={item} />
+          {endRender}
+        </InPortalThreadContext.Provider>
+      );
+    }
 
     return (
       item && (

@@ -6,6 +6,7 @@ import { StateCreator } from 'zustand/vanilla';
 import { LOADING_FLAT } from '@/const/message';
 import {
   GroupMemberInfo,
+  buildAgentResponsePrompt,
   buildGroupChatSystemPrompt,
   filterMessagesForAgent,
 } from '@/prompts/groupChat';
@@ -185,6 +186,15 @@ export interface AIGroupChatAction {
    * Toggles supervisor loading state for group chat
    */
   internal_toggleSupervisorLoading: (loading: boolean, groupId?: string) => void;
+
+  /**
+   * Creates a supervisor error message for group chat
+   */
+  internal_createSupervisorErrorMessage: (
+    groupId: string,
+    error: Error | string,
+    context?: string,
+  ) => Promise<void>;
 }
 
 export const generateAIGroupChat: StateCreator<
@@ -299,6 +309,12 @@ export const generateAIGroupChat: StateCreator<
         console.log('Supervisor decision was aborted for group:', groupId);
       } else {
         console.error('Supervisor decision failed:', error);
+        // Create supervisor error message to show the error to users
+        await get().internal_createSupervisorErrorMessage(
+          groupId,
+          error instanceof Error ? error : new Error(String(error)),
+          'Supervisor Decision Failed',
+        );
       }
     } finally {
       internal_toggleSupervisorLoading(false, groupId);
@@ -363,6 +379,12 @@ export const generateAIGroupChat: StateCreator<
       }
     } catch (error) {
       console.error('Failed to execute agent responses:', error);
+      // Create supervisor error message to show the error to users
+      await get().internal_createSupervisorErrorMessage(
+        groupId,
+        error instanceof Error ? error : new Error(String(error)),
+        'Agent Response Execution Failed',
+      );
     }
   },
 
@@ -455,7 +477,7 @@ export const generateAIGroupChat: StateCreator<
       const userMessage: ChatMessage = {
         id: 'group-user',
         role: 'user',
-        content: `Now it's your turn to respond. You are sending message to ${targetId ? targetId : 'the group publicly'}. Please respond as this agent would, considering the full conversation history provided above. Directly return the message content, no other text. You do not need add author name or anything else.`,
+        content: buildAgentResponsePrompt({ targetId }),
         createdAt: Date.now(),
         updatedAt: Date.now(),
         meta: {},
@@ -510,10 +532,17 @@ export const generateAIGroupChat: StateCreator<
     } catch (error) {
       console.error(`Failed to process message for agent ${agentId}:`, error);
 
-      // Update error state if we have an assistant message
-      const currentMessages = get().messagesMap[groupId] || [];
+      // Create supervisor error message to show the error to users
+      await get().internal_createSupervisorErrorMessage(
+        groupId,
+        error instanceof Error ? error : new Error(String(error)),
+        `Agent ${agentId} Response Failed`,
+      );
+
+      // Also update error state if we have an assistant message (for consistency with single chat)
+      const currentMessages = get().messagesMap[messageMapKey(groupId, activeTopicId)] || [];
       const errorMessage = currentMessages.find(
-        (m) => m.role === 'assistant' && m.groupId === groupId && m.content === LOADING_FLAT,
+        (m) => m.role === 'assistant' && m.agentId === agentId && m.content === LOADING_FLAT,
       );
 
       if (errorMessage) {
@@ -682,6 +711,41 @@ export const generateAIGroupChat: StateCreator<
         false,
         n('cancelAllSupervisorDecisions'),
       );
+    }
+  },
+
+  internal_createSupervisorErrorMessage: async (
+    groupId: string,
+    error: Error | string,
+    context?: string,
+  ) => {
+    const { internal_createTmpMessage, activeTopicId } = get();
+
+    try {
+      const errorMessage = error instanceof Error ? error.message : error;
+      const contextText = context ? ` (${context})` : '';
+
+      const supervisorMessage: CreateMessageParams = {
+        role: 'assistant',
+        content: `⚠️ **Group Chat Error**${contextText}\n\n${errorMessage}`,
+        agentId: 'supervisor',
+        groupId,
+        sessionId: useSessionStore.getState().activeId,
+        topicId: activeTopicId,
+        error: {
+          type: ChatErrorType.CreateMessageError,
+          message: errorMessage,
+        },
+        meta: {
+          avatar: '🎤',
+          title: 'Supervisor',
+        },
+      };
+
+      // Create a temporary message that only exists in UI state, no API call
+      internal_createTmpMessage(supervisorMessage);
+    } catch (createError) {
+      console.error('Failed to create supervisor error message:', createError);
     }
   },
 });

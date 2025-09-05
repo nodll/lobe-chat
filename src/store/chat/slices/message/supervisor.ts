@@ -13,20 +13,18 @@ export interface SupervisorDecision {
 export type SupervisorDecisionList = SupervisorDecision[]; // Empty array = stop conversation
 
 export interface SupervisorContext {
-  // Custom system prompt from group config
   abortController?: AbortController;
   availableAgents: GroupMemberWithAgent[];
   groupId: string;
   messages: ChatMessage[];
   model: string;
   provider: string;
-  // Real user name for group member list
   systemPrompt?: string;
-  userName?: string; // For request cancellation
+  userName?: string;
 }
 
 /**
- * Core supervisor class that decides who should speak next in group chat
+ * Core supervisor runtime that orchestrates the conversation between agents in group chat
  */
 export class GroupChatSupervisor {
   /**
@@ -167,7 +165,6 @@ export class GroupChatSupervisor {
     // Empty array is always valid (means stop)
     if (decisions.length === 0) return true;
 
-    // Check each decision
     return decisions.every((decision) => {
       // Validate speaker exists
       const speakerExists = availableAgents.some((agent) => agent.id === decision.id);

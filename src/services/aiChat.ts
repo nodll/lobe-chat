@@ -1,4 +1,4 @@
-import { SendGroupMessageServerParams, SendMessageServerParams } from '@lobechat/types';
+import { SendMessageServerParams } from '@lobechat/types';
 import { cleanObject } from '@lobechat/utils';
 
 import { lambdaClient } from '@/libs/trpc/client';
@@ -8,9 +8,9 @@ class AiChatService {
     return lambdaClient.aiChat.sendMessageInServer.mutate(cleanObject(params));
   };
 
-  sendGroupMessageInServer = async (params: SendGroupMessageServerParams) => {
-    return lambdaClient.aiChat.sendGroupMessageInServer.mutate(cleanObject(params));
-  };
+  // sendGroupMessageInServer = async (params: SendMessageServerParams) => {
+  //   return lambdaClient.aiChat.sendGroupMessageInServer.mutate(cleanObject(params));
+  // };
 }
 
 export const aiChatService = new AiChatService();

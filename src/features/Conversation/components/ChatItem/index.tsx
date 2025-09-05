@@ -248,13 +248,16 @@ const Item = memo<ChatListItemProps>(
     const messageExtra = useMemo(() => item && <MessageExtra data={item} />, [item]);
 
     // DM tag logic - show for assistant messages with targetId when not in thread panel
-    const isDM = !!item?.targetId && !inPortalThread && item?.role === 'assistant';
+    const isDM =
+      !!item?.targetId && !inPortalThread && (item?.role === 'assistant' || item?.role === 'user');
 
     const isToCurrentUser = item?.targetId === 'user';
 
     const groupConfig = useChatGroupStore(chatGroupSelectors.currentGroupConfig);
 
     const revealDMContent = groupConfig?.revealDM;
+
+    if (isDM && item?.role === 'user') return null;
 
     if (item?.agentId === 'supervisor') {
       return (

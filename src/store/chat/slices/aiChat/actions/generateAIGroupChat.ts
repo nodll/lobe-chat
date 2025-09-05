@@ -312,8 +312,7 @@ export const chatAiGroupChat: StateCreator<
         // Create supervisor error message to show the error to users
         await get().internal_createSupervisorErrorMessage(
           groupId,
-          error instanceof Error ? error : new Error(String(error)),
-          'Supervisor Decision Failed',
+          'Supervisor Decision Failed, Please check your configuration',
         );
       }
     } finally {
@@ -714,32 +713,23 @@ export const chatAiGroupChat: StateCreator<
     }
   },
 
-  internal_createSupervisorErrorMessage: async (
-    groupId: string,
-    error: Error | string,
-    context?: string,
-  ) => {
+  internal_createSupervisorErrorMessage: async (groupId: string, error: Error | string) => {
     const { internal_createTmpMessage, activeTopicId } = get();
 
     try {
       const errorMessage = error instanceof Error ? error.message : error;
-      const contextText = context ? ` (${context})` : '';
 
       const supervisorMessage: CreateMessageParams = {
-        role: 'assistant',
-        content: `⚠️ **Group Chat Error**${contextText}\n\n${errorMessage}`,
+        role: 'system',
         agentId: 'supervisor',
         groupId,
         sessionId: useSessionStore.getState().activeId,
         topicId: activeTopicId,
         error: {
-          type: ChatErrorType.CreateMessageError,
+          type: ChatErrorType.SupervisorDecisionFailed,
           message: errorMessage,
         },
-        meta: {
-          avatar: '🎤',
-          title: 'Supervisor',
-        },
+        content: LOADING_FLAT,
       };
 
       // Create a temporary message that only exists in UI state, no API call

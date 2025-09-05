@@ -4,8 +4,8 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ChatItem from '@/components/ChatItem/ChatItem';
-import { LOADING_FLAT } from '@/const/message';
 import { DEFAULT_ORCHESTRATOR_AVATAR } from '@/const/meta';
+import { ChatErrorType } from '@/types/fetch';
 import { ChatMessage } from '@/types/message';
 
 export interface SupervisorMessageProps {
@@ -15,6 +15,11 @@ export interface SupervisorMessageProps {
 const SupervisorMessage = memo<SupervisorMessageProps>(({ message }) => {
   const { t } = useTranslation('chat');
 
+  const errorMessage =
+    message.error?.type === ChatErrorType.SupervisorDecisionFailed
+      ? t('supervisor.decisionFailed', { ns: 'error' })
+      : message.error?.message;
+
   return (
     <ChatItem
       avatar={{
@@ -22,11 +27,11 @@ const SupervisorMessage = memo<SupervisorMessageProps>(({ message }) => {
         title: t('groupSidebar.members.orchestrator'),
       }}
       error={{
-        message: 'Host Error: ' + message.error?.message,
+        message: errorMessage,
         type: 'error',
       }}
       loading={false}
-      message={LOADING_FLAT}
+      message={message.content}
       placement="left"
       primary={false}
       showTitle={true}

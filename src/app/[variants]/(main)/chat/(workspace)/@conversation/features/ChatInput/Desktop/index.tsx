@@ -1,80 +1,152 @@
 'use client';
 
-import { memo } from 'react';
+import { Alert, Hotkey, Icon } from '@lobehub/ui';
+import { BotMessageSquare, LucideCheck, MessageSquarePlus } from 'lucide-react';
+import { Suspense, memo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { Flexbox } from 'react-layout-kit';
 
-import { ActionKeys } from '@/features/ChatInput/ActionBar/config';
-import DesktopChatInput, { FooterRender } from '@/features/ChatInput/Desktop';
-import { useGlobalStore } from '@/store/global';
-import { systemStatusSelectors } from '@/store/global/selectors';
-import { useSessionStore } from '@/store/session';
-import { sessionSelectors } from '@/store/session/selectors';
+import { type ActionKeys, ChatInputProvider, DesktopChatInput } from '@/features/ChatInput';
+import WideScreenContainer from '@/features/Conversation/components/WideScreenContainer';
+import { useChatStore } from '@/store/chat';
+import { aiChatSelectors } from '@/store/chat/selectors';
+import { useUserStore } from '@/store/user';
+import { preferenceSelectors, settingsSelectors } from '@/store/user/selectors';
+import { HotkeyEnum, KeyEnum } from '@/types/hotkey';
 
-import Footer from './Footer';
-import TextArea from './TextArea';
+import { useSend } from '../useSend';
+import MessageFromUrl from './MessageFromUrl';
 
-// Default Actions
-const leftActions = [
+const leftActions: ActionKeys[] = [
   'model',
   'search',
+  'typo',
   'fileUpload',
   'knowledgeBase',
-  'params',
-  'history',
-  'stt',
   'tools',
+  '---',
+  ['params', 'history', 'stt', 'clear'],
   'mainToken',
-] as ActionKeys[];
+];
 
-// Group Chat Actions
-const leftActionsForGroup = [
-  'stt',
-  'mention',
-  'fileUpload',
-  'knowledgeBase',
-  'mainToken',
-] as ActionKeys[];
+const rightActions: ActionKeys[] = ['saveTopic'];
 
-// Group Chat Actions for Thread (without mention)
-const leftActionsForGroupThread = ['stt', 'fileUpload', 'knowledgeBase'] as ActionKeys[];
-
-const rightActions = ['clear'] as ActionKeys[];
-
-interface DesktopProps {
-  targetMemberId?: string;
-}
-
-const Desktop = memo<DesktopProps>(({ targetMemberId }) => {
-  const renderTextArea = (onSend: () => void) => (
-    <TextArea onSend={onSend} targetMemberId={targetMemberId} />
-  );
-  const renderFooter: FooterRender = ({ expand, onExpandChange }) => (
-    <Footer expand={expand} inThread={!!targetMemberId} onExpandChange={onExpandChange} />
-  );
-  const [inputHeight, updatePreference] = useGlobalStore((s) => [
-    systemStatusSelectors.inputHeight(s),
-    s.updateSystemStatus,
+const Desktop = memo(() => {
+  const { t } = useTranslation('chat');
+  const { send, generating, disabled, stop } = useSend();
+  const [useCmdEnterToSend, updatePreference] = useUserStore((s) => [
+    preferenceSelectors.useCmdEnterToSend(s),
+    s.updatePreference,
   ]);
 
-  const isGroupSession = useSessionStore(sessionSelectors.isCurrentSessionGroupSession);
+  const [mainInputSendErrorMsg, clearSendMessageError] = useChatStore((s) => [
+    aiChatSelectors.isCurrentSendMessageError(s),
+    s.clearSendMessageError,
+  ]);
+  const hotkey = useUserStore(settingsSelectors.getHotkeyById(HotkeyEnum.AddUserMessage));
 
   return (
-    <DesktopChatInput
-      inThread={!!targetMemberId}
-      inputHeight={inputHeight}
-      leftActions={
-        isGroupSession
-          ? targetMemberId
-            ? leftActionsForGroupThread
-            : leftActionsForGroup
-          : leftActions
-      }
-      onInputHeightChange={(height) => {
-        updatePreference({ inputHeight: height });
+    <ChatInputProvider
+      chatInputEditorRef={(instance) => {
+        if (!instance) return;
+        useChatStore.setState({ mainInputEditor: instance });
       }}
-      renderFooter={renderFooter}
-      renderTextArea={renderTextArea}
-      rightActions={targetMemberId ? [] : rightActions}
-    />
+      leftActions={leftActions}
+      onMarkdownContentChange={(content) => {
+        useChatStore.setState({ inputMessage: content });
+      }}
+      onSend={() => {
+        send();
+      }}
+      rightActions={rightActions}
+      sendButtonProps={{ disabled, generating, onStop: stop }}
+      sendMenu={{
+        items: [
+          {
+            icon: !useCmdEnterToSend ? <Icon icon={LucideCheck} /> : <div />,
+            key: 'sendWithEnter',
+            label: (
+              <Flexbox align={'center'} gap={4} horizontal>
+                <Trans
+                  components={{
+                    key: <Hotkey keys={KeyEnum.Enter} variant={'borderless'} />,
+                  }}
+                  i18nKey={'input.sendWithEnter'}
+                  ns={'chat'}
+                />
+              </Flexbox>
+            ),
+            onClick: () => {
+              updatePreference({ useCmdEnterToSend: false });
+            },
+          },
+          {
+            icon: useCmdEnterToSend ? <Icon icon={LucideCheck} /> : <div />,
+            key: 'sendWithCmdEnter',
+            label: (
+              <Flexbox align={'center'} gap={4} horizontal>
+                <Trans
+                  components={{
+                    key: (
+                      <Hotkey
+                        keys={[KeyEnum.Mod, KeyEnum.Enter].join('+')}
+                        variant={'borderless'}
+                      />
+                    ),
+                  }}
+                  i18nKey={'input.sendWithCmdEnter'}
+                  ns={'chat'}
+                />
+              </Flexbox>
+            ),
+            onClick: () => {
+              updatePreference({ useCmdEnterToSend: true });
+            },
+          },
+          { type: 'divider' },
+          {
+            // disabled,
+            icon: <Icon icon={BotMessageSquare} />,
+            key: 'addAi',
+            label: t('input.addAi'),
+            onClick: () => {
+              send({ onlyAddAIMessage: true });
+            },
+          },
+          {
+            // disabled,
+            icon: <Icon icon={MessageSquarePlus} />,
+            key: 'addUser',
+            label: (
+              <Flexbox align={'center'} gap={24} horizontal>
+                {t('input.addUser')}
+                <Hotkey keys={hotkey} />
+              </Flexbox>
+            ),
+            onClick: () => {
+              send({ onlyAddUserMessage: true });
+            },
+          },
+        ],
+      }}
+    >
+      <WideScreenContainer>
+        {mainInputSendErrorMsg && (
+          <Flexbox paddingBlock={'0 6px'} paddingInline={12}>
+            <Alert
+              closable
+              message={t('input.errorMsg', { errorMsg: mainInputSendErrorMsg })}
+              onClose={clearSendMessageError}
+              type={'warning'}
+            />
+          </Flexbox>
+        )}
+        <DesktopChatInput />
+      </WideScreenContainer>
+      <Suspense>
+        <MessageFromUrl />
+      </Suspense>
+    </ChatInputProvider>
   );
 });
 

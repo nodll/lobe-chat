@@ -16,7 +16,6 @@ import InputEditor from '../InputEditor';
 import SendArea from '../SendArea';
 import TypoBar from '../TypoBar';
 import FilePreview from './FilePreview';
-import { useStyles } from '@/components/FormAction';
 
 const useStyles = createStyles(({ css, token }) => ({
   container: css`

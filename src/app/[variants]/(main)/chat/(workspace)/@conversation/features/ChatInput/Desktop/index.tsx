@@ -8,10 +8,10 @@ import { sessionSelectors } from '@/store/session/selectors';
 import ClassicChatInput from './ClassicChat';
 import GroupChatInput from './GroupChat';
 
-const Desktop = memo(() => {
+const Desktop = memo((props: { targetMemberId?: string }) => {
   const isGroupSession = useSessionStore(sessionSelectors.isCurrentSessionGroupSession);
 
-  return isGroupSession ? <GroupChatInput /> : <ClassicChatInput />;
+  return isGroupSession ? <GroupChatInput {...props} /> : <ClassicChatInput />;
 });
 
 export default Desktop;

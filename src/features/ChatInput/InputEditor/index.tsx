@@ -57,6 +57,9 @@ const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
       autoFocus
       content={''}
       editor={editor}
+      mentionOption={{
+        items: [],
+      }}
       onBlur={() => {
         disableScope(HotkeyEnum.AddUserMessage);
       }}

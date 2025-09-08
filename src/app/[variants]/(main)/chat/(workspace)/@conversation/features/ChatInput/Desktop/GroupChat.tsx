@@ -22,19 +22,32 @@ const leftActions: ActionKeys[] = [
   'fileUpload',
   'knowledgeBase',
   '---',
-  ['params', 'history', 'stt', 'clear'],
+  ['params', 'stt', 'clear'],
   'groupChatToken',
+];
+
+const dmLeftActions: ActionKeys[] = [
+  'typo',
+  'fileUpload',
+  'knowledgeBase',
+  '---',
+  ['params', 'stt', 'clear'],
 ];
 
 const rightActions: ActionKeys[] = ['saveTopic'];
 
-const Desktop = memo(() => {
+/**
+ * Message Editor for Group Chat along with DM Portal
+ */
+const Desktop = memo((props: { targetMemberId?: string }) => {
   const { t } = useTranslation('chat');
   const { send, generating, disabled, stop } = useSendGroupMessage();
   const [useCmdEnterToSend, updatePreference] = useUserStore((s) => [
     preferenceSelectors.useCmdEnterToSend(s),
     s.updatePreference,
   ]);
+
+  const isDMPortal = !!props.targetMemberId;
 
   const [mainInputSendErrorMsg, clearSendMessageError] = useChatStore((s) => [
     aiChatSelectors.isCurrentSendMessageError(s),
@@ -48,14 +61,14 @@ const Desktop = memo(() => {
         if (!instance) return;
         useChatStore.setState({ mainInputEditor: instance });
       }}
-      leftActions={leftActions}
+      leftActions={isDMPortal ? dmLeftActions : leftActions}
       onMarkdownContentChange={(content) => {
         useChatStore.setState({ inputMessage: content });
       }}
       onSend={() => {
-        send();
+        send({ targetMemberId: props.targetMemberId });
       }}
-      rightActions={rightActions}
+      rightActions={isDMPortal ? [] : rightActions}
       sendButtonProps={{ disabled, generating, onStop: stop }}
       sendMenu={{
         items: [

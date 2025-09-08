@@ -1,15 +1,19 @@
 'use client';
 
-import { Alert, Hotkey, Icon } from '@lobehub/ui';
+import { Alert, Avatar, GroupAvatar, Hotkey, Icon } from '@lobehub/ui';
+import { isEqual } from 'lodash';
 import { BotMessageSquare, LucideCheck, MessageSquarePlus } from 'lucide-react';
 import { Suspense, memo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 
+import { DEFAULT_AVATAR } from '@/const/meta';
 import { type ActionKeys, ChatInputProvider, DesktopChatInput } from '@/features/ChatInput';
 import WideScreenContainer from '@/features/Conversation/components/WideScreenContainer';
 import { useChatStore } from '@/store/chat';
 import { aiChatSelectors } from '@/store/chat/selectors';
+import { useSessionStore } from '@/store/session';
+import { sessionSelectors } from '@/store/session/selectors';
 import { useUserStore } from '@/store/user';
 import { preferenceSelectors, settingsSelectors } from '@/store/user/selectors';
 import { HotkeyEnum, KeyEnum } from '@/types/hotkey';
@@ -22,17 +26,11 @@ const leftActions: ActionKeys[] = [
   'fileUpload',
   'knowledgeBase',
   '---',
-  ['params', 'stt', 'clear'],
+  ['stt', 'clear'],
   'groupChatToken',
 ];
 
-const dmLeftActions: ActionKeys[] = [
-  'typo',
-  'fileUpload',
-  'knowledgeBase',
-  '---',
-  ['params', 'stt', 'clear'],
-];
+const dmLeftActions: ActionKeys[] = ['typo', 'fileUpload', 'knowledgeBase', '---', ['stt']];
 
 const rightActions: ActionKeys[] = ['saveTopic'];
 
@@ -48,6 +46,7 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
   ]);
 
   const isDMPortal = !!props.targetMemberId;
+  const currentGroupMemebers = useSessionStore(sessionSelectors.currentGroupAgents, isEqual);
 
   const [mainInputSendErrorMsg, clearSendMessageError] = useChatStore((s) => [
     aiChatSelectors.isCurrentSendMessageError(s),
@@ -151,7 +150,40 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
             />
           </Flexbox>
         )}
-        <DesktopChatInput />
+        <DesktopChatInput
+          mentionItems={
+            currentGroupMemebers
+              ? [
+                  {
+                    icon: (
+                      <GroupAvatar
+                        avatars={
+                          currentGroupMemebers?.map((member) => ({
+                            avatar: member.avatar || DEFAULT_AVATAR,
+                            background: member.backgroundColor || undefined,
+                          })) || []
+                        }
+                        size={24}
+                      />
+                    ),
+                    key: 'ALL_MEMBERS',
+                    label: 'All Members',
+                  },
+                  ...currentGroupMemebers.map((member) => ({
+                    icon: (
+                      <Avatar
+                        avatar={member.avatar}
+                        background={member.backgroundColor ?? undefined}
+                        size={24}
+                      />
+                    ),
+                    key: member.id,
+                    label: member.title,
+                  })),
+                ]
+              : []
+          }
+        />
       </WideScreenContainer>
       <Suspense>
         <MessageFromUrl />

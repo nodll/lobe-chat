@@ -14,26 +14,23 @@ import { useUserStore } from '@/store/user';
 import { preferenceSelectors, settingsSelectors } from '@/store/user/selectors';
 import { HotkeyEnum, KeyEnum } from '@/types/hotkey';
 
-import { useSend } from '../useSend';
+import { useSendGroupMessage } from '../useSend';
 import MessageFromUrl from './MessageFromUrl';
 
 const leftActions: ActionKeys[] = [
-  'model',
-  'search',
   'typo',
   'fileUpload',
   'knowledgeBase',
-  'tools',
   '---',
   ['params', 'history', 'stt', 'clear'],
-  'mainToken',
+  'groupChatToken',
 ];
 
 const rightActions: ActionKeys[] = ['saveTopic'];
 
 const Desktop = memo(() => {
   const { t } = useTranslation('chat');
-  const { send, generating, disabled, stop } = useSend();
+  const { send, generating, disabled, stop } = useSendGroupMessage();
   const [useCmdEnterToSend, updatePreference] = useUserStore((s) => [
     preferenceSelectors.useCmdEnterToSend(s),
     s.updatePreference,

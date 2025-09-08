@@ -148,18 +148,66 @@ export const useSend = () => {
 };
 
 export const useSendGroupMessage = () => {
-  const [sendGroupMessage, updateInputMessage] = useChatStore((s) => [
+  const [
+    isContentEmpty,
+    sendGroupMessage,
+    updateInputMessage,
+    stopGenerateMessage,
+    generating,
+    isSendButtonDisabledByMessage,
+    isCreatingMessage,
+  ] = useChatStore((s) => [
+    !s.inputMessage,
     s.sendGroupMessage,
     s.updateInputMessage,
+    s.stopGenerateMessage,
+    chatSelectors.isAIGenerating(s),
+    chatSelectors.isSendButtonDisabledByMessage(s),
+    chatSelectors.isCreatingMessage(s),
   ]);
   const { analytics } = useAnalytics();
+  const checkGeminiChineseWarning = useGeminiChineseWarning();
 
-  const send = useCallback((params: UseSendGroupMessageParams = {}) => {
+  const fileList = fileChatSelectors.chatUploadFileList(useFileStore.getState());
+  const [isUploadingFiles, clearChatUploadFileList] = useFileStore((s) => [
+    fileChatSelectors.isUploadingFiles(s),
+    s.clearChatUploadFileList,
+  ]);
+
+  const isInputEmpty = isContentEmpty && fileList.length === 0;
+
+  const canNotSend =
+    isInputEmpty || isUploadingFiles || isSendButtonDisabledByMessage || isCreatingMessage;
+
+  const handleSend = useCallback(async (params: UseSendGroupMessageParams = {}) => {
+    if (canNotSend) return;
+
     const store = useChatStore.getState();
     if (!store.activeId) return;
-    const fileList = fileChatSelectors.chatUploadFileList(useFileStore.getState());
 
-    if (!store.inputMessage && fileList.length === 0) return;
+    const mainInputEditor = store.mainInputEditor;
+    if (!mainInputEditor) {
+      console.warn('not found mainInputEditor instance');
+      return;
+    }
+
+    if (chatSelectors.isAIGenerating(store) || chatSelectors.isCreatingMessage(store)) return;
+
+    const inputMessage = store.inputMessage;
+
+    // if there is no message and no files, then we should not send the message
+    if (!inputMessage && fileList.length === 0) return;
+
+    // Check for Chinese text warning with Gemini model
+    const agentStore = getAgentStoreState();
+    const currentModel = agentSelectors.currentAgentModel(agentStore);
+    const shouldContinue = await checkGeminiChineseWarning({
+      model: currentModel,
+      prompt: inputMessage,
+      scenario: 'chat',
+    });
+
+    if (!shouldContinue) return;
 
     // Append mentioned users as plain text like "@userName"
     const mentionState = useMentionStore.getState();
@@ -172,7 +220,7 @@ export const useSendGroupMessage = () => {
             .map((name) => `@${name}`)
             .join(' ')}`
         : '';
-    const messageWithMentions = `${store.inputMessage}${mentionText}`.trim();
+    const messageWithMentions = `${inputMessage}${mentionText}`.trim();
 
     sendGroupMessage({
       files: fileList,
@@ -182,20 +230,16 @@ export const useSendGroupMessage = () => {
       ...params,
     });
 
-    // Clear input content (similar to single chat behavior)
-    const mainInputEditor = store.mainInputEditor;
-    if (mainInputEditor) {
-      mainInputEditor.clearContent();
-      mainInputEditor.focus();
-    }
+    clearChatUploadFileList();
+    mainInputEditor.setExpand(false);
+    mainInputEditor.clearContent();
+    mainInputEditor.focus();
     updateInputMessage('');
-    useFileStore.getState().clearChatUploadFileList();
     // clear mentioned users after sending
     mentionState.clearMentionedUsers();
 
     // 获取分析数据
     const userStore = getUserStoreState();
-    const agentStore = getAgentStoreState();
     const hasImages = fileList.some((file) => file.file?.type?.startsWith('image'));
     const messageType = fileList.length === 0 ? 'text' : hasImages ? 'image' : 'file';
 
@@ -206,15 +250,41 @@ export const useSendGroupMessage = () => {
         current_topic: topicSelectors.currentActiveTopic(store)?.title || null,
         has_attachments: fileList.length > 0,
         history_message_count: chatSelectors.activeBaseChats(store).length,
-        message: store.inputMessage,
-        message_length: store.inputMessage.length,
+        message: inputMessage,
+        message_length: inputMessage.length,
         message_type: messageType,
         selected_model: agentSelectors.currentAgentModel(agentStore),
         session_id: store.activeId || 'inbox', // 当前活跃的会话ID
         user_id: userStore.user?.id || 'anonymous',
       },
     });
-  }, []);
+  }, [canNotSend, fileList, clearChatUploadFileList, updateInputMessage, analytics, checkGeminiChineseWarning]);
 
-  return useMemo(() => ({ send }), [send]);
+  const stop = useCallback(() => {
+    const store = getChatStoreState();
+    const generating = chatSelectors.isAIGenerating(store);
+    const isCreating = chatSelectors.isCreatingMessage(store);
+
+    if (generating) {
+      stopGenerateMessage();
+      return;
+    }
+
+    if (isCreating) {
+      // For group messages, we don't have a separate cancel method like in single chat
+      // The isCreatingMessage state will be reset when the operation completes
+      // We can potentially add a cancel group message functionality in the future
+      console.warn('Group message creation in progress, cannot cancel');
+    }
+  }, [stopGenerateMessage]);
+
+  return useMemo(
+    () => ({
+      disabled: canNotSend,
+      generating: generating || isCreatingMessage,
+      send: handleSend,
+      stop,
+    }),
+    [canNotSend, generating, isCreatingMessage, handleSend, stop],
+  );
 };

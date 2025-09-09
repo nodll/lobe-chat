@@ -1,5 +1,4 @@
-import { Avatar, Markdown, Tag } from '@lobehub/ui';
-import { Divider } from 'antd';
+import { Avatar, Tag } from '@lobehub/ui';
 import { createStyles } from 'antd-style';
 import { startCase } from 'lodash-es';
 import { CSSProperties, memo } from 'react';
@@ -26,10 +25,9 @@ export interface GroupInfoProps {
   meta?: MetaData;
   onAvatarClick?: () => void;
   style?: CSSProperties;
-  systemPrompt?: string;
 }
 
-const GroupInfo = memo<GroupInfoProps>(({ systemPrompt, style, meta, onAvatarClick }) => {
+const GroupInfo = memo<GroupInfoProps>(({ style, meta, onAvatarClick }) => {
   const { styles, theme } = useStyles();
 
   if (!meta) return;
@@ -55,12 +53,6 @@ const GroupInfo = memo<GroupInfoProps>(({ systemPrompt, style, meta, onAvatarCli
         </Center>
       )}
       {meta.description && <div className={styles.desc}>{meta.description}</div>}
-      {systemPrompt && (
-        <>
-          <Divider style={{ margin: '8px 0' }} />
-          <Markdown variant={'chat'}>{systemPrompt}</Markdown>
-        </>
-      )}
     </Center>
   );
 });

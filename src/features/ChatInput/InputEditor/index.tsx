@@ -63,7 +63,7 @@ const InputEditor = memo<{ defaultRows?: number; mentionItems?: SlashOptions['it
         mentionOption={{
           items: mentionItems,
           markdownWriter: (mention) => {
-            return `\n<mention>${mention.label}[${mention.extra.id}]</mention>\n`;
+            return `\n<mention id="${mention.extra.id}">${mention.label}</mention>\n`;
           },
           onSelect: (editor, option) => {
             editor.dispatchCommand(INSERT_MENTION_COMMAND, {

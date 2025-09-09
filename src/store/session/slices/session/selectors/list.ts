@@ -1,7 +1,7 @@
 import { DEFAULT_AGENT_LOBE_SESSION, INBOX_SESSION_ID } from '@/const/session';
 import { sessionHelpers } from '@/store/session/slices/session/helpers';
 import { MetaData } from '@/types/meta';
-import { CustomSessionGroup, LobeSession, LobeSessions } from '@/types/session';
+import { CustomSessionGroup, LobeGroupSession, LobeSession, LobeSessions } from '@/types/session';
 
 import { SessionStore } from '../../../store';
 
@@ -13,17 +13,17 @@ const allSessions = (s: SessionStore): LobeSessions => s.sessions;
 
 const getSessionById =
   (id: string) =>
-    (s: SessionStore): LobeSession =>
-      sessionHelpers.getSessionById(id, allSessions(s));
+  (s: SessionStore): LobeSession =>
+    sessionHelpers.getSessionById(id, allSessions(s));
 
 const getSessionMetaById =
   (id: string) =>
-    (s: SessionStore): MetaData => {
-      const session = getSessionById(id)(s);
+  (s: SessionStore): MetaData => {
+    const session = getSessionById(id)(s);
 
-      if (!session) return {};
-      return session.meta;
-    };
+    if (!session) return {};
+    return session.meta;
+  };
 
 const currentSession = (s: SessionStore): LobeSession | undefined => {
   if (!s.activeId) return;
@@ -45,8 +45,8 @@ const isCurrentSessionGroupSession = (s: SessionStore) => {
 };
 
 const currentGroupAgents = (s: SessionStore) => {
-  const session = currentSession(s);
-  return session?.type === 'group' ? session.members : [];
+  const session = currentSession(s) as LobeGroupSession;
+  return session.members || [];
 };
 
 const isSessionListInit = (s: SessionStore) => s.isSessionsFirstFetchFinished;

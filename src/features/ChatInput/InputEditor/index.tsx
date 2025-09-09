@@ -63,10 +63,6 @@ const InputEditor = memo<{ defaultRows?: number; mentionItems?: SlashOptions['it
         mentionOption={{
           items: mentionItems,
           markdownWriter: (mention) => {
-            // Handle "Mention All" case
-            if (mention.key === 'ALL_MEMBERS') {
-              return `\n<mention>ALL_MEMBERS</mention>\n`;
-            }
             return `\n<mention>${mention.label}[${mention.extra.id}]</mention>\n`;
           },
           onSelect: (editor, option) => {

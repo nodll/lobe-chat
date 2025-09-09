@@ -167,7 +167,7 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
                       />
                     ),
                     key: 'ALL_MEMBERS',
-                    label: 'All Members',
+                    label: t('memberSelection.allMembers'),
                   },
                   ...currentGroupMemebers.map((member) => ({
                     icon: (

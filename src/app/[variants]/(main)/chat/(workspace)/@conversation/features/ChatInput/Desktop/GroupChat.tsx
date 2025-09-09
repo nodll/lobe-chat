@@ -1,9 +1,10 @@
 'use client';
 
-import { Alert, Avatar, GroupAvatar, Hotkey, Icon } from '@lobehub/ui';
+import { SlashOptions } from '@lobehub/editor';
+import { Alert, Avatar, GroupAvatar, Hotkey, Icon, type MenuProps } from '@lobehub/ui';
 import { isEqual } from 'lodash';
 import { BotMessageSquare, LucideCheck, MessageSquarePlus } from 'lucide-react';
-import { Suspense, memo } from 'react';
+import { Suspense, memo, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 
@@ -54,6 +55,106 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
   ]);
   const hotkey = useUserStore(settingsSelectors.getHotkeyById(HotkeyEnum.AddUserMessage));
 
+  const mentionItems: SlashOptions['items'] = useMemo(() => {
+    if (!currentGroupMemebers) return [];
+    return [
+      {
+        icon: (
+          <GroupAvatar
+            avatars={
+              currentGroupMemebers?.map((member) => ({
+                avatar: member.avatar || DEFAULT_AVATAR,
+                background: member.backgroundColor || undefined,
+              })) || []
+            }
+            size={24}
+          />
+        ),
+        key: 'ALL_MEMBERS',
+        label: t('memberSelection.allMembers'),
+      },
+      ...currentGroupMemebers.map((member) => ({
+        icon: (
+          <Avatar
+            avatar={member.avatar}
+            background={member.backgroundColor ?? undefined}
+            size={24}
+          />
+        ),
+        key: member.id,
+        label: member.title,
+      })),
+    ];
+  }, [currentGroupMemebers]);
+
+  const sendMenuItems: MenuProps['items'] = useMemo(
+    () => [
+      {
+        icon: !useCmdEnterToSend ? <Icon icon={LucideCheck} /> : <div />,
+        key: 'sendWithEnter',
+        label: (
+          <Flexbox align={'center'} gap={4} horizontal>
+            <Trans
+              components={{
+                key: <Hotkey keys={KeyEnum.Enter} variant={'borderless'} />,
+              }}
+              i18nKey={'input.sendWithEnter'}
+              ns={'chat'}
+            />
+          </Flexbox>
+        ),
+        onClick: () => {
+          updatePreference({ useCmdEnterToSend: false });
+        },
+      },
+      {
+        icon: useCmdEnterToSend ? <Icon icon={LucideCheck} /> : <div />,
+        key: 'sendWithCmdEnter',
+        label: (
+          <Flexbox align={'center'} gap={4} horizontal>
+            <Trans
+              components={{
+                key: (
+                  <Hotkey keys={[KeyEnum.Mod, KeyEnum.Enter].join('+')} variant={'borderless'} />
+                ),
+              }}
+              i18nKey={'input.sendWithCmdEnter'}
+              ns={'chat'}
+            />
+          </Flexbox>
+        ),
+        onClick: () => {
+          updatePreference({ useCmdEnterToSend: true });
+        },
+      },
+      { type: 'divider' },
+      {
+        // disabled,
+        icon: <Icon icon={BotMessageSquare} />,
+        key: 'addAi',
+        label: t('input.addAi'),
+        onClick: () => {
+          send({ onlyAddAIMessage: true });
+        },
+      },
+      {
+        // disabled,
+        icon: <Icon icon={MessageSquarePlus} />,
+        key: 'addUser',
+        label: (
+          <Flexbox align={'center'} gap={24} horizontal>
+            {t('input.addUser')}
+            <Hotkey keys={hotkey} />
+          </Flexbox>
+        ),
+        onClick: () => {
+          send({ onlyAddUserMessage: true });
+        },
+      },
+    ],
+    [useCmdEnterToSend, send, updatePreference, hotkey],
+  );
+
   return (
     <ChatInputProvider
       chatInputEditorRef={(instance) => {
@@ -61,6 +162,7 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
         useChatStore.setState({ mainInputEditor: instance });
       }}
       leftActions={isDMPortal ? dmLeftActions : leftActions}
+      mentionItems={mentionItems}
       onMarkdownContentChange={(content) => {
         useChatStore.setState({ inputMessage: content });
       }}
@@ -70,73 +172,7 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
       rightActions={isDMPortal ? [] : rightActions}
       sendButtonProps={{ disabled, generating, onStop: stop }}
       sendMenu={{
-        items: [
-          {
-            icon: !useCmdEnterToSend ? <Icon icon={LucideCheck} /> : <div />,
-            key: 'sendWithEnter',
-            label: (
-              <Flexbox align={'center'} gap={4} horizontal>
-                <Trans
-                  components={{
-                    key: <Hotkey keys={KeyEnum.Enter} variant={'borderless'} />,
-                  }}
-                  i18nKey={'input.sendWithEnter'}
-                  ns={'chat'}
-                />
-              </Flexbox>
-            ),
-            onClick: () => {
-              updatePreference({ useCmdEnterToSend: false });
-            },
-          },
-          {
-            icon: useCmdEnterToSend ? <Icon icon={LucideCheck} /> : <div />,
-            key: 'sendWithCmdEnter',
-            label: (
-              <Flexbox align={'center'} gap={4} horizontal>
-                <Trans
-                  components={{
-                    key: (
-                      <Hotkey
-                        keys={[KeyEnum.Mod, KeyEnum.Enter].join('+')}
-                        variant={'borderless'}
-                      />
-                    ),
-                  }}
-                  i18nKey={'input.sendWithCmdEnter'}
-                  ns={'chat'}
-                />
-              </Flexbox>
-            ),
-            onClick: () => {
-              updatePreference({ useCmdEnterToSend: true });
-            },
-          },
-          { type: 'divider' },
-          {
-            // disabled,
-            icon: <Icon icon={BotMessageSquare} />,
-            key: 'addAi',
-            label: t('input.addAi'),
-            onClick: () => {
-              send({ onlyAddAIMessage: true });
-            },
-          },
-          {
-            // disabled,
-            icon: <Icon icon={MessageSquarePlus} />,
-            key: 'addUser',
-            label: (
-              <Flexbox align={'center'} gap={24} horizontal>
-                {t('input.addUser')}
-                <Hotkey keys={hotkey} />
-              </Flexbox>
-            ),
-            onClick: () => {
-              send({ onlyAddUserMessage: true });
-            },
-          },
-        ],
+        items: sendMenuItems,
       }}
     >
       <WideScreenContainer>
@@ -150,40 +186,7 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
             />
           </Flexbox>
         )}
-        <DesktopChatInput
-          mentionItems={
-            currentGroupMemebers
-              ? [
-                  {
-                    icon: (
-                      <GroupAvatar
-                        avatars={
-                          currentGroupMemebers?.map((member) => ({
-                            avatar: member.avatar || DEFAULT_AVATAR,
-                            background: member.backgroundColor || undefined,
-                          })) || []
-                        }
-                        size={24}
-                      />
-                    ),
-                    key: 'ALL_MEMBERS',
-                    label: t('memberSelection.allMembers'),
-                  },
-                  ...currentGroupMemebers.map((member) => ({
-                    icon: (
-                      <Avatar
-                        avatar={member.avatar}
-                        background={member.backgroundColor ?? undefined}
-                        size={24}
-                      />
-                    ),
-                    key: member.id,
-                    label: member.title,
-                  })),
-                ]
-              : []
-          }
-        />
+        <DesktopChatInput />
       </WideScreenContainer>
       <Suspense>
         <MessageFromUrl />

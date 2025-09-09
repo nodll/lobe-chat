@@ -11,7 +11,6 @@ import {
   ReactListPlugin,
   ReactMathPlugin,
   ReactTablePlugin,
-  SlashOptions,
 } from '@lobehub/editor';
 import { Editor, FloatMenu, SlashMenu, useEditorState } from '@lobehub/editor/react';
 import { Hotkey, combineKeys } from '@lobehub/ui';
@@ -27,13 +26,15 @@ import { preferenceSelectors, settingsSelectors } from '@/store/user/selectors';
 import { useChatInputStore, useStoreApi } from '../store';
 
 const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
-  const [editor, slashMenuRef, send, updateMarkdownContent, expand] = useChatInputStore((s) => [
-    s.editor,
-    s.slashMenuRef,
-    s.handleSendButton,
-    s.updateMarkdownContent,
-    s.expand,
-  ]);
+  const [editor, slashMenuRef, send, updateMarkdownContent, expand, mentionItems] =
+    useChatInputStore((s) => [
+      s.editor,
+      s.slashMenuRef,
+      s.handleSendButton,
+      s.updateMarkdownContent,
+      s.expand,
+      s.mentionItems,
+    ]);
 
   const storeApi = useStoreApi();
   const state = useEditorState(editor);
@@ -41,65 +42,65 @@ const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
   const { enableScope, disableScope } = useHotkeysContext();
   const { t } = useTranslation(['editor', 'chat']);
 
-    const isChineseInput = useRef(false);
+  const isChineseInput = useRef(false);
 
   const useCmdEnterToSend = useUserStore(preferenceSelectors.useCmdEnterToSend);
   const wrapperShortcut = useCmdEnterToSend
     ? KeyEnum.Enter
     : combineKeys([KeyEnum.Mod, KeyEnum.Enter]);
 
-    useEffect(() => {
-      const fn = (e: BeforeUnloadEvent) => {
-        if (!state.isEmpty) {
-          // set returnValue to trigger alert modal
-          // Note: No matter what value is set, the browser will display the standard text
-          e.returnValue = 'You are typing something, are you sure you want to leave?';
-        }
-      };
-      window.addEventListener('beforeunload', fn);
-      return () => {
-        window.removeEventListener('beforeunload', fn);
-      };
-    }, [state.isEmpty]);
+  useEffect(() => {
+    const fn = (e: BeforeUnloadEvent) => {
+      if (!state.isEmpty) {
+        // set returnValue to trigger alert modal
+        // Note: No matter what value is set, the browser will display the standard text
+        e.returnValue = 'You are typing something, are you sure you want to leave?';
+      }
+    };
+    window.addEventListener('beforeunload', fn);
+    return () => {
+      window.removeEventListener('beforeunload', fn);
+    };
+  }, [state.isEmpty]);
 
-    return (
-      <Editor
-        autoFocus
-        content={''}
-        editor={editor}
-        mentionOption={{
-          items: mentionItems,
-          markdownWriter: (mention) => {
-            return `\n<mention id="${mention.extra.id}">${mention.label}</mention>\n`;
-          },
-          onSelect: (editor, option) => {
-            editor.dispatchCommand(INSERT_MENTION_COMMAND, {
-              label: String(option.label),
-            });
-          },
-          // renderComp: (props) => {
-          //   return <SlashMenu {...props} getPopupContainer={() => slashMenuRef?.current} />;
-          // },
-        }}
-        onBlur={() => {
-          disableScope(HotkeyEnum.AddUserMessage);
-        }}
-        onChange={() => {
-          updateMarkdownContent();
-        }}
-        onCompositionEnd={() => {
-          isChineseInput.current = false;
-        }}
-        onCompositionStart={() => {
-          isChineseInput.current = true;
-        }}
-        onContextMenu={async ({ event: e, editor }) => {
-          if (isDesktop) {
-            e.preventDefault();
-            const { electronSystemService } = await import('@/services/electron/system');
+  return (
+    <Editor
+      autoFocus
+      content={''}
+      editor={editor}
+      mentionOption={{
+        items: mentionItems,
+        markdownWriter: (mention) => {
+          return `\n<mention id="${mention.extra.id}">${mention.label}</mention>\n`;
+        },
+        onSelect: (editor, option) => {
+          editor.dispatchCommand(INSERT_MENTION_COMMAND, {
+            label: String(option.label),
+          });
+        },
+        // renderComp: (props) => {
+        //   return <SlashMenu {...props} getPopupContainer={() => slashMenuRef?.current} />;
+        // },
+      }}
+      onBlur={() => {
+        disableScope(HotkeyEnum.AddUserMessage);
+      }}
+      onChange={() => {
+        updateMarkdownContent();
+      }}
+      onCompositionEnd={() => {
+        isChineseInput.current = false;
+      }}
+      onCompositionStart={() => {
+        isChineseInput.current = true;
+      }}
+      onContextMenu={async ({ event: e, editor }) => {
+        if (isDesktop) {
+          e.preventDefault();
+          const { electronSystemService } = await import('@/services/electron/system');
 
-            const selectionValue = editor.getSelectionDocument('markdown') as unknown as string;
-            const hasSelection = !!selectionValue;
+          const selectionValue = editor.getSelectionDocument('markdown') as unknown as string;
+          const hasSelection = !!selectionValue;
 
           await electronSystemService.showContextMenu('editor', {
             hasSelection,
@@ -174,11 +175,6 @@ const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
             onSelect: (editor) => {
               editor.dispatchCommand(INSERT_TABLE_COMMAND, { columns: '3', rows: '3' });
             },
-          ],
-          renderComp: (props) => {
-            return (
-              <SlashMenu {...props} getPopupContainer={() => (slashMenuRef as any)?.current} />
-            );
           },
         ],
         renderComp: expand

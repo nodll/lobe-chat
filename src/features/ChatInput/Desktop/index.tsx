@@ -16,7 +16,6 @@ import InputEditor from '../InputEditor';
 import SendArea from '../SendArea';
 import TypoBar from '../TypoBar';
 import FilePreview from './FilePreview';
-import { SlashOptions } from '@lobehub/editor';
 
 const useStyles = createStyles(({ css, token }) => ({
   container: css`
@@ -46,7 +45,7 @@ const useStyles = createStyles(({ css, token }) => ({
   `,
 }));
 
-const DesktopChatInput = memo<{ mentionItems?: SlashOptions['items'], showFootnote?: boolean }>(({ showFootnote, mentionItems }) => {
+const DesktopChatInput = memo<{ showFootnote?: boolean }>(({ showFootnote }) => {
   const { t } = useTranslation('chat');
   const [slashMenuRef, expand, showTypoBar, editor, leftActions] = useChatInputStore((s) => [
     s.slashMenuRef,
@@ -90,7 +89,7 @@ const DesktopChatInput = memo<{ mentionItems?: SlashOptions['items'], showFootno
           slashMenuRef={slashMenuRef}
         >
           {expand && fileNode}
-          <InputEditor mentionItems={mentionItems} />
+          <InputEditor />
         </ChatInput>
         {showFootnote && !expand && (
           <Center style={{ pointerEvents: 'none', zIndex: 100 }}>

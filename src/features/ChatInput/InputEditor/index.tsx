@@ -49,6 +49,8 @@ const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
     ? KeyEnum.Enter
     : combineKeys([KeyEnum.Mod, KeyEnum.Enter]);
 
+  const enableMention = !!mentionItems && mentionItems.length > 0;
+
   useEffect(() => {
     const fn = (e: BeforeUnloadEvent) => {
       if (!state.isEmpty) {
@@ -68,20 +70,32 @@ const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
       autoFocus
       content={''}
       editor={editor}
-      mentionOption={{
-        items: mentionItems,
-        markdownWriter: (mention) => {
-          return `\n<mention id="${mention.extra.id}">${mention.label}</mention>\n`;
-        },
-        onSelect: (editor, option) => {
-          editor.dispatchCommand(INSERT_MENTION_COMMAND, {
-            label: String(option.label),
-          });
-        },
-        // renderComp: (props) => {
-        //   return <SlashMenu {...props} getPopupContainer={() => slashMenuRef?.current} />;
-        // },
-      }}
+      mentionOption={
+        enableMention
+          ? {
+              items: mentionItems,
+              markdownWriter: (mention) => {
+                return `\n<mention id="${mention.metadata.id}">${mention.label}</mention>\n`;
+              },
+              onSelect: (editor, option) => {
+                editor.dispatchCommand(INSERT_MENTION_COMMAND, {
+                  label: String(option.label),
+                  metadata: option.metadata,
+                });
+              },
+              renderComp: expand
+                ? undefined
+                : (props) => {
+                    return (
+                      <SlashMenu
+                        {...props}
+                        getPopupContainer={() => (slashMenuRef as any)?.current}
+                      />
+                    );
+                  },
+            }
+          : undefined
+      }
       onBlur={() => {
         disableScope(HotkeyEnum.AddUserMessage);
       }}
@@ -145,7 +159,7 @@ const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
                 />
               ),
             }}
-            i18nKey={'input.warpWithKey'}
+            i18nKey={'input.sendWithEnter'}
             ns={'chat'}
           />
           {'...'}

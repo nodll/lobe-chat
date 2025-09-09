@@ -1,11 +1,10 @@
 'use client';
 
 import { SlashOptions } from '@lobehub/editor';
-import { Alert, Avatar, GroupAvatar, Hotkey, Icon, type MenuProps } from '@lobehub/ui';
+import { Alert, Avatar, GroupAvatar } from '@lobehub/ui';
 import { isEqual } from 'lodash';
-import { BotMessageSquare, LucideCheck, MessageSquarePlus } from 'lucide-react';
 import { Suspense, memo, useMemo } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 
 import { DEFAULT_AVATAR } from '@/const/meta';
@@ -15,12 +14,10 @@ import { useChatStore } from '@/store/chat';
 import { aiChatSelectors } from '@/store/chat/selectors';
 import { useSessionStore } from '@/store/session';
 import { sessionSelectors } from '@/store/session/selectors';
-import { useUserStore } from '@/store/user';
-import { preferenceSelectors, settingsSelectors } from '@/store/user/selectors';
-import { HotkeyEnum, KeyEnum } from '@/types/hotkey';
 
 import { useSendGroupMessage } from '../useSend';
 import MessageFromUrl from './MessageFromUrl';
+import { useSendMenuItems } from './useSendMenuItems';
 
 const leftActions: ActionKeys[] = [
   'typo',
@@ -41,10 +38,6 @@ const rightActions: ActionKeys[] = ['saveTopic'];
 const Desktop = memo((props: { targetMemberId?: string }) => {
   const { t } = useTranslation('chat');
   const { send, generating, disabled, stop } = useSendGroupMessage();
-  const [useCmdEnterToSend, updatePreference] = useUserStore((s) => [
-    preferenceSelectors.useCmdEnterToSend(s),
-    s.updatePreference,
-  ]);
 
   const isDMPortal = !!props.targetMemberId;
   const currentGroupMemebers = useSessionStore(sessionSelectors.currentGroupAgents, isEqual);
@@ -53,7 +46,6 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
     aiChatSelectors.isCurrentSendMessageError(s),
     s.clearSendMessageError,
   ]);
-  const hotkey = useUserStore(settingsSelectors.getHotkeyById(HotkeyEnum.AddUserMessage));
 
   const mentionItems: SlashOptions['items'] = useMemo(() => {
     if (!currentGroupMemebers) return [];
@@ -72,6 +64,7 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
         ),
         key: 'ALL_MEMBERS',
         label: t('memberSelection.allMembers'),
+        metadata: { id: 'ALL_MEMBERS' },
       },
       ...currentGroupMemebers.map((member) => ({
         icon: (
@@ -83,77 +76,12 @@ const Desktop = memo((props: { targetMemberId?: string }) => {
         ),
         key: member.id,
         label: member.title,
+        metadata: { id: member.id },
       })),
     ];
   }, [currentGroupMemebers]);
 
-  const sendMenuItems: MenuProps['items'] = useMemo(
-    () => [
-      {
-        icon: !useCmdEnterToSend ? <Icon icon={LucideCheck} /> : <div />,
-        key: 'sendWithEnter',
-        label: (
-          <Flexbox align={'center'} gap={4} horizontal>
-            <Trans
-              components={{
-                key: <Hotkey keys={KeyEnum.Enter} variant={'borderless'} />,
-              }}
-              i18nKey={'input.sendWithEnter'}
-              ns={'chat'}
-            />
-          </Flexbox>
-        ),
-        onClick: () => {
-          updatePreference({ useCmdEnterToSend: false });
-        },
-      },
-      {
-        icon: useCmdEnterToSend ? <Icon icon={LucideCheck} /> : <div />,
-        key: 'sendWithCmdEnter',
-        label: (
-          <Flexbox align={'center'} gap={4} horizontal>
-            <Trans
-              components={{
-                key: (
-                  <Hotkey keys={[KeyEnum.Mod, KeyEnum.Enter].join('+')} variant={'borderless'} />
-                ),
-              }}
-              i18nKey={'input.sendWithCmdEnter'}
-              ns={'chat'}
-            />
-          </Flexbox>
-        ),
-        onClick: () => {
-          updatePreference({ useCmdEnterToSend: true });
-        },
-      },
-      { type: 'divider' },
-      {
-        // disabled,
-        icon: <Icon icon={BotMessageSquare} />,
-        key: 'addAi',
-        label: t('input.addAi'),
-        onClick: () => {
-          send({ onlyAddAIMessage: true });
-        },
-      },
-      {
-        // disabled,
-        icon: <Icon icon={MessageSquarePlus} />,
-        key: 'addUser',
-        label: (
-          <Flexbox align={'center'} gap={24} horizontal>
-            {t('input.addUser')}
-            <Hotkey keys={hotkey} />
-          </Flexbox>
-        ),
-        onClick: () => {
-          send({ onlyAddUserMessage: true });
-        },
-      },
-    ],
-    [useCmdEnterToSend, send, updatePreference, hotkey],
-  );
+  const sendMenuItems = useSendMenuItems();
 
   return (
     <ChatInputProvider

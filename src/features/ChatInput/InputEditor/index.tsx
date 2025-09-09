@@ -75,7 +75,7 @@ const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
           ? {
               items: mentionItems,
               markdownWriter: (mention) => {
-                return `\n<mention id="${mention.metadata.id}">${mention.label}</mention>\n`;
+                return `<mention>${mention.metadata.id}</mention>`;
               },
               onSelect: (editor, option) => {
                 editor.dispatchCommand(INSERT_MENTION_COMMAND, {
@@ -148,7 +148,7 @@ const InputEditor = memo<{ defaultRows?: number }>(({ defaultRows = 2 }) => {
         <Flexbox align={'center'} gap={4} horizontal>
           {t('sendPlaceholder', { ns: 'chat' }).replace('...', ', ')}
           <Trans
-            as={'div'}
+            as={'span'}
             components={{
               key: (
                 <Hotkey

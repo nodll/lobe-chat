@@ -35,8 +35,23 @@ import SupervisorMessage from '../SupervisorMessage';
 import { InPortalThreadContext } from './InPortalThreadContext';
 import { normalizeThinkTags, processWithArtifact } from './utils';
 
-const rehypePlugins = markdownElements.map((element) => element.rehypePlugin).filter(Boolean);
-const remarkPlugins = markdownElements.map((element) => element.remarkPlugin).filter(Boolean);
+const assistantRehypePlugins = markdownElements
+  .filter((element) => ['all', 'assistant'].includes(element.scope))
+  .map((element) => element.rehypePlugin)
+  .filter(Boolean);
+const assistantRemarkPlugins = markdownElements
+  .filter((element) => ['all', 'assistant'].includes(element.scope))
+  .map((element) => element.remarkPlugin)
+  .filter(Boolean);
+
+const userRehypePlugins = markdownElements
+  .filter((element) => ['all', 'user'].includes(element.scope))
+  .map((element) => element.rehypePlugin)
+  .filter(Boolean);
+const userRemarkPlugins = markdownElements
+  .filter((element) => ['all', 'user'].includes(element.scope))
+  .map((element) => element.remarkPlugin)
+  .filter(Boolean);
 
 const useStyles = createStyles(({ css, prefixCls }) => ({
   loading: css`
@@ -187,8 +202,8 @@ const Item = memo<ChatListItemProps>(
         components,
         customRender: markdownCustomRender,
         enableCustomFootnotes: item?.role === 'assistant',
-        rehypePlugins: item?.role === 'user' ? undefined : rehypePlugins,
-        remarkPlugins: item?.role === 'user' ? undefined : remarkPlugins,
+        rehypePlugins: item?.role === 'user' ? userRehypePlugins : assistantRehypePlugins,
+        remarkPlugins: item?.role === 'user' ? userRemarkPlugins : assistantRemarkPlugins,
         showFootnotes:
           item?.role === 'user'
             ? undefined

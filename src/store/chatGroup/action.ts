@@ -204,8 +204,9 @@ export const chatGroupAction: StateCreator<
       const group = chatGroupSelectors.currentGroup(get());
       if (!group) return;
 
-      await chatGroupService.updateGroup(group.id, { config });
-      dispatch({ payload: { config, id: group.id }, type: 'updateGroup' });
+      const mergedConfig = { ...group.config, ...config };
+      await chatGroupService.updateGroup(group.id, { config: mergedConfig });
+      dispatch({ payload: { config: mergedConfig, id: group.id }, type: 'updateGroup' });
       await get().internal_refreshGroups();
     },
 

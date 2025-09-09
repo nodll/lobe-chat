@@ -55,13 +55,7 @@ const GroupRole = memo<GroupRoleProps>(
           editing={editing}
           markdownProps={{ enableLatex: false, enableMermaid: false }}
           model={{
-            extra: (
-              <GroupInfo
-                meta={currentSession?.meta}
-                style={{ marginBottom: 16 }}
-                systemPrompt={groupConfig?.systemPrompt}
-              />
-            ),
+            extra: <GroupInfo meta={currentSession?.meta} style={{ marginBottom: 16 }} />,
           }}
           onChange={handleSystemPromptChange}
           onEditingChange={setEditing}
